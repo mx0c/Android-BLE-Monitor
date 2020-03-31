@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Android-BLE-Monitor</string>
+    <string name="ble_not_supported">Seems like your device doesnt support BLE!</string>
+</resources>
