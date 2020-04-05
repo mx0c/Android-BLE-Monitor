@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
@@ -11,6 +12,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -22,17 +24,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+
 public class MainActivity extends Activity {
 
     private static final int REQUEST_ENABLE_BT = 0;
-    // Stops scanning after 10 seconds.
-    private static final long SCAN_PERIOD = 30000;
+    private static final long SCAN_PERIOD = 10000;
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
 
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning = false;
     private Handler mHandler = new Handler();
     private List<BluetoothDevice> mDeviceList = new ArrayList<BluetoothDevice>();
     private ListView mListView;
+    private DeviceArrayAdapter mDevAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +47,31 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         mListView = findViewById(R.id.deviceList);
 
-        DeviceArrayAdapter devAdapter = new DeviceArrayAdapter(this, mDeviceList);
-        mListView.setAdapter(devAdapter);
+        mDevAdapter = new DeviceArrayAdapter(this, mDeviceList);
+        mListView.setAdapter(mDevAdapter);
 
+        requestLocationPermission();
         checkBleAvailability();
+
         if(checkForBluetoothEnabled()){
             scanBleDevices(true);
         }
+    }
+
+    @AfterPermissionGranted(REQUEST_LOCATION_PERMISSION)
+    public void requestLocationPermission() {
+        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
+        if(!EasyPermissions.hasPermissions(this, perms)) {
+            EasyPermissions.requestPermissions(this, "Please grant the location permission", REQUEST_LOCATION_PERMISSION, perms);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     private void checkBleAvailability(){
@@ -80,6 +105,7 @@ public class MainActivity extends Activity {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    Debug.waitForDebugger();
                     mScanning = false;
                     mBluetoothAdapter.stopLeScan(leScanCallback);
                 }
@@ -100,7 +126,12 @@ public class MainActivity extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mDeviceList.add(device);
+                            if(!mDeviceList.contains(device)){
+                                //necessary for async breakpoint
+                                Debug.waitForDebugger();
+                                mDeviceList.add(device);
+                                mDevAdapter.notifyDataSetChanged();
+                            }
                         }
                     });
                 }
