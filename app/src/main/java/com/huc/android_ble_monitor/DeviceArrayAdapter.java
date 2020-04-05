@@ -28,7 +28,7 @@ public class DeviceArrayAdapter extends ArrayAdapter<BluetoothDevice> {
 
         tvName.setText("Name: " + dev.getName());
         tvAddress.setText("Address: " + dev.getAddress());
-        tvBonded.setText("Bonded: " + dev.getBondState());
+        tvBonded.setText("Bondstate: " + Helper.BondIntToString(dev.getBondState()));
 
         return convertView;
     }
