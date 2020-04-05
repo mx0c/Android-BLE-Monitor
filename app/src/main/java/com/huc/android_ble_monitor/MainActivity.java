@@ -1,12 +1,7 @@
 package com.huc.android_ble_monitor;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
 import android.app.Activity;
-import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -14,15 +9,14 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.huc.android_ble_monitor.Models.BleDevice;
+import com.huc.android_ble_monitor.Models.ParsedAdvertisingPacket;
+
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -37,7 +31,7 @@ public class MainActivity extends Activity {
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning = false;
     private Handler mHandler = new Handler();
-    private List<BluetoothDevice> mDeviceList = new ArrayList<BluetoothDevice>();
+    private List<BleDevice> mDeviceList = new ArrayList<BleDevice>();
     private ListView mListView;
     private DeviceArrayAdapter mDevAdapter;
 
@@ -129,7 +123,7 @@ public class MainActivity extends Activity {
                             if(!mDeviceList.contains(device)){
                                 //necessary for async breakpoint
                                 Debug.waitForDebugger();
-                                mDeviceList.add(device);
+                                mDeviceList.add(new BleDevice(device,Helper.parseAdvPacket(scanRecord)));
                                 mDevAdapter.notifyDataSetChanged();
                             }
                         }

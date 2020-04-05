@@ -8,16 +8,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.huc.android_ble_monitor.Models.BleDevice;
+
 import java.util.List;
 
-public class DeviceArrayAdapter extends ArrayAdapter<BluetoothDevice> {
-    public DeviceArrayAdapter(Context context, List<BluetoothDevice> devices) {
+public class DeviceArrayAdapter extends ArrayAdapter<BleDevice> {
+    public DeviceArrayAdapter(Context context, List<BleDevice> devices) {
         super(context, 0, devices);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        BluetoothDevice dev = getItem(position);
+        BleDevice dev = getItem(position);
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.device_list_item, parent, false);
         }
@@ -26,9 +28,9 @@ public class DeviceArrayAdapter extends ArrayAdapter<BluetoothDevice> {
         TextView tvAddress = convertView.findViewById(R.id.textView_address);
         TextView tvBonded = convertView.findViewById(R.id.textView_bonded);
 
-        tvName.setText("Name: " + dev.getName());
-        tvAddress.setText("Address: " + dev.getAddress());
-        tvBonded.setText("Bondstate: " + Helper.BondIntToString(dev.getBondState()));
+        tvName.setText("Name: " + dev.mDevice.getName());
+        tvAddress.setText("Address: " + dev.mDevice.getAddress());
+        tvBonded.setText("Bondstate: " + Helper.BondIntToString(dev.mDevice.getBondState()));
 
         return convertView;
     }
