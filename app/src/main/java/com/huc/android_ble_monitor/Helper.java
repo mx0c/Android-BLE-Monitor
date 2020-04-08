@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Helper {
-    public static String BondIntToString(int bondInt){
-        switch(bondInt){
+    public static String BondIntToString(int bondInt) {
+        switch (bondInt) {
             case 10:
                 return "NONE";
             case 11:
@@ -21,7 +21,13 @@ public class Helper {
         }
     }
 
-    public static ArrayList<ParsedAdvertisingPacket> parseAdvPacket(byte[] data){
+    /**
+     * more informations at: <a href="https://www.silabs.com/community/wireless/bluetooth/knowledge-base.entry.html/2017/02/10/bluetooth_advertisin-hGsf></a>
+     *
+     * @param data
+     * @return
+     */
+    public static ArrayList<ParsedAdvertisingPacket> parseAdvPacket(byte[] data) {
         ArrayList<ParsedAdvertisingPacket> advPacketList = new ArrayList<>();
         int index = 0;
         while (index < data.length) {
@@ -33,7 +39,7 @@ public class Helper {
             //Done if our record isn't a valid type
             if (type == 0) break;
 
-            byte[] advData = Arrays.copyOfRange(data, index+1, index+length);
+            byte[] advData = Arrays.copyOfRange(data, index + 1, index + length);
 
             advPacketList.add(new ParsedAdvertisingPacket(length, type, data));
             index += length;
@@ -41,9 +47,9 @@ public class Helper {
         return advPacketList;
     }
 
-    public static String StringifyAdvType(byte adType){
-        for (Pair<Integer,String> pair: Static.ADTypes) {
-            if(pair.first == adType){
+    public static String StringifyAdvType(byte adType) {
+        for (Pair<Integer, String> pair : Static.ADTypes) {
+            if (pair.first == adType) {
                 return pair.second;
             }
         }
