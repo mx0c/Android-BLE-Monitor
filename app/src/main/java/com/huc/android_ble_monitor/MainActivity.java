@@ -11,13 +11,9 @@ import android.os.Debug;
 import android.os.Handler;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.huc.android_ble_monitor.Models.BleDevice;
-import com.huc.android_ble_monitor.Models.ParsedAdvertisingPacket;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
