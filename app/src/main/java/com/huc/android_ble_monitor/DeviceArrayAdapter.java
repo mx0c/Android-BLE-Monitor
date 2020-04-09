@@ -30,7 +30,7 @@ public class DeviceArrayAdapter extends ArrayAdapter<BleDevice> {
         TextView tvRssi = convertView.findViewById(R.id.textView_rssi);
 
         String name = dev.mDevice.getName();
-        if(name != null){
+        if(name == null){
             name = dev.getNameFromAdvPackets();
         }
 
