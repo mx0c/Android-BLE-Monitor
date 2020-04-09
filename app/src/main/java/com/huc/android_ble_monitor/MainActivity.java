@@ -33,6 +33,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.switchFromSplashToMainTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mListView = findViewById(R.id.deviceList);
@@ -126,4 +127,11 @@ public class MainActivity extends Activity {
                     });
                 }
             };
+
+    /**
+     * Sets back main theme to default AppTheme
+     */
+    private void switchFromSplashToMainTheme() {
+        setTheme(R.style.AppTheme); // Go back from splash screen to main theme on activity create
+    }
 }
