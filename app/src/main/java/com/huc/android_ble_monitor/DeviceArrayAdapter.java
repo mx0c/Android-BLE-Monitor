@@ -27,10 +27,17 @@ public class DeviceArrayAdapter extends ArrayAdapter<BleDevice> {
         TextView tvName = convertView.findViewById(R.id.textView_name);
         TextView tvAddress = convertView.findViewById(R.id.textView_address);
         TextView tvBonded = convertView.findViewById(R.id.textView_bonded);
+        TextView tvRssi = convertView.findViewById(R.id.textView_rssi);
 
-        tvName.setText("Name: " + dev.mDevice.getName());
+        String name = dev.mDevice.getName();
+        if(name != null){
+            name = dev.getNameFromAdvPackets();
+        }
+
+        tvName.setText("Name: " + name);
         tvAddress.setText("Address: " + dev.mDevice.getAddress());
         tvBonded.setText("Bondstate: " + Helper.BondIntToString(dev.mDevice.getBondState()));
+        tvRssi.setText("RSSI:" + dev.rssi);
 
         return convertView;
     }

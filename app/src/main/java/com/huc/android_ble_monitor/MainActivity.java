@@ -111,19 +111,27 @@ public class MainActivity extends Activity {
     private BluetoothAdapter.LeScanCallback leScanCallback =
             new BluetoothAdapter.LeScanCallback() {
                 @Override
-                public void onLeScan(final BluetoothDevice device, int rssi,
-                                     final byte[] scanRecord) {
+                public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(!mDeviceList.contains(device)){
+                            if(!containsDevice(mDeviceList, device)){
                                 //necessary for async breakpoint
                                 Debug.waitForDebugger();
-                                mDeviceList.add(new BleDevice(device,Helper.parseAdvPacket(scanRecord)));
+                                mDeviceList.add(new BleDevice(device, Helper.parseAdvPacket(scanRecord), rssi));
                                 mDevAdapter.notifyDataSetChanged();
                             }
                         }
                     });
                 }
             };
+
+    private boolean containsDevice(List<BleDevice> devList, BluetoothDevice device){
+        for (BleDevice dev: devList) {
+            if(dev.mDevice.getAddress().equals(device.getAddress())){
+                return true;
+            }
+        }
+        return false;
+    }
 }
