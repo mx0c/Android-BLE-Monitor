@@ -22,7 +22,7 @@ public class Helper {
     }
 
     /**
-     * more informations at: <a href="https://www.silabs.com/community/wireless/bluetooth/knowledge-base.entry.html/2017/02/10/bluetooth_advertisin-hGsf></a>
+     * more informations at: <a href="https://www.silabs.com/community/wireless/bluetooth/knowledge-base.entry.html/2017/02/10/bluetooth_advertisin-hGsf>Link</a>
      *
      * @param data
      * @return
