@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.huc.android_ble_monitor"
-        minSdkVersion 18
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"

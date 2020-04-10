@@ -4,8 +4,10 @@ import android.util.Pair;
 
 import com.huc.android_ble_monitor.Models.ParsedAdvertisingPacket;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.UUID;
 
 public class Helper {
     public static String BondIntToString(int bondInt) {
@@ -40,8 +42,17 @@ public class Helper {
             if (type == 0) break;
 
             byte[] advData = Arrays.copyOfRange(data, index + 1, index + length);
+            ParsedAdvertisingPacket advPacket = new ParsedAdvertisingPacket(length, type, advData);
 
-            advPacketList.add(new ParsedAdvertisingPacket(length, type, data));
+            // Complete list of 16-bit UUIDs or Complete list of 128-bit UUIDs
+            if(type == 0x03 || type == 0x07){
+                ByteBuffer bb = ByteBuffer.wrap(advPacket.mAdvData);
+                long high = bb.getLong();
+                long low = bb.getLong();
+                advPacket.mUuids.add(new UUID(high,low));
+            }
+
+            advPacketList.add(advPacket);
             index += length;
         }
         return advPacketList;
