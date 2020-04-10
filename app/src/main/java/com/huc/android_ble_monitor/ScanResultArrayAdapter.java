@@ -1,6 +1,5 @@
 package com.huc.android_ble_monitor;
 
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.os.Build;
@@ -13,11 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
-
-import com.huc.android_ble_monitor.Models.BleDevice;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,9 +37,10 @@ public class ScanResultArrayAdapter extends ArrayAdapter<ScanResult> {
         TextView tvConnectable = convertView.findViewById(R.id.textView_conectability);
         TextView tvVendor = convertView.findViewById(R.id.textView_vendor);
 
-        tvName.setText("Name: " + res.getScanRecord().getDeviceName());
+        String name = res.getScanRecord().getDeviceName();
+        tvName.setText("Name: " + name == null ? "unknown" : name);
         tvAddress.setText("Address: " + res.getDevice().getAddress());
-        tvBonded.setText("Bondstate: " + Helper.BondIntToString(res.getDevice().getBondState()));
+        tvBonded.setText("Bondstate: " + BleUtility.BondIntToString(res.getDevice().getBondState()));
         tvRssi.setText("RSSI: " + res.getRssi());
 
         SparseArray<byte[]> manufacturerData = res.getScanRecord().getManufacturerSpecificData();
