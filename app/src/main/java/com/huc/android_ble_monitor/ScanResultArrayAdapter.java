@@ -38,7 +38,7 @@ public class ScanResultArrayAdapter extends ArrayAdapter<ScanResult> {
         TextView tvVendor = convertView.findViewById(R.id.textView_vendor);
 
         String name = res.getScanRecord().getDeviceName();
-        tvName.setText("Name: " + name == null ? "unknown" : name);
+        tvName.setText("Name: " + (name == null ? "unknown" : name));
         tvAddress.setText("Address: " + res.getDevice().getAddress());
         tvBonded.setText("Bondstate: " + BleUtility.BondIntToString(res.getDevice().getBondState()));
         tvRssi.setText("RSSI: " + res.getRssi());
