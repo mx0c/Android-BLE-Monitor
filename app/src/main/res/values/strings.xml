@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Android-BLE-Monitor</string>
-    <string name="ble_not_supported">Seems like your device doesnt support BLE!</string>
+    <string name="ble_not_supported">Seems like your device doesn\'t support BLE!</string>
+
+    <!-- Menu Action Buttons  -->
+    <string name="action_settings">Settings</string>
+    <string name="action_ble_toggle">Bluetooth Switch</string>
 </resources>

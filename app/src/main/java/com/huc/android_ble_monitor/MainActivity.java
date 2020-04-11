@@ -1,7 +1,6 @@
 package com.huc.android_ble_monitor;
 
 import android.Manifest;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -11,6 +10,10 @@ import android.os.Debug;
 import android.os.Handler;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.huc.android_ble_monitor.Models.BleDevice;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +21,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_ENABLE_BT = 0;
     private static final long SCAN_PERIOD = 10000;
@@ -27,7 +30,7 @@ public class MainActivity extends Activity {
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning = false;
     private Handler mHandler = new Handler();
-    private List<BleDevice> mDeviceList = new ArrayList<BleDevice>();
+    private List<BleDevice> mDeviceList = new ArrayList<>();
     private ListView mListView;
     private DeviceArrayAdapter mDevAdapter;
 
@@ -35,7 +38,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         this.switchFromSplashToMainTheme();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        // Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        // setSupportActionBar(myToolbar);
+
         mListView = findViewById(R.id.deviceList);
 
         mDevAdapter = new DeviceArrayAdapter(this, mDeviceList);
@@ -58,7 +63,7 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         // Forward results to EasyPermissions
