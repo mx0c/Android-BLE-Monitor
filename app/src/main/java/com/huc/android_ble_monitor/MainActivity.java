@@ -11,7 +11,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -20,19 +22,24 @@ import java.util.ArrayList;
 import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+import com.google.android.material.appbar.MaterialToolbar;
+
 
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_ENABLE_BT = 0;
-    private static final long SCAN_PERIOD = 10000;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
+
+    private ListView mListView;
+    private MaterialToolbar mToolbar;
+    private MenuItem mBluetoothSwitch;
+
 
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning = false;
-    private Handler mHandler = new Handler();
     private List<ScanResult> mScanResultList = new ArrayList<>();
-    private ListView mListView;
+
     private ScanResultArrayAdapter mScanResultAdapter;
     private BluetoothLeScanner mBleScanner;
 
@@ -42,11 +49,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        // setSupportActionBar(myToolbar);
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         mListView = findViewById(R.id.deviceList);
-
         mScanResultAdapter = new ScanResultArrayAdapter(this, mScanResultList);
         mListView.setAdapter(mScanResultAdapter);
 
@@ -55,23 +61,10 @@ public class MainActivity extends AppCompatActivity {
 
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
-
-        if(checkForBluetoothEnabled()){
-            scanBleDevices(true);
-        }
     }
 
     private void scanBleDevices(final boolean enable){
         if(enable){
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if(mScanning) {
-                        mScanning = false;
-                        mBleScanner.stopScan(mScanCallback);
-                    }
-                }
-            }, SCAN_PERIOD);
             mScanning = true;
             mBleScanner.startScan(mScanCallback);
         }else{
@@ -169,6 +162,43 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+
+        // Manually Set OnClick Listener
+        mBluetoothSwitch = menu.findItem(R.id.app_bar_bluetooth_switch);
+        mBluetoothSwitch.getActionView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.this.onOptionsItemSelected(mBluetoothSwitch); // ToDo: Seems to have to effect. Needs fix. Click on ToggleSwitch is not registered.
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Toast.makeText(this, "Item Selected", Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()) {
+            case R.id.app_bar_bluetooth_switch:
+                if (checkForBluetoothEnabled()) {
+                    if (item.isChecked()) {
+                        scanBleDevices(true);
+                    } else {
+                        scanBleDevices(false);
+                    }
+                    return true;
+                } else {
+                    Toast.makeText(this, R.string.activate_bluetooth, Toast.LENGTH_SHORT).show();
+                    item.setChecked(false);
+                    return true;
+                }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
