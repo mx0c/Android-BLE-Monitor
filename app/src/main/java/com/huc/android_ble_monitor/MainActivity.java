@@ -14,10 +14,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+
 import java.util.ArrayList;
 import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -33,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView mListView;
     private MaterialToolbar mToolbar;
-    private MenuItem mBluetoothSwitch;
-
+    private SwitchCompat mBluetoothSwitch;
 
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning = false;
@@ -146,15 +148,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
-            // if bluetooth enabled
-            scanBleDevices(true);
-        }
-    }
-
     private boolean containsDevice(List<ScanResult> resList, ScanResult res) {
         for (ScanResult dev : resList) {
             if (dev.getDevice().getAddress().equals(res.getDevice().getAddress())) {
@@ -167,35 +160,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-
-        // Manually Set OnClick Listener
-        mBluetoothSwitch = menu.findItem(R.id.app_bar_bluetooth_switch);
-        mBluetoothSwitch.getActionView().setOnClickListener(new View.OnClickListener() {
+        MenuItem menuItem = menu.findItem(R.id.app_bar_switch_item);
+        View view = menuItem.getActionView();
+        mBluetoothSwitch = view.findViewById(R.id.switch_compat_element);
+        mBluetoothSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                MainActivity.this.onOptionsItemSelected(mBluetoothSwitch); // ToDo: Seems to have to effect. Needs fix. Click on ToggleSwitch is not registered.
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (checkForBluetoothEnabled()) {
+                    if(isChecked){
+                        scanBleDevices(true);
+                    }else {
+                        scanBleDevices(false);
+                    }
+                }else {
+                    buttonView.setChecked(false);
+                }
             }
         });
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Toast.makeText(this, "Item Selected", Toast.LENGTH_SHORT).show();
         switch (item.getItemId()) {
-            case R.id.app_bar_bluetooth_switch:
-                if (checkForBluetoothEnabled()) {
-                    if (item.isChecked()) {
-                        scanBleDevices(true);
-                    } else {
-                        scanBleDevices(false);
-                    }
-                    return true;
-                } else {
-                    Toast.makeText(this, R.string.activate_bluetooth, Toast.LENGTH_SHORT).show();
-                    item.setChecked(false);
-                    return true;
-                }
             default:
                 return super.onOptionsItemSelected(item);
         }

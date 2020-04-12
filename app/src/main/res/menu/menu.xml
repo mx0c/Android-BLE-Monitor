@@ -3,10 +3,10 @@
 
     <!-- "BLE Switch", should appear as action button if possible -->
     <item
-        android:id="@+id/app_bar_bluetooth_switch"
+        android:id="@+id/app_bar_switch_item"
         android:checkable="true"
         android:title="@string/action_ble_toggle"
-        app:actionLayout="@layout/switch_item"
+        app:actionLayout="@layout/switch_layout"
         app:showAsAction="ifRoom" />
 
     <!-- Settings, should always be in the overflow -->
