@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     private SwitchCompat mBluetoothSwitch;
 
     private BluetoothAdapter mBluetoothAdapter;
-    private boolean mScanning = false;
     private List<ScanResult> mScanResultList = new ArrayList<>();
 
     private ScanResultArrayAdapter mScanResultAdapter;
@@ -67,10 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void scanBleDevices(final boolean enable){
         if(enable){
-            mScanning = true;
             mBleScanner.startScan(mScanCallback);
         }else{
-            mScanning = false;
             mBleScanner.stopScan(mScanCallback);
         }
     }
@@ -85,12 +82,7 @@ public class MainActivity extends AppCompatActivity {
                         BluetoothAdapter.ERROR);
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
-                        mScanning = false;
-                        break;
-                    case BluetoothAdapter.STATE_ON:
-                        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                        mBleScanner = mBluetoothAdapter.getBluetoothLeScanner();
-                        scanBleDevices(true);
+                        mBluetoothSwitch.setChecked(false);
                         break;
                 }
             }
