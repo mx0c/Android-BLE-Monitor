@@ -95,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
             if(!containsDevice(mScanResultList, result)){
                 mScanResultList.add(result);
                 mScanResultAdapter.notifyDataSetChanged();
+            }else{
+                mScanResultList = updateDevice(mScanResultList,result);
+                mScanResultAdapter.notifyDataSetChanged();
             }
         }
     };
@@ -147,6 +150,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    private List<ScanResult> updateDevice(List<ScanResult> resList, ScanResult update){
+        int i = 0;
+        for (ScanResult res: resList) {
+            if(res.getDevice().getAddress().equals(update.getDevice().getAddress())){
+                resList.set(i,update);
+                return resList;
+            }
+            i++;
+        }
+        return resList;
     }
 
     @Override
