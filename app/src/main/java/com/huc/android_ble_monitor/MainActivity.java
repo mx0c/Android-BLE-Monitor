@@ -2,6 +2,11 @@ package com.huc.android_ble_monitor;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
@@ -11,9 +16,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Debug;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -56,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         mListView = findViewById(R.id.deviceList);
         mScanResultAdapter = new ScanResultArrayAdapter(this, mScanResultList);
         mListView.setAdapter(mScanResultAdapter);
+        mListView.setOnItemClickListener(mOnListViewItemClick);
 
         requestLocationPermission();
         checkBleAvailability();
@@ -63,6 +71,37 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
     }
+
+    private AdapterView.OnItemClickListener mOnListViewItemClick = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ScanResult item = mScanResultList.get(position);
+            item.getDevice().connectGatt(MainActivity.this, false, new BluetoothGattCallback() {
+                @Override
+                public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+                    if (status == BluetoothGatt.GATT_SUCCESS){
+                        //TODO: Retrieve Services and add to list
+                    }
+                }
+
+                @Override
+                public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+                    switch (newState){
+                        case BluetoothProfile.STATE_CONNECTING:
+                            Toast.makeText(MainActivity.this, "Connecting...", Toast.LENGTH_SHORT).show();
+                            break;
+                        case BluetoothProfile.STATE_CONNECTED:
+                            Toast.makeText(MainActivity.this, "Connected!", Toast.LENGTH_SHORT).show();
+                            gatt.discoverServices();
+                            break;
+                        case BluetoothProfile.STATE_DISCONNECTED:
+                            Toast.makeText(MainActivity.this, "Disconnected!", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
+            });
+        }
+    };
 
     private void scanBleDevices(final boolean enable){
         if(enable){
