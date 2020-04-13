@@ -2,10 +2,9 @@ package com.huc.android_ble_monitor;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
@@ -15,8 +14,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,10 +29,12 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
+
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import com.google.android.material.appbar.MaterialToolbar;
-
+import com.huc.android_ble_monitor.Models.BleDevice;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private SwitchCompat mBluetoothSwitch;
 
     private BluetoothAdapter mBluetoothAdapter;
-    private List<ScanResult> mScanResultList = new ArrayList<>();
+    private List<BleDevice> mScanResultList = new ArrayList<>();
 
     private ScanResultArrayAdapter mScanResultAdapter;
     private BluetoothLeScanner mBleScanner;
@@ -74,13 +75,26 @@ public class MainActivity extends AppCompatActivity {
 
     private AdapterView.OnItemClickListener mOnListViewItemClick = new AdapterView.OnItemClickListener() {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            ScanResult item = mScanResultList.get(position);
-            item.getDevice().connectGatt(MainActivity.this, false, new BluetoothGattCallback() {
+        public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+            final BleDevice item = mScanResultList.get(position);
+
+            //Check for connectability if api version >= 26
+            if (Build.VERSION.SDK_INT >= 26) {
+                if(!item.mScanResult.isConnectable()){
+                    Toast.makeText(MainActivity.this, "Device is not connectable.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            item.mScanResult.getDevice().connectGatt(MainActivity.this, false, new BluetoothGattCallback() {
                 @Override
                 public void onServicesDiscovered(BluetoothGatt gatt, int status) {
                     if (status == BluetoothGatt.GATT_SUCCESS){
-                        //TODO: Retrieve Services and add to list
+                        //Retrieve Services and add to list (needs to be tested)
+                        List<BluetoothGattService> services = gatt.getServices();
+                        item.mServices.addAll(services);
+                        MainActivity.this.mScanResultList.set(position, item);
+                        MainActivity.this.mScanResultAdapter.notifyDataSetChanged();
                     }
                 }
 
@@ -132,10 +146,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             if(!containsDevice(mScanResultList, result)){
-                mScanResultList.add(result);
+                mScanResultList.add(new BleDevice(result, null));
                 mScanResultAdapter.notifyDataSetChanged();
             }else{
-                mScanResultList = updateDevice(mScanResultList,result);
+                mScanResultList = updateDevice(mScanResultList, new BleDevice(result, null));
                 mScanResultAdapter.notifyDataSetChanged();
             }
         }
@@ -182,20 +196,20 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private boolean containsDevice(List<ScanResult> resList, ScanResult res) {
-        for (ScanResult dev : resList) {
-            if (dev.getDevice().getAddress().equals(res.getDevice().getAddress())) {
+    private boolean containsDevice(List<BleDevice> resList, ScanResult res) {
+        for (BleDevice dev : resList) {
+            if (dev.mScanResult.getDevice().getAddress().equals(res.getDevice().getAddress())) {
                 return true;
             }
         }
         return false;
     }
 
-    private List<ScanResult> updateDevice(List<ScanResult> resList, ScanResult update){
+    private List<BleDevice> updateDevice(List<BleDevice> resList, BleDevice update){
         int i = 0;
-        for (ScanResult res: resList) {
-            if(res.getDevice().getAddress().equals(update.getDevice().getAddress())){
-                resList.set(i,update);
+        for (BleDevice dev: resList) {
+            if(dev.mScanResult.getDevice().getAddress().equals(update.mScanResult.getDevice().getAddress())){
+                resList.set(i, update);
                 return resList;
             }
             i++;

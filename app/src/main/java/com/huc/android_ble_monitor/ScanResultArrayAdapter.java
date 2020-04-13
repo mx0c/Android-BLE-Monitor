@@ -1,5 +1,6 @@
 package com.huc.android_ble_monitor;
 
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.os.Build;
@@ -12,20 +13,23 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.huc.android_ble_monitor.Models.BleDevice;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScanResultArrayAdapter extends ArrayAdapter<ScanResult> {
+public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
     private Context mCtx;
 
-    public ScanResultArrayAdapter(Context context, List<ScanResult> devices) {
+    public ScanResultArrayAdapter(Context context, List<BleDevice> devices) {
         super(context, 0, devices);
         mCtx = context;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        ScanResult res = getItem(position);
+        BleDevice item = getItem(position);
+        ScanResult res = item.mScanResult;
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.device_list_item, parent, false);
         }
@@ -61,11 +65,18 @@ public class ScanResultArrayAdapter extends ArrayAdapter<ScanResult> {
         List<ParcelUuid> uuids = res.getScanRecord().getServiceUuids();
         ArrayList<String> uuidStrings = new ArrayList<String>();
 
+        //add BleDevice services to listview
+        if(item.mServices.size() > 0 && item != null){
+            for (BluetoothGattService service: item.mServices) {
+                uuidStrings.add(service.getUuid().toString());
+            }
+        }
+
         if(uuids != null) {
             for (ParcelUuid uuid : uuids) {
                 uuidStrings.add(uuid.getUuid().toString());
             }
-        }else {
+        }else if(uuidStrings.size() <= 0){
             uuidStrings.add("- No advertised services found");
         }
 
