@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,36 +35,52 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.device_list_item, parent, false);
         }
 
-        TextView tvName = convertView.findViewById(R.id.textView_name);
-        TextView tvAddress = convertView.findViewById(R.id.textView_address);
-        TextView tvBonded = convertView.findViewById(R.id.textView_bonded);
-        TextView tvRssi = convertView.findViewById(R.id.textView_rssi);
-        TextView tvConnectable = convertView.findViewById(R.id.textView_conectability);
-        TextView tvVendor = convertView.findViewById(R.id.textView_vendor);
+        TextView tvName = convertView.findViewById(R.id.DeviceName_TextView);
+        TextView tvAddress = convertView.findViewById(R.id.DeviceUUID_TextView);
+        TextView tvBonded = convertView.findViewById(R.id.BondState_TextView);
+        TextView tvRssi = convertView.findViewById(R.id.RSSI_TextView);
+        TextView tvConnectability = convertView.findViewById(R.id.Connectability_TextView);
+        TextView tvCompanyIdentifier = convertView.findViewById(R.id.CompanyIdentifier_TextView);
+        ImageView ivBondstate = convertView.findViewById(R.id.BondState_ImageView);
 
         String name = res.getScanRecord().getDeviceName();
-        tvName.setText("Name: " + (name == null ? "unknown" : name));
-        tvAddress.setText("Address: " + res.getDevice().getAddress());
-        tvBonded.setText("Bondstate: " + BleUtility.BondIntToString(res.getDevice().getBondState()));
-        tvRssi.setText("RSSI: " + res.getRssi());
+        tvName.setText((name == null ? "unknown" : name));
+        tvAddress.setText(res.getDevice().getAddress());
+
+        int state = res.getDevice().getBondState();
+
+        int id = 0;
+        if (state == 11) {
+            id = R.drawable.round_bluetooth_searching_white_48;
+        } else if (state == 12) {
+            id = R.drawable.round_bluetooth_connected_white_48;
+        } else {
+            id = R.drawable.round_bluetooth_disabled_white_48;
+        }
+        ivBondstate.setImageResource(id);
+        tvBonded.setText(BleUtility.BondIntToString(state));
+
+        tvRssi.setText(Integer.toString(res.getRssi()));
+
 
         SparseArray<byte[]> manufacturerData = res.getScanRecord().getManufacturerSpecificData();
         int manufacturerId = 0;
         for(int i = 0; i < manufacturerData .size(); i++){
             manufacturerId = manufacturerData.keyAt(i);
         }
-        tvVendor.setText("Vendor: " + manufacturerId);
+        tvCompanyIdentifier.setText("Resolved Name (" + manufacturerId + ")"); // ToDo Resolve Name
 
         //only possible with api level >= 26
         if (Build.VERSION.SDK_INT >= 26) {
-            tvConnectable.setText("Connectable: " + Boolean.toString(res.isConnectable()));
+            tvConnectability.setText("Connectable: " + Boolean.toString(res.isConnectable()));
         }else{
-            tvConnectable.setVisibility(View.GONE);
+            tvConnectability.setText("NOT CONNECTABLE");
+            //tvConnectability.setVisibility(View.GONE);
         }
 
-        ListView servicesListView = convertView.findViewById(R.id.service_uuids_listView);
+        ListView servicesListView = convertView.findViewById(R.id.serviceUUIDs_ListView);
         List<ParcelUuid> uuids = res.getScanRecord().getServiceUuids();
-        ArrayList<String> uuidStrings = new ArrayList<String>();
+        ArrayList<String> uuidStrings = new ArrayList<>();
 
         //add BleDevice services to listview
         if(item.mServices.size() > 0 && item != null){

@@ -16,7 +16,5 @@
     <ListView
         android:id="@+id/deviceList"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:divider="#000000"
-        android:dividerHeight="1px" />
+        android:layout_width="match_parent" />
 </LinearLayout>
