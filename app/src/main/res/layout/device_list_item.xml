@@ -174,23 +174,39 @@
                 android:layout_height="24dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
+                android:src="@drawable/round_power_off_white_48"
+                android:tint="@color/secondaryColor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Not Connectable"
+                android:id="@+id/Connectability_TextView"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="1.5dp"
+            android:paddingBottom="1.5dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
                 android:src="@drawable/round_import_export_white_48"
                 android:tint="@color/secondaryColor" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Connectable"
-                android:id="@+id/Connectability_TextView"/>
+                android:text="Services (0)"
+                android:id="@+id/Services_TextView"/>
         </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Services:"
-        android:id="@+id/Services_TextView"
-        android:layout_marginBottom="5dp"/>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
