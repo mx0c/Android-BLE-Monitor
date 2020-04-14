@@ -1,13 +1,35 @@
 package com.huc.android_ble_monitor;
 
+import android.content.Context;
 import android.util.Pair;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Static {
+public class DataIO {
+
+    public JSONObject loadJSONFromAsset(Context context, String filename) {
+        try {
+            InputStream is = context.getAssets().open(filename);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String json = new String(buffer, "UTF-8");
+            return new JSONObject(json);
+        } catch (IOException | JSONException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     //from https://github.com/tessel/bleadvertise/blob/master/lib/packet.js
     static List<Pair<Integer, String>> ADTypes = Arrays.asList(
             new Pair<Integer, String>(0x01, "Flags"),
