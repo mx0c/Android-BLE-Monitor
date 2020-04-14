@@ -28,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -65,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         mScanResultAdapter = new ScanResultArrayAdapter(this, mScanResultList);
         mListView.setAdapter(mScanResultAdapter);
         mListView.setOnItemClickListener(mOnListViewItemClick);
+
+
 
         requestLocationPermission();
         checkBleAvailability();

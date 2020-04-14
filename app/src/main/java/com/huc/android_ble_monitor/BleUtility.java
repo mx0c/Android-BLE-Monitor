@@ -20,13 +20,4 @@ public class BleUtility {
                 return "NOT RECOGNIZED";
         }
     }
-
-    public static String StringifyAdvType(byte adType) {
-        for (Pair<Integer, String> pair : Static.ADTypes) {
-            if (pair.first == adType) {
-                return pair.second;
-            }
-        }
-        return "Unknown";
-    }
 }

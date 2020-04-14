@@ -16,14 +16,17 @@ import android.widget.TextView;
 import com.huc.android_ble_monitor.Models.BleDevice;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
     private Context mCtx;
+    private HashMap<Integer, String> mManufacturerIdToStringMap;
 
     public ScanResultArrayAdapter(Context context, List<BleDevice> devices) {
         super(context, 0, devices);
         mCtx = context;
+        mManufacturerIdToStringMap = DataIO.loadManufacturerIdToStringMap(context);
     }
 
     @Override
@@ -52,7 +55,7 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
         for(int i = 0; i < manufacturerData .size(); i++){
             manufacturerId = manufacturerData.keyAt(i);
         }
-        tvVendor.setText("Vendor: " + manufacturerId);
+        tvVendor.setText("Vendor: " + mManufacturerIdToStringMap.get(manufacturerId));
 
         //only possible with api level >= 26
         if (Build.VERSION.SDK_INT >= 26) {

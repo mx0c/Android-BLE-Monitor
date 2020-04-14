@@ -3,6 +3,7 @@ package com.huc.android_ble_monitor;
 import android.content.Context;
 import android.util.Pair;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,11 +12,12 @@ import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class DataIO {
 
-    public JSONObject loadJSONFromAsset(Context context, String filename) {
+    static public JSONArray loadJSONArrayFromAsset(Context context, String filename) {
         try {
             InputStream is = context.getAssets().open(filename);
             int size = is.available();
@@ -23,15 +25,32 @@ public class DataIO {
             is.read(buffer);
             is.close();
             String json = new String(buffer, "UTF-8");
-            return new JSONObject(json);
+            return new JSONArray(json);
         } catch (IOException | JSONException ex) {
             ex.printStackTrace();
             return null;
         }
     }
 
+    static public HashMap<Integer, String> loadManufacturerIdToStringMap(Context ctx){
+        JSONArray jsonArray = loadJSONArrayFromAsset(ctx, "company_ids.json");
+        HashMap<Integer, String> map = new HashMap<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                String test = obj.keys().next();
+                map.put(obj.getInt("code"), obj.getString("name"));
+            }catch (JSONException ex){
+                ex.printStackTrace();
+            }
+        }
+
+        return map;
+    }
+
     //from https://github.com/tessel/bleadvertise/blob/master/lib/packet.js
-    static List<Pair<Integer, String>> ADTypes = Arrays.asList(
+    public static List<Pair<Integer, String>> ADTypes = Arrays.asList(
             new Pair<Integer, String>(0x01, "Flags"),
             new Pair<Integer, String>(0x02, "Incomplete List of 16-bit Service Class UUIDs"),
             new Pair<Integer, String>(0x03, "Complete List of 16-bit Service Class UUIDs"),
