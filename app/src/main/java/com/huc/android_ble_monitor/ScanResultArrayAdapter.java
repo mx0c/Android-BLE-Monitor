@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.huc.android_ble_monitor.Models.BleDevice;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
@@ -26,6 +27,7 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
 
 
     private Context mCtx;
+    private HashMap<Integer, String> mManufacturerIdToStringMap;
 
     // Views
     private TextView tvName;
@@ -40,6 +42,7 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
     public ScanResultArrayAdapter(Context context, List<BleDevice> devices) {
         super(context, 0, devices);
         mCtx = context;
+        mManufacturerIdToStringMap = DataIO.loadManufacturerIdToStringMap(context);
     }
 
     private void initializeViewIds(View convertView, ViewGroup parent) {
@@ -86,7 +89,7 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
         for(int i = 0; i < manufacturerData .size(); i++){
             manufacturerId = manufacturerData.keyAt(i);
         }
-        tvCompanyIdentifier.setText("Resolved Name (" + manufacturerId + ")"); // ToDo Resolve Name
+        tvCompanyIdentifier.setText(mManufacturerIdToStringMap.get(manufacturerId) + "(" + manufacturerId + ")"); // ToDo Resolve Name
     }
 
     private void deviceConnectabilityResolver(ScanResult result) {
