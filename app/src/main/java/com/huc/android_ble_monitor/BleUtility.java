@@ -11,7 +11,7 @@ public class BleUtility {
     public static String BondIntToString(int bondInt) {
         switch (bondInt) {
             case 10:
-                return "NONE";
+                return "NOT CONNECTED";
             case 11:
                 return "BONDING";
             case 12:

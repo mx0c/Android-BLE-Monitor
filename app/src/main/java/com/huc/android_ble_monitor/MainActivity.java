@@ -16,6 +16,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,7 @@ import com.huc.android_ble_monitor.Models.BleDevice;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
 
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+                    Toast.makeText(MainActivity.this, "onConnectionStateChange", Toast.LENGTH_SHORT).show();
                     switch (newState){
                         case BluetoothProfile.STATE_CONNECTING:
                             Toast.makeText(MainActivity.this, "Connecting...", Toast.LENGTH_SHORT).show();
@@ -231,8 +234,10 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (checkForBluetoothEnabled()) {
                     if(isChecked){
+                        Log.d(TAG, "BLE Switch checked. Scanning BLE Devices.");
                         scanBleDevices(true);
                     }else {
+                        Log.d(TAG, "BLE Switch unchecked. Stopped scanning BLE Devices.");
                         scanBleDevices(false);
                     }
                 }else {
