@@ -25,7 +25,6 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
     final int BOND_STATE_BONDED = R.drawable.round_bluetooth_connected_white_48;
     final int BOND_STATE_NOT_CONNECTED_OR_RECOGNIZED = R.drawable.round_bluetooth_disabled_white_48;
 
-
     private Context mCtx;
     private HashMap<Integer, String> mManufacturerIdToStringMap;
 
@@ -80,7 +79,7 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
     }
 
     private void deviceRssiResolver(ScanResult result) {
-        tvRssi.setText(Integer.toString(result.getRssi()));
+        tvRssi.setText(Integer.toString(result.getRssi()) + " dBm");
     }
 
     private void deviceManufacturerResolver(ScanResult result) {
