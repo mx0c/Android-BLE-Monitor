@@ -18,7 +18,6 @@ import com.huc.android_ble_monitor.Models.BleDevice;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 
 public class BleUtility {
