@@ -3,18 +3,20 @@ package com.huc.android_ble_monitor;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.widget.Toast;
 import com.huc.android_ble_monitor.Models.BleDevice;
+
 import java.util.List;
+import java.util.UUID;
 
 
 public class BleUtility {
@@ -23,6 +25,9 @@ public class BleUtility {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBleScanner;
     private MainActivity mCtx;
+
+    private static final UUID NAME_CHARACTERISTIC_UUID = UUID.fromString("00002A00-0000-1000-8000-00805F9B34FB");
+    private static final UUID DEVICE_INFO_SERVICE_UUID = UUID.fromString("00001800-0000-1000-8000-00805F9B34FB");
 
     BleUtility(MainActivity ctx){
         this.mCtx = ctx;
@@ -46,7 +51,21 @@ public class BleUtility {
                     device.mServices.addAll(services);
                     mCtx.mScanResultList.set(position, device);
                     mCtx.mScanResultAdapter.notifyDataSetChanged();
+
+                    BluetoothGattService service = gatt.getService(DEVICE_INFO_SERVICE_UUID);
+                    BluetoothGattCharacteristic charac = service.getCharacteristic(NAME_CHARACTERISTIC_UUID);
+
+                    if(gatt.readCharacteristic(charac))
+                        Toast.makeText(mCtx, "Reading Characteristic", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(mCtx, "Failed Reading Characteristic", Toast.LENGTH_SHORT).show();
                 }
+            }
+
+            @Override
+            public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+                String byteString = new String(characteristic.getValue());
+                Toast.makeText(mCtx, byteString, Toast.LENGTH_LONG).show();
             }
 
             @Override

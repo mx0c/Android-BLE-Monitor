@@ -28,13 +28,13 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
     private Context mCtx;
     private HashMap<Integer, String> mManufacturerIdToStringMap;
 
-    // Views
     private TextView tvName;
     private TextView tvAddress;
     private TextView tvBonded;
     private TextView tvRssi;
     private TextView tvConnectability;
     private TextView tvCompanyIdentifier;
+    private TextView tvServices;
     private ImageView ivBondstate;
     private ListView servicesListView;
 
@@ -52,6 +52,7 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
         tvConnectability = convertView.findViewById(R.id.Connectability_TextView);
         tvCompanyIdentifier = convertView.findViewById(R.id.CompanyIdentifier_TextView);
         ivBondstate = convertView.findViewById(R.id.BondState_ImageView);
+        tvServices = convertView.findViewById(R.id.Services_TextView);
         servicesListView = convertView.findViewById(R.id.serviceUUIDs_ListView);
     }
 
@@ -88,7 +89,7 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
         for(int i = 0; i < manufacturerData .size(); i++){
             manufacturerId = manufacturerData.keyAt(i);
         }
-        tvCompanyIdentifier.setText(mManufacturerIdToStringMap.get(manufacturerId) + "(" + manufacturerId + ")"); // ToDo Resolve Name
+        tvCompanyIdentifier.setText(mManufacturerIdToStringMap.get(manufacturerId) + "(" + manufacturerId + ")");
     }
 
     private void deviceConnectabilityResolver(ScanResult result) {
@@ -118,6 +119,8 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
         }else if(uuidStrings.size() <= 0){
             uuidStrings.add("- No advertised services found");
         }
+
+        tvServices.setText(new StringBuilder().append("Services ").append("(").append(uuidStrings.size()).append(")").toString());
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mCtx, R.layout.advertised_service_list_item, uuidStrings);
         servicesListView.setAdapter(adapter);
