@@ -28,7 +28,6 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
     private Context mCtx;
     private HashMap<Integer, String> mManufacturerIdToStringMap;
 
-    // Views
     private TextView tvName;
     private TextView tvAddress;
     private TextView tvBonded;
@@ -88,7 +87,7 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
         for(int i = 0; i < manufacturerData .size(); i++){
             manufacturerId = manufacturerData.keyAt(i);
         }
-        tvCompanyIdentifier.setText(mManufacturerIdToStringMap.get(manufacturerId) + "(" + manufacturerId + ")"); // ToDo Resolve Name
+        tvCompanyIdentifier.setText(mManufacturerIdToStringMap.get(manufacturerId) + "(" + manufacturerId + ")");
     }
 
     private void deviceConnectabilityResolver(ScanResult result) {
@@ -96,8 +95,7 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
         if (Build.VERSION.SDK_INT >= 26) {
             tvConnectability.setText("Connectable: " + Boolean.toString(result.isConnectable()));
         }else{
-            tvConnectability.setText("NOT CONNECTABLE");
-            //tvConnectability.setVisibility(View.GONE);
+            tvConnectability.setVisibility(View.GONE);
         }
     }
 
