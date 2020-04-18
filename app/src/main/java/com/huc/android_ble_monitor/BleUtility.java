@@ -12,18 +12,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.util.Pair;
 import android.widget.Toast;
-
 import com.huc.android_ble_monitor.Models.BleDevice;
-
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
-import static androidx.core.app.ActivityCompat.startActivityForResult;
 
 public class BleUtility {
     private static final int REQUEST_ENABLE_BT = 0;

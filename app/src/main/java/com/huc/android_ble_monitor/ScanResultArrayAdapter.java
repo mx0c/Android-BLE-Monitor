@@ -96,8 +96,7 @@ public class ScanResultArrayAdapter extends ArrayAdapter<BleDevice> {
         if (Build.VERSION.SDK_INT >= 26) {
             tvConnectability.setText("Connectable: " + Boolean.toString(result.isConnectable()));
         }else{
-            tvConnectability.setText("NOT CONNECTABLE");
-            //tvConnectability.setVisibility(View.GONE);
+            tvConnectability.setVisibility(View.GONE);
         }
     }
 
