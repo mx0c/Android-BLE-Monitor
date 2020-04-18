@@ -15,19 +15,28 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+
 import com.google.android.material.appbar.MaterialToolbar;
 import com.huc.android_ble_monitor.Models.BleDevice;
+import com.huc.android_ble_monitor.Util.ActivityUtil;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "BLEM_MainActivity";
     private static final int REQUEST_LOCATION_PERMISSION = 1;
 
     private ListView mListView;
@@ -40,14 +49,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppTheme); // Resets default theme after app was loaded
         setContentView(R.layout.activity_main);
+        ActivityUtil.setToolbar(this, true);
 
-        mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
+        initViews();
 
-        mListView = findViewById(R.id.deviceList);
         mScanResultAdapter = new ScanResultArrayAdapter(this, mScanResultList);
         mListView.setAdapter(mScanResultAdapter);
         mListView.setOnItemClickListener(mOnListViewItemClick);
@@ -62,11 +70,20 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(mReceiver, filter);
     }
 
+    /**
+     * Helper to initialize views at once place
+     */
+    public void initViews() {
+        mListView = findViewById(R.id.deviceList);
+        mBluetoothSwitch = findViewById(R.id.switch_compat_element);
+    }
+
     private AdapterView.OnItemClickListener mOnListViewItemClick = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
             final BleDevice item = mScanResultList.get(position);
             mBleUtility.connectToDevice(item, position);
+            ActivityUtil.startNewActivity(MainActivity.this, BleDeviceOverviewActivity.class, null);
         }
     };
 
@@ -97,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     @AfterPermissionGranted(REQUEST_LOCATION_PERMISSION)
     public void requestLocationPermission() {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
-        if(!EasyPermissions.hasPermissions(this, perms)) {
+        if (!EasyPermissions.hasPermissions(this, perms)) {
             EasyPermissions.requestPermissions(this, "Please grant the location permission", REQUEST_LOCATION_PERMISSION, perms);
         }
     }
@@ -115,19 +132,18 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu, menu);
         MenuItem menuItem = menu.findItem(R.id.app_bar_switch_item);
         View view = menuItem.getActionView();
-        mBluetoothSwitch = view.findViewById(R.id.switch_compat_element);
         mBluetoothSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (mBleUtility.checkForBluetoothEnabled()) {
-                    if(isChecked){
+                    if (isChecked) {
                         Log.d(TAG, "BLE Switch checked. Scanning BLE Devices.");
                         mBleUtility.scanBleDevices(true);
-                    }else {
+                    } else {
                         Log.d(TAG, "BLE Switch unchecked. Stopped scanning BLE Devices.");
                         mBleUtility.scanBleDevices(false);
                     }
-                }else {
+                } else {
                     buttonView.setChecked(false);
                 }
             }
