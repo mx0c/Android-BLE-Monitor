@@ -15,6 +15,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.widget.Toast;
 import com.huc.android_ble_monitor.Models.BleDevice;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +29,7 @@ public class BleUtility {
     private MainActivity mCtx;
 
     private static final UUID NAME_CHARACTERISTIC_UUID = UUID.fromString("00002A00-0000-1000-8000-00805F9B34FB");
-    private static final UUID DEVICE_INFO_SERVICE_UUID = UUID.fromString("0000180a-0000-1000-8000-00805F9B34FB");
+    private static final UUID DEVICE_INFO_SERVICE_UUID = UUID.fromString("00001800-0000-1000-8000-00805F9B34FB");
 
     BleUtility(MainActivity ctx){
         this.mCtx = ctx;
@@ -51,12 +53,21 @@ public class BleUtility {
                     device.mServices.addAll(services);
                     mCtx.mScanResultList.set(position, device);
                     mCtx.mScanResultAdapter.notifyDataSetChanged();
+
+                    BluetoothGattService service = gatt.getService(DEVICE_INFO_SERVICE_UUID);
+                    BluetoothGattCharacteristic charac = service.getCharacteristic(NAME_CHARACTERISTIC_UUID);
+
+                    if(gatt.readCharacteristic(charac))
+                        Toast.makeText(mCtx, "Reading Characteristic", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(mCtx, "Failed Reading Characteristic", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-                characteristic.getValue();
+                String byteString = new String(characteristic.getValue());
+                Toast.makeText(mCtx, byteString, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -69,12 +80,6 @@ public class BleUtility {
                     case BluetoothProfile.STATE_CONNECTED:
                         Toast.makeText(mCtx, "Connected!", Toast.LENGTH_SHORT).show();
                         gatt.discoverServices();
-                        BluetoothGattCharacteristic charac = gatt.getService(DEVICE_INFO_SERVICE_UUID).getCharacteristic(NAME_CHARACTERISTIC_UUID);
-
-                        if(gatt.readCharacteristic(charac))
-                            Toast.makeText(mCtx, "Reading Characteristic", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(mCtx, "Failed Reading Characteristic", Toast.LENGTH_SHORT).show();
                         break;
                     case BluetoothProfile.STATE_DISCONNECTED:
                         Toast.makeText(mCtx, "Disconnected!", Toast.LENGTH_SHORT).show();
