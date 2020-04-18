@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
-                android:text="-80db"
+                android:text="-0db"
                 android:id="@+id/RSSI_TextView"/>
         </LinearLayout>
 
@@ -65,7 +65,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Apple Watch"
+                    android:text="@string/dummy_device"
                     android:id="@+id/DeviceName_TextView"/>
             </LinearLayout>
 
@@ -88,7 +88,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="UUID:"
+                    android:text="@string/dummy_uuid"
                     android:id="@+id/DeviceUUID_TextView"/>
             </LinearLayout>
 
@@ -98,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="right|center_vertical"
+            android:gravity="end|center_vertical"
             android:paddingTop="8dp">
 
             <ImageView
@@ -113,21 +113,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Connected"
-                android:layout_marginLeft="3dp"
+                android:text="@string/dummy_connected"
+                android:layout_marginStart="3dp"
                 android:id="@+id/BondState_TextView"/>
         </LinearLayout>
 
 
     </LinearLayout>
-
-    <!--
-    <View
-        android:layout_marginVertical="5dp"
-        android:layout_height="1dp"
-        android:layout_width="match_parent"
-        android:background="@color/secondaryColor"/>
-        -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -155,7 +147,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mocked Inc."
+                android:text="@string/dummy_company"
                 android:id="@+id/CompanyIdentifier_TextView"/>
         </LinearLayout>
 
@@ -178,7 +170,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Not Connectable"
+                android:text="@string/dummy_not_connectable"
                 android:id="@+id/Connectability_TextView"/>
         </LinearLayout>
 
@@ -201,7 +193,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Services (0)"
+                android:text="@string/dummy_services"
                 android:id="@+id/Services_TextView"/>
         </LinearLayout>
     </LinearLayout>

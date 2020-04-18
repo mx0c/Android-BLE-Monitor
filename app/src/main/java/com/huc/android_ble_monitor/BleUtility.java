@@ -9,15 +9,14 @@ import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.widget.Toast;
 import com.huc.android_ble_monitor.Models.BleDevice;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 
 public class BleUtility {

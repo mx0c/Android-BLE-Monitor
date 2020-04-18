@@ -1,6 +1,5 @@
 package com.huc.android_ble_monitor.Util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
@@ -8,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.huc.android_ble_monitor.MainActivity;
 import com.huc.android_ble_monitor.R;
 
 import java.util.Objects;
@@ -44,6 +42,5 @@ public class ActivityUtil {
         } else {
             Objects.requireNonNull(activity.getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         }
-
     }
 }

@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
      */
     public void initViews() {
         mListView = findViewById(R.id.deviceList);
-        mBluetoothSwitch = findViewById(R.id.switch_compat_element);
     }
 
     private AdapterView.OnItemClickListener mOnListViewItemClick = new AdapterView.OnItemClickListener() {
@@ -132,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu, menu);
         MenuItem menuItem = menu.findItem(R.id.app_bar_switch_item);
         View view = menuItem.getActionView();
+        mBluetoothSwitch = view.findViewById(R.id.switch_compat_element);
         mBluetoothSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
