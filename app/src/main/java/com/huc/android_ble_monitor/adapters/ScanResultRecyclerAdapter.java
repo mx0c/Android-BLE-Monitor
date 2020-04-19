@@ -59,9 +59,9 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         ((ViewHolder)holder).tvBonded.setText(this.bondStateTextResolver(scanResult));
         ((ViewHolder)holder).ivBondstate.setImageResource(this.bondStateImageResolver(scanResult));
-        ((ViewHolder)holder).tvName.setText(this.deviceAddressResolver(scanResult));
+        ((ViewHolder)holder).tvName.setText(this.deviceNameResolver(scanResult));
         ((ViewHolder)holder).tvAddress.setText(this.deviceAddressResolver(scanResult));
-        ((ViewHolder)holder).tvRssi.setText(this.deviceAddressResolver(scanResult));
+        ((ViewHolder)holder).tvRssi.setText(this.deviceRssiResolver(scanResult));
         ((ViewHolder)holder).tvCompanyIdentifier.setText(this.deviceManufacturerResolver(scanResult));
         ((ViewHolder)holder).tvConnectability.setText(this.deviceConnectabilityResolver(scanResult));
         ((ViewHolder)holder).tvServices.setText(this.deviceServiceResolver(mBleDevices.get(position), scanResult));

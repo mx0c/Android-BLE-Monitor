@@ -2,28 +2,40 @@ package com.huc.android_ble_monitor.util;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
+import android.content.Context;
+import android.content.Intent;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.huc.android_ble_monitor.MainActivity;
+import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
 
+import java.util.List;
 import java.util.UUID;
 
 
 public class BleUtility {
-    private static final int REQUEST_ENABLE_BT = 0;
+    public static final int REQUEST_ENABLE_BT_RESULT = 313;
 
-    private BluetoothAdapter mBluetoothAdapter;
-    private BluetoothLeScanner mBleScanner;
-
-    private MutableLiveData<ToastModel> toastMessage;
+    public static BluetoothAdapter mBluetoothAdapter;
+    public static BluetoothLeScanner mBleScanner;
 
     private static final UUID NAME_CHARACTERISTIC_UUID = UUID.fromString("00002A00-0000-1000-8000-00805F9B34FB");
     private static final UUID DEVICE_INFO_SERVICE_UUID = UUID.fromString("00001800-0000-1000-8000-00805F9B34FB");
 
-    public BleUtility(MainActivity ctx){
+    static public void checkIsBluetoothEnabled(AppCompatActivity ctx){
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mBleScanner = mBluetoothAdapter.getBluetoothLeScanner();
+
+        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            ctx.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT_RESULT);
+        }
     }
 
     /*
@@ -81,20 +93,9 @@ public class BleUtility {
         });
 
     }
+    */
 
-    private ScanCallback mScanCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, ScanResult result) {
-            if(!containsDevice(mCtx.mScanResultList, result)){
-                mCtx.mScanResultList.add(new BleDevice(result, null));
-                mCtx.mScanResultAdapter.notifyDataSetChanged();
-            }else{
-                mCtx.mScanResultList = updateDevice(mCtx.mScanResultList, new BleDevice(result, null));
-                mCtx.mScanResultAdapter.notifyDataSetChanged();
-            }
-        }
-    };
-
+    /*
     public void scanBleDevices(final boolean enable){
         if(enable){
             mBleScanner.startScan(mScanCallback);
@@ -119,8 +120,8 @@ public class BleUtility {
         }
         return true;
     }
-
-    private boolean containsDevice(List<BleDevice> resList, ScanResult res) {
+     */
+    public static boolean containsDevice(List<BleDevice> resList, ScanResult res) {
         for (BleDevice dev : resList) {
             if (dev.mScanResult.getDevice().getAddress().equals(res.getDevice().getAddress())) {
                 return true;
@@ -129,7 +130,7 @@ public class BleUtility {
         return false;
     }
 
-    private List<BleDevice> updateDevice(List<BleDevice> resList, BleDevice update){
+    public static List<BleDevice> updateDevice(List<BleDevice> resList, BleDevice update){
         int i = 0;
         for (BleDevice dev: resList) {
             if(dev.mScanResult.getDevice().getAddress().equals(update.mScanResult.getDevice().getAddress())){
@@ -141,8 +142,6 @@ public class BleUtility {
         return resList;
     }
 
-
-     */
     public static String BondIntToString(int bondInt) {
         switch (bondInt) {
             case 10:
@@ -154,10 +153,5 @@ public class BleUtility {
             default:
                 return "NOT RECOGNIZED";
         }
-    }
-
-
-    public LiveData<ToastModel> getToastBroadcast() {
-        return toastMessage;
     }
 }
