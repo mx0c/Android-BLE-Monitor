@@ -9,6 +9,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -64,7 +65,11 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         ((ViewHolder)holder).tvRssi.setText(this.deviceRssiResolver(scanResult));
         ((ViewHolder)holder).tvCompanyIdentifier.setText(this.deviceManufacturerResolver(scanResult));
         ((ViewHolder)holder).tvConnectability.setText(this.deviceConnectabilityResolver(scanResult));
-        ((ViewHolder)holder).tvServices.setText(this.deviceServiceResolver(mBleDevices.get(position), scanResult));
+
+        ArrayList<String> uuids = this.deviceServiceResolver(mBleDevices.get(position), scanResult);
+        ((ViewHolder)holder).tvServices.setText("Services (" + (uuids.size()-1) + ")");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.advertised_service_list_item, uuids);
+        ((ViewHolder)holder).servicesListView.setAdapter(adapter);
     }
 
     @Override
@@ -169,7 +174,7 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
          */
     }
 
-    private String deviceServiceResolver(BleDevice item, ScanResult result) {
+    private ArrayList<String> deviceServiceResolver(BleDevice item, ScanResult result) {
         List<ParcelUuid> uuids = result.getScanRecord().getServiceUuids(); // ToDo Remove Logic to viewmodel
         ArrayList<String> uuidStrings = new ArrayList<>();
 
@@ -188,13 +193,7 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             uuidStrings.add("- No advertised services found");
         }
 
-        return new StringBuilder().append("Services ").append("(").append(uuidStrings.size()).append(")").toString();
-
-        /*
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mCtx, R.layout.advertised_service_list_item, uuidStrings);
-        servicesListView.setAdapter(adapter);
-
-         */
+        return uuidStrings;
     }
 
 }
