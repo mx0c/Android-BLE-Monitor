@@ -1,21 +1,14 @@
-package com.huc.android_ble_monitor;
+package com.huc.android_ble_monitor.util;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCallback;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
-import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanResult;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.widget.Toast;
-import com.huc.android_ble_monitor.Models.BleDevice;
 
-import java.util.List;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import com.huc.android_ble_monitor.MainActivity;
+import com.huc.android_ble_monitor.models.ToastModel;
+
 import java.util.UUID;
 
 
@@ -24,20 +17,21 @@ public class BleUtility {
 
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBleScanner;
-    private MainActivity mCtx;
+
+    private MutableLiveData<ToastModel> toastMessage;
 
     private static final UUID NAME_CHARACTERISTIC_UUID = UUID.fromString("00002A00-0000-1000-8000-00805F9B34FB");
     private static final UUID DEVICE_INFO_SERVICE_UUID = UUID.fromString("00001800-0000-1000-8000-00805F9B34FB");
 
-    BleUtility(MainActivity ctx){
-        this.mCtx = ctx;
+    public BleUtility(MainActivity ctx){
     }
 
+    /*
     public void connectToDevice(final BleDevice device, final int position){
         //Check for connectability if api version >= 26
         if (Build.VERSION.SDK_INT >= 26) {
             if(!device.mScanResult.isConnectable()){
-                Toast.makeText(mCtx, "Device is not connectable.", Toast.LENGTH_SHORT).show();
+                toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT,"Device is not connectable." ));
                 return;
             }
         }
@@ -56,31 +50,31 @@ public class BleUtility {
                     BluetoothGattCharacteristic charac = service.getCharacteristic(NAME_CHARACTERISTIC_UUID);
 
                     if(gatt.readCharacteristic(charac))
-                        Toast.makeText(mCtx, "Reading Characteristic", Toast.LENGTH_SHORT).show();
+                        toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT,"Reading Characteristic"));
                     else
-                        Toast.makeText(mCtx, "Failed Reading Characteristic", Toast.LENGTH_SHORT).show();
+                        toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT,"Failed Reading Characteristic"));
+
                 }
             }
 
             @Override
             public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
                 String byteString = new String(characteristic.getValue());
-                Toast.makeText(mCtx, byteString, Toast.LENGTH_LONG).show();
+                toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT, byteString));
             }
 
             @Override
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-                Toast.makeText(mCtx, "onConnectionStateChange", Toast.LENGTH_SHORT).show();
                 switch (newState){
                     case BluetoothProfile.STATE_CONNECTING:
-                        Toast.makeText(mCtx, "Connecting...", Toast.LENGTH_SHORT).show();
+                        toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT, "Connecting..."));
                         break;
                     case BluetoothProfile.STATE_CONNECTED:
-                        Toast.makeText(mCtx, "Connected!", Toast.LENGTH_SHORT).show();
+                        toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT, "Connected!"));
                         gatt.discoverServices();
                         break;
                     case BluetoothProfile.STATE_DISCONNECTED:
-                        Toast.makeText(mCtx, "Disconnected!", Toast.LENGTH_SHORT).show();
+                        toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT, "Disconnected!"));
                         break;
                 }
             }
@@ -111,7 +105,7 @@ public class BleUtility {
 
     public void checkBleAvailability(){
         if (!mCtx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(mCtx, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+            toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT, "Seems like your device doesn\\'t support BLE!"));
         }
     }
 
@@ -147,6 +141,8 @@ public class BleUtility {
         return resList;
     }
 
+
+     */
     public static String BondIntToString(int bondInt) {
         switch (bondInt) {
             case 10:
@@ -158,5 +154,10 @@ public class BleUtility {
             default:
                 return "NOT RECOGNIZED";
         }
+    }
+
+
+    public LiveData<ToastModel> getToastBroadcast() {
+        return toastMessage;
     }
 }

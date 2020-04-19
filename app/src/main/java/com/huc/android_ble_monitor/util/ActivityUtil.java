@@ -1,4 +1,4 @@
-package com.huc.android_ble_monitor.Util;
+package com.huc.android_ble_monitor.util;
 
 import android.content.Context;
 import android.content.Intent;

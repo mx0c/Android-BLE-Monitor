@@ -1,4 +1,4 @@
-package com.huc.android_ble_monitor;
+package com.huc.android_ble_monitor.adapters;
 
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.le.ScanResult;
@@ -14,7 +14,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.huc.android_ble_monitor.Models.BleDevice;
+import com.huc.android_ble_monitor.util.BleUtility;
+import com.huc.android_ble_monitor.util.DataIO;
+import com.huc.android_ble_monitor.R;
+import com.huc.android_ble_monitor.models.BleDevice;
 
 import java.util.ArrayList;
 import java.util.HashMap;

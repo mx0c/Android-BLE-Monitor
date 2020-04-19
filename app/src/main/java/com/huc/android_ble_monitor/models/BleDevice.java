@@ -1,4 +1,4 @@
-package com.huc.android_ble_monitor.Models;
+package com.huc.android_ble_monitor.models;
 
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.le.ScanResult;

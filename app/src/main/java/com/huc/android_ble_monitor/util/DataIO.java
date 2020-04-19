@@ -1,4 +1,4 @@
-package com.huc.android_ble_monitor;
+package com.huc.android_ble_monitor.util;
 
 import android.content.Context;
 import org.json.JSONArray;

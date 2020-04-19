@@ -1,6 +1,6 @@
 package com.huc.android_ble_monitor;
 
-import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,80 +11,86 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.huc.android_ble_monitor.adapters.ScanResultRecyclerAdapter;
+import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.models.ToastModel;
+import com.huc.android_ble_monitor.util.ActivityUtil;
+import com.huc.android_ble_monitor.util.PermissionsUtil;
+import com.huc.android_ble_monitor.viewmodels.MainActivityViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import com.google.android.material.appbar.MaterialToolbar;
-import com.huc.android_ble_monitor.Models.BleDevice;
-import com.huc.android_ble_monitor.Util.ActivityUtil;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
-
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ScanResultRecyclerAdapter.OnDeviceConnectListener {
     private static final String TAG = "BLEM_MainActivity";
-    private static final int REQUEST_LOCATION_PERMISSION = 1;
 
-    private ListView mListView;
-    private MaterialToolbar mToolbar;
     private SwitchCompat mBluetoothSwitch;
 
-    private BleUtility mBleUtility;
     public List<BleDevice> mScanResultList = new ArrayList<>();
-    public ScanResultArrayAdapter mScanResultAdapter;
+
+    private MainActivityViewModel mMainActivityViewModel;
+    private RecyclerView mScanResultRecyclerView;
+    private ScanResultRecyclerAdapter mScanResultRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppTheme); // Resets default theme after app was loaded
         setContentView(R.layout.activity_main);
+        mScanResultRecyclerView = findViewById(R.id.scan_result_recycler_view);
         ActivityUtil.setToolbar(this, true);
 
-        initViews();
-
-        mScanResultAdapter = new ScanResultArrayAdapter(this, mScanResultList);
-        mListView.setAdapter(mScanResultAdapter);
-        mListView.setOnItemClickListener(mOnListViewItemClick);
-
-        requestLocationPermission();
-
-        mBleUtility = new BleUtility(this);
-        mBleUtility.checkBleAvailability();
-        mBleUtility.checkForBluetoothEnabled();
+        PermissionsUtil.requestLocationPermission(MainActivity.this);
+        PermissionsUtil.enableBluetooth(MainActivity.this);
+        PermissionsUtil.checkBleAvailability(MainActivity.this);
 
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
+
+
+        mMainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+
+        mMainActivityViewModel.init();
+
+
+        mMainActivityViewModel.getBleDevices().observe(this, new Observer<List<BleDevice>>() {
+            @Override
+            public void onChanged(List<BleDevice> bleDevices) {
+                mScanResultList = bleDevices;
+                mScanResultRecyclerAdapter.notifyDataSetChanged();
+            }
+        });
+
+        mMainActivityViewModel.getToast().observe(this, new Observer<ToastModel>() {
+            @Override
+            public void onChanged(ToastModel toastModel) {
+                Toast.makeText(MainActivity.this, toastModel.getMessage(), toastModel.getDuration()).show();
+            }
+        });
+
+        initRecyclerView();
     }
 
-    /**
-     * Helper to initialize views at once place
-     */
-    public void initViews() {
-        mListView = findViewById(R.id.deviceList);
+    private void initRecyclerView(){
+        mScanResultRecyclerAdapter = new ScanResultRecyclerAdapter(this, new ArrayList<BleDevice>(), this);
+        RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mScanResultRecyclerView.setLayoutManager(linearLayoutManager);
+        mScanResultRecyclerView.setAdapter(mScanResultRecyclerAdapter);
     }
-
-    private AdapterView.OnItemClickListener mOnListViewItemClick = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-            final BleDevice item = mScanResultList.get(position);
-            mBleUtility.connectToDevice(item, position);
-            ActivityUtil.startNewActivity(MainActivity.this, BleDeviceOverviewActivity.class, null);
-        }
-    };
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -106,45 +112,41 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mBleUtility.scanBleDevices(false);
-        unregisterReceiver(mReceiver);
-    }
-
-    @AfterPermissionGranted(REQUEST_LOCATION_PERMISSION)
-    public void requestLocationPermission() {
-        String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
-        if (!EasyPermissions.hasPermissions(this, perms)) {
-            EasyPermissions.requestPermissions(this, "Please grant the location permission", REQUEST_LOCATION_PERMISSION, perms);
-        }
+        // unregisterReceiver(mReceiver);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
+    /*
+        EventHandlers related to the toolbar
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         MenuItem menuItem = menu.findItem(R.id.app_bar_switch_item);
         View view = menuItem.getActionView();
         mBluetoothSwitch = view.findViewById(R.id.switch_compat_element);
+
         mBluetoothSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (mBleUtility.checkForBluetoothEnabled()) {
-                    if (isChecked) {
+                if (isChecked) {
+                    if(mMainActivityViewModel.isBluetoothEnabled()) {
                         Log.d(TAG, "BLE Switch checked. Scanning BLE Devices.");
-                        mBleUtility.scanBleDevices(true);
+                        mMainActivityViewModel.enableBluetoothScan(true);
                     } else {
-                        Log.d(TAG, "BLE Switch unchecked. Stopped scanning BLE Devices.");
-                        mBleUtility.scanBleDevices(false);
+                        PermissionsUtil.enableBluetooth(MainActivity.this);
+                        buttonView.setChecked(false);
                     }
                 } else {
-                    buttonView.setChecked(false);
+                    Log.d(TAG, "BLE Switch unchecked. Stopped scanning BLE Devices.");
+                    mMainActivityViewModel.enableBluetoothScan(false);
                 }
             }
         });
@@ -157,6 +159,30 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onDeviceClick(int position) {
+        final BleDevice item = mScanResultList.get(position);
+        mMainActivityViewModel.connectToNewDevice(item, position);
+        ActivityUtil.startNewActivity(MainActivity.this, BleDeviceOverviewActivity.class, null);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: " + "Request code " + requestCode +  ", Result Code " + resultCode);
+        switch (requestCode) {
+            case PermissionsUtil.REQUEST_ENABLE_BT_RESULT:
+                if (resultCode == Activity.RESULT_OK) {
+                    mMainActivityViewModel.setBluetoothEnabled(true);
+                } else {
+                    mMainActivityViewModel.setBluetoothEnabled(false);
+                }
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+                break;
         }
     }
 }

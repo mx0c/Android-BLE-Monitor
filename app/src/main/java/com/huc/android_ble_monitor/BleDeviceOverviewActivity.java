@@ -1,14 +1,10 @@
 package com.huc.android_ble_monitor;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
-
 import android.os.Bundle;
 
-import com.google.android.material.appbar.MaterialToolbar;
-import com.huc.android_ble_monitor.Util.ActivityUtil;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Objects;
+import com.huc.android_ble_monitor.util.ActivityUtil;
 
 public class BleDeviceOverviewActivity extends AppCompatActivity {
     @Override

@@ -36,7 +36,19 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'pub.devrel:easypermissions:3.0.0'
+
     // https://mvnrepository.com/artifact/com.google.android.material/material
     implementation 'com.google.android.material:material:1.2.0-alpha05'
+
+    // Livecylce Components
+    def archLivecycleVersion = '1.1.1';
+    implementation "android.arch.lifecycle:extensions:$archLivecycleVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$archLivecycleVersion"
+
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    // For control over item selection of both touch and mouse driven selection
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc01"
+
+
 
 }
