@@ -202,5 +202,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/serviceUUIDs_ListView" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/primaryLightColor"
+        android:layout_marginTop="25dp"/>
+
 </LinearLayout>
 

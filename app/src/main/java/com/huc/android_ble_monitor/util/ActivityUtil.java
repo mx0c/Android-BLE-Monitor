@@ -1,4 +1,4 @@
-package com.huc.android_ble_monitor.Util;
+package com.huc.android_ble_monitor.util;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.huc.android_ble_monitor.R;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
@@ -28,6 +29,22 @@ public class ActivityUtil {
 
         ctx.startActivity(intent);
     }
+
+    /**
+     * Helper Method to start a new activity passing an object of <code>{@link com.huc.android_ble_monitor.models.BleDevice}</code>
+     * @param ctx
+     * @param cls
+     * @param extraName
+     * @param obj
+     */
+    public static void startNewActivity(Context ctx, Class<?> cls, String extraName, Serializable obj) {
+        Intent intent = new Intent(ctx, cls);
+        intent.putExtra(extraName, obj);
+
+        ctx.startActivity(intent);
+    }
+
+
 
     /**
      * @param activity
