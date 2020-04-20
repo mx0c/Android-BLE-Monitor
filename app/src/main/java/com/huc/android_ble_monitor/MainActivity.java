@@ -30,7 +30,6 @@ import com.huc.android_ble_monitor.util.BleUtility;
 import com.huc.android_ble_monitor.util.PermissionsUtil;
 import com.huc.android_ble_monitor.viewmodels.MainActivityViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
@@ -164,7 +163,10 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     public void onDeviceClick(int position) {
         final BleDevice item = mMainActivityViewModel.getBleDevices().getValue().get(position);
         mMainActivityViewModel.connectToNewDevice(item, position);
-        ActivityUtil.startNewActivity(MainActivity.this, BleDeviceOverviewActivity.class, null);
+
+        BleDeviceOverviewActivity.staticBleDevice = item;
+        Intent intent = new Intent(MainActivity.this, BleDeviceOverviewActivity.class);
+        startActivity(intent);
     }
 
     @Override

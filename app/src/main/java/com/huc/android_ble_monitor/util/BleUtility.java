@@ -2,18 +2,12 @@ package com.huc.android_ble_monitor.util;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
-import android.content.Context;
 import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
-import com.huc.android_ble_monitor.MainActivity;
 import com.huc.android_ble_monitor.models.BleDevice;
-import com.huc.android_ble_monitor.models.ToastModel;
 
 import java.util.List;
 import java.util.UUID;
