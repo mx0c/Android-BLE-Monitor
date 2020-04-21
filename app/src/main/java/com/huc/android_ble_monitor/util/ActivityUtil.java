@@ -44,8 +44,6 @@ public class ActivityUtil {
         ctx.startActivity(intent);
     }
 
-
-
     /**
      * @param activity
      * @param isHomeEnabled

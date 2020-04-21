@@ -1,14 +1,28 @@
 package com.huc.android_ble_monitor.util;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
+import android.content.Context;
 import android.content.Intent;
-
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.widget.Toast;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.huc.android_ble_monitor.models.BleDevice;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,89 +46,69 @@ public class BleUtility {
         }
     }
 
-    /*
-    public void connectToDevice(final BleDevice device, final int position){
+    public static void scanForDevices(boolean enable, @Nullable ScanCallback callback){
+        if(enable && callback != null) {
+            ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build();
+            List<ScanFilter> filters = new ArrayList<ScanFilter>();
+            BleUtility.mBleScanner.startScan(filters, scanSettings, callback);
+        } else {
+            BleUtility.mBleScanner.stopScan(new ScanCallback() {});
+        }
+    }
+
+    public static void checkBleAvailability(Activity ctx){
+        if (!ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(ctx, "Seems like your device doesn\\'t support BLE!", Toast.LENGTH_SHORT ).show();
+        }
+    }
+
+    public static void connectToDevice(final BleDevice device, final Context ctx){
         //Check for connectability if api version >= 26
         if (Build.VERSION.SDK_INT >= 26) {
             if(!device.mScanResult.isConnectable()){
-                toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT,"Device is not connectable." ));
+                Toast.makeText(ctx, "Device is not connectable!", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
 
-        device.mScanResult.getDevice().connectGatt(mCtx, false, new BluetoothGattCallback() {
+        device.mScanResult.getDevice().connectGatt(ctx, false, new BluetoothGattCallback() {
             @Override
             public void onServicesDiscovered(BluetoothGatt gatt, int status) {
                 if (status == BluetoothGatt.GATT_SUCCESS){
                     //Retrieve Services and add to list (needs to be tested)
                     List<BluetoothGattService> services = gatt.getServices();
                     device.mServices.addAll(services);
-                    mCtx.mScanResultList.set(position, device);
-                    mCtx.mScanResultAdapter.notifyDataSetChanged();
 
-                    BluetoothGattService service = gatt.getService(DEVICE_INFO_SERVICE_UUID);
-                    BluetoothGattCharacteristic charac = service.getCharacteristic(NAME_CHARACTERISTIC_UUID);
-
-                    if(gatt.readCharacteristic(charac))
-                        toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT,"Reading Characteristic"));
-                    else
-                        toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT,"Failed Reading Characteristic"));
+                    //TODO: Read Device Name Charac.
 
                 }
             }
 
             @Override
             public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-                String byteString = new String(characteristic.getValue());
-                toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT, byteString));
+                String result = new String(characteristic.getValue());
+                Toast.makeText(ctx, "Characteristic returned: " + result, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
                 switch (newState){
                     case BluetoothProfile.STATE_CONNECTING:
-                        toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT, "Connecting..."));
+                        Toast.makeText(ctx, "Connecting...", Toast.LENGTH_SHORT).show();
                         break;
                     case BluetoothProfile.STATE_CONNECTED:
-                        toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT, "Connected!"));
+                        Toast.makeText(ctx, "Connected!", Toast.LENGTH_SHORT).show();
                         gatt.discoverServices();
                         break;
                     case BluetoothProfile.STATE_DISCONNECTED:
-                        toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT, "Disconnected!"));
+                        Toast.makeText(ctx, "Disconnected!", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
         });
 
     }
-    */
 
-    /*
-    public void scanBleDevices(final boolean enable){
-        if(enable){
-            mBleScanner.startScan(mScanCallback);
-        }else{
-            mBleScanner.stopScan(mScanCallback);
-        }
-    }
-
-    public void checkBleAvailability(){
-        if (!mCtx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            toastMessage.setValue(new ToastModel(Toast.LENGTH_SHORT, "Seems like your device doesn\\'t support BLE!"));
-        }
-    }
-
-    public boolean checkForBluetoothEnabled(){
-        this.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        this.mBleScanner = mBluetoothAdapter.getBluetoothLeScanner();
-        if (this.mBluetoothAdapter == null || !this.mBluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            mCtx.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            return false;
-        }
-        return true;
-    }
-     */
     public static boolean containsDevice(List<BleDevice> resList, ScanResult res) {
         for (BleDevice dev : resList) {
             if (dev.mScanResult.getDevice().getAddress().equals(res.getDevice().getAddress())) {

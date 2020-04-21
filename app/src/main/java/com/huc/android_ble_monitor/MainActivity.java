@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
         mScanResultRecyclerView = findViewById(R.id.scan_result_recycler_view);
         ActivityUtil.setToolbar(this, true);
 
-        PermissionsUtil.requestLocationPermission(MainActivity.this);
+        PermissionsUtil.requestLocationPermission(this);
         BleUtility.checkIsBluetoothEnabled(this);
-        PermissionsUtil.checkBleAvailability(MainActivity.this);
+        BleUtility.checkBleAvailability(this);
 
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
@@ -138,12 +138,11 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
                         Log.d(TAG, "BLE Switch checked. Scanning BLE Devices.");
                         mMainActivityViewModel.enableBluetoothScan(true);
                     } else {
-                        PermissionsUtil.enableBluetooth(MainActivity.this);
+                        BleUtility.checkIsBluetoothEnabled(MainActivity.this);
                         buttonView.setChecked(false);
                     }
                 } else {
                     Log.d(TAG, "BLE Switch unchecked. Stopped scanning BLE Devices.");
-                    mMainActivityViewModel.enableBluetoothScan(false);
                 }
             }
         });
@@ -162,10 +161,10 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     @Override
     public void onDeviceClick(int position) {
         final BleDevice item = mMainActivityViewModel.getBleDevices().getValue().get(position);
-        mMainActivityViewModel.connectToNewDevice(item, position);
+        mMainActivityViewModel.connectToNewDevice(item, this);
 
         BleDeviceOverviewActivity.staticBleDevice = item;
-        Intent intent = new Intent(MainActivity.this, BleDeviceOverviewActivity.class);
+        Intent intent = new Intent(this, BleDeviceOverviewActivity.class);
         startActivity(intent);
     }
 

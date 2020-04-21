@@ -21,19 +21,4 @@ public class PermissionsUtil {
             EasyPermissions.requestPermissions(activity, "Please grant the location permission", REQUEST_LOCATION_PERMISSION, perms);
         }
     }
-
-    public static void enableBluetooth(Activity activity) {
-        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT_RESULT);
-    }
-
-    public static void checkBleAvailability(Activity activity){
-        if (!activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(activity, "Seems like your device doesn\\'t support BLE!", Toast.LENGTH_SHORT ).show();
-        }
-    }
-
-
-
-
 }
