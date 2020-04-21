@@ -71,6 +71,9 @@ public class BleUtility {
             }
         }
 
+        //Bond = saving security keys to use next time both devices connect
+        device.mScanResult.getDevice().createBond();
+
         device.mScanResult.getDevice().connectGatt(ctx, false, new BluetoothGattCallback() {
             @Override
             public void onServicesDiscovered(BluetoothGatt gatt, int status) {
@@ -79,8 +82,10 @@ public class BleUtility {
                     List<BluetoothGattService> services = gatt.getServices();
                     device.mServices.addAll(services);
 
-                    //TODO: Read Device Name Charac.
+                    BluetoothGattService service = gatt.getService(DEVICE_INFO_SERVICE_UUID);
+                    BluetoothGattCharacteristic characteristic = service.getCharacteristic(NAME_CHARACTERISTIC_UUID);
 
+                    gatt.readCharacteristic(characteristic);
                 }
             }
 
