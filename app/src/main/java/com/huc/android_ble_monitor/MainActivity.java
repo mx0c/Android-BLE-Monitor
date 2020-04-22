@@ -3,10 +3,13 @@ package com.huc.android_ble_monitor;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.huc.android_ble_monitor.adapters.ScanResultRecyclerAdapter;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
+import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BleUtility;
 import com.huc.android_ble_monitor.util.PermissionsUtil;
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     private MainActivityViewModel mMainActivityViewModel;
     private RecyclerView mScanResultRecyclerView;
     private ScanResultRecyclerAdapter mScanResultRecyclerAdapter;
+    private BluetoothLeService mBluetoothLeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,10 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
         });
 
         initRecyclerView();
+
+        //Bind to BluetoothLeService
+        Intent serviceIntent = new Intent(this, BluetoothLeService.class);
+        bindService(serviceIntent, mServiceConnection, BIND_AUTO_CREATE);
     }
 
     private void initRecyclerView(){
@@ -84,6 +93,22 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
         mScanResultRecyclerView.setLayoutManager(linearLayoutManager);
         mScanResultRecyclerView.setAdapter(mScanResultRecyclerAdapter);
     }
+
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            if (!mBluetoothLeService.initialize()) {
+                Log.d(TAG, "Unable to initialize Bluetooth");
+                finish();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBluetoothLeService = null;
+        }
+    };
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -109,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unbindService(mServiceConnection);
         // unregisterReceiver(mReceiver);
     }
 

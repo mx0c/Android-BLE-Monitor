@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -15,13 +14,10 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.bluetooth.BluetoothManager;
-
 import java.util.List;
-import java.util.UUID;
 
 public class BluetoothLeService extends Service {
-    public final static String TAG = "BLuetoothLeService";
+    public final static String TAG = "BLEM_BLuetoothLeService";
 
     public final static String EXTRA_DATA = "CHARACTERISTIC_DATA";
     public final static String ACTION_GATT_SERVICES_DISCOVERED = "ACTION_GATT_SERVICES_DISCOVERED";
@@ -103,7 +99,7 @@ public class BluetoothLeService extends Service {
     }
 
     public class LocalBinder extends Binder {
-        BluetoothLeService getService() {
+        public BluetoothLeService getService() {
             return BluetoothLeService.this;
         }
     }
