@@ -15,6 +15,7 @@ import com.huc.android_ble_monitor.models.NameInformation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.jar.Attributes;
 
 public class BLEPropertyToViewResolver {
     private static final String TAG = "BLEM_PropertyToViewReso";
@@ -94,22 +95,18 @@ public class BLEPropertyToViewResolver {
         List<ParcelUuid> uuids = result.getScanRecord().getServiceUuids(); // ToDo Remove Logic to viewmodel
         ArrayList<String> uuidStrings = new ArrayList<>();
 
-        //add BleDevice services to listview
-        if(item.mServices.size() > 0 && item != null){
-            for (BluetoothGattService service: item.mServices) {
-                String uuid = service.getUuid().toString();
-                String name = this.mServiceUUIDtoNameInformationsMap.get(uuid).name;
-
-                if(name == null || name.equals(""))
-                    name = "uuid not recognized";
-
-                uuidStrings.add(uuid + " | " + name);
-            }
-        }
-
         if(uuids != null) {
             for (ParcelUuid uuid : uuids) {
-                uuidStrings.add(uuid.getUuid().toString());
+                String uuidString = uuid.getUuid().toString();
+                NameInformation nameInfo = this.mServiceUUIDtoNameInformationsMap.get(uuidString);
+                String name;
+
+                if(nameInfo != null)
+                    name = nameInfo.name;
+                else
+                    name = "SIG unknown service";
+
+                uuidStrings.add(uuidString + " | " + name);
             }
         }else if(uuidStrings.size() <= 0){
             uuidStrings.add("- No advertised services found");
