@@ -28,6 +28,7 @@ import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BLEPropertyToViewResolver;
 import com.huc.android_ble_monitor.util.BleUtility;
 import com.huc.android_ble_monitor.util.DataIO;
+import com.huc.android_ble_monitor.util.DataIO;
 import com.huc.android_ble_monitor.viewmodels.BleDeviceOverviewViewModel;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,14 +92,6 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
             }
         });
 
-        mBluetoothLeService.getConnectionState().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                ivBondstate.setImageResource(blePropertyToViewResolver.bondStateImageResolver(integer));
-                tvBonded.setText(BleUtility.BondIntToString(integer));
-            }
-        });
-
         lvServices.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -111,6 +104,15 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+
+            mBluetoothLeService.getConnectionState().observe(BleDeviceOverviewActivity.this, new Observer<Integer>() {
+                @Override
+                public void onChanged(Integer integer) {
+                    ivBondstate.setImageResource(blePropertyToViewResolver.bondStateImageResolver(integer));
+                    tvBonded.setText(BleUtility.BondIntToString(integer));
+                }
+            });
+
             if (!mBluetoothLeService.initialize()) {
                 Log.d(TAG, "Unable to initialize Bluetooth");
             }
