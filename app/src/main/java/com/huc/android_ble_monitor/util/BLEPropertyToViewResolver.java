@@ -10,6 +10,7 @@ import android.util.SparseArray;
 
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.models.NameInformation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,12 +23,13 @@ public class BLEPropertyToViewResolver {
     final static int BOND_STATE_BONDED = R.drawable.round_bluetooth_connected_white_48;
     final static int BOND_STATE_NOT_CONNECTED_OR_RECOGNIZED = R.drawable.round_bluetooth_disabled_white_48;
 
-    static HashMap<Integer, String> mManufacturerIdToStringMap;
+    private HashMap<Integer, String> mManufacturerIdToStringMap;
+    private HashMap<String, NameInformation> mServiceUUIDtoNameInformationsMap;
 
     public BLEPropertyToViewResolver(Context ctx) {
         mManufacturerIdToStringMap = DataIO.loadManufacturerIdToStringMap(ctx);
+        mServiceUUIDtoNameInformationsMap = DataIO.loadServiceData(ctx);
     }
-
 
     public int bondStateImageResolver(ScanResult scanResult) {
         int state = scanResult.getDevice().getBondState();
@@ -68,7 +70,7 @@ public class BLEPropertyToViewResolver {
         for(int i = 0; i < manufacturerData .size(); i++){
             manufacturerId = manufacturerData.keyAt(i);
         }
-        return mManufacturerIdToStringMap.get(manufacturerId) + "(" + manufacturerId + ")";
+        return mManufacturerIdToStringMap.get(manufacturerId) + " (" + manufacturerId + ")";
     }
 
     public String deviceConnectabilityResolver(ScanResult result) {
@@ -92,7 +94,13 @@ public class BLEPropertyToViewResolver {
         //add BleDevice services to listview
         if(item.mServices.size() > 0 && item != null){
             for (BluetoothGattService service: item.mServices) {
-                uuidStrings.add(service.getUuid().toString());
+                String uuid = service.getUuid().toString();
+                String name = this.mServiceUUIDtoNameInformationsMap.get(uuid).name;
+
+                if(name == null || name.equals(""))
+                    name = "uuid not recognized";
+
+                uuidStrings.add(uuid + " | " + name);
             }
         }
 

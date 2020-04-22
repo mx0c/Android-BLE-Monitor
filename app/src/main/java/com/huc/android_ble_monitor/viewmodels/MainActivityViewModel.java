@@ -49,7 +49,7 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public void connectToNewDevice(BleDevice bleDevice, Context ctx) {
-        BleUtility.connectToDevice(bleDevice, ctx);
+        //BleUtility.connectToDevice(bleDevice, ctx);
     }
 
     public boolean isBluetoothEnabled() {
