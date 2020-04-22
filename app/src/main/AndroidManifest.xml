@@ -19,6 +19,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Launcher">
 
+        <service
+            android:enabled="true"
+            android:name="com.huc.android_ble_monitor.services.BluetoothLeService">
+        </service>
+
         <activity android:name=".MainActivity" android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

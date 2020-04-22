@@ -15,4 +15,7 @@
     <string name="dummy_company">Mocked Inc.</string>
     <string name="dummy_not_connectable">Not Connectable</string>
     <string name="dummy_services">Services (99)</string>
+    <string name="hr_text_service">Service</string>
+    <string name="dummy_service_identifier">Dummy Service Identifier</string>
+    <string name="dummy_service_name">Dummy Service Name</string>
 </resources>
