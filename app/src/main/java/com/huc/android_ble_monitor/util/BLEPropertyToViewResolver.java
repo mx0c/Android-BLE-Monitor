@@ -22,6 +22,9 @@ public class BLEPropertyToViewResolver {
     final static int BOND_STATE_BONDING = R.drawable.round_bluetooth_searching_white_48;
     final static int BOND_STATE_BONDED = R.drawable.round_bluetooth_connected_white_48;
     final static int BOND_STATE_NOT_CONNECTED_OR_RECOGNIZED = R.drawable.round_bluetooth_disabled_white_48;
+    final static String SIG_UNKNOWN_SERVICE_NAME = "SIG unknown service";
+    final static String SIG_UNKNOWN_SERVICE_IDENTIFIER = "SIG unknown service identifier";
+
 
     private HashMap<Integer, String> mManufacturerIdToStringMap;
     private HashMap<String, NameInformation> mServiceUUIDtoNameInformationsMap;
@@ -116,15 +119,34 @@ public class BLEPropertyToViewResolver {
     }
 
     public String serviceNameResolver(BluetoothGattService bluetoothGattService) {
-        return "Name"; // ToDo: replace with real method
+        NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid());
+        String serviceName;
+
+
+        if(knownSigService == null) {
+            serviceName =  SIG_UNKNOWN_SERVICE_NAME;
+        } else {
+            serviceName = knownSigService.name;
+        }
+
+        return serviceName;
     }
 
     public String serviceUuidResolver(BluetoothGattService bluetoothGattService) {
-        return "UUID"; // ToDo: replace with real method
+        return bluetoothGattService.getUuid().toString();
     }
 
     public String serviceIdentifierResolver(BluetoothGattService bluetoothGattService) {
-        return "Identifier"; // ToDo: replace with real method
+        NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid());
+        String serviceIdentifier;
+
+        if(knownSigService == null) {
+            serviceIdentifier =  SIG_UNKNOWN_SERVICE_IDENTIFIER;
+        } else {
+            serviceIdentifier = knownSigService.identifier;
+        }
+
+        return serviceIdentifier;
     }
 }
 
