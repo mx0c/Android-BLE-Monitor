@@ -2,6 +2,10 @@ package com.huc.android_ble_monitor;
 
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.le.ScanResult;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.huc.android_ble_monitor.adapters.ServicesListAdapter;
 import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BLEPropertyToViewResolver;
 import com.huc.android_ble_monitor.viewmodels.BleDeviceOverviewViewModel;
@@ -30,6 +35,7 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
     private BleDeviceOverviewViewModel mBleDeviceOverviewViewModel;
     private BLEPropertyToViewResolver blePropertyToViewResolver;
     private ServicesListAdapter mServicesListAdapter;
+    private BroadcastReceiver bleBroadcastReceiver;
 
     private TextView tvName;
     private TextView tvAddress;
@@ -49,6 +55,9 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
 
         ActivityUtil.setToolbar(this, false);
         initializeViews();
+
+        IntentFilter filter = new IntentFilter(BluetoothLeService.CONNECTION_STATE_CHANGED);
+        registerReceiver(mReceiver, filter);
 
         mServicesListAdapter = new ServicesListAdapter(this, new ArrayList<BluetoothGattService>());
         lvServices.setAdapter(mServicesListAdapter);
@@ -108,6 +117,17 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
         ArrayList<String> uuids = blePropertyToViewResolver.deviceServiceResolver(bleDevice, bleScanResult);
         tvServices.setText("Services (" + bleDevice.getServiceCount() + ")");
     }
+
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            if (action.equals(BluetoothLeService.CONNECTION_STATE_CHANGED)) {
+                Log.d(TAG, "onReceive: DeviceState: " + staticBleDevice.mScanResult.getDevice().getBondState());
+            }
+        }
+    };
 
 
 }

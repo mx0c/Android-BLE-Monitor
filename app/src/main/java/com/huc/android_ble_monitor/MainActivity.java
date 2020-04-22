@@ -2,6 +2,7 @@ package com.huc.android_ble_monitor;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -33,7 +34,9 @@ import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BleUtility;
 import com.huc.android_ble_monitor.util.PermissionsUtil;
 import com.huc.android_ble_monitor.viewmodels.MainActivityViewModel;
+
 import java.util.List;
+
 import pub.devrel.easypermissions.EasyPermissions;
 
 
@@ -75,10 +78,20 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
                 Toast.makeText(MainActivity.this, toastModel.getMessage(), toastModel.getDuration()).show();
             }
         });
+
+        mMainActivityViewModel.getmBleDevices().observe(MainActivity.this, new Observer<List<BleDevice>>() {
+            @Override
+            public void onChanged(List<BleDevice> bleDevices) {
+                mScanResultRecyclerAdapter.notifyDataSetChanged();
+            }
+        });
+
+
+        initRecyclerView();
     }
 
     private void initRecyclerView(){
-        mScanResultRecyclerAdapter = new ScanResultRecyclerAdapter(this, mBluetoothLeService.getScannedDevices().getValue(), this);
+        mScanResultRecyclerAdapter = new ScanResultRecyclerAdapter(this, mMainActivityViewModel.getmBleDevices().getValue(), this);
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mScanResultRecyclerView.setLayoutManager(linearLayoutManager);
         mScanResultRecyclerView.setAdapter(mScanResultRecyclerAdapter);
@@ -88,14 +101,13 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
-            initRecyclerView();
             if (!mBluetoothLeService.initialize()) {
                 Log.d(TAG, "Unable to initialize Bluetooth");
             }else{
-                mBluetoothLeService.getScannedDevices().observe(MainActivity.this, new Observer<List<BleDevice>>() {
+                mBluetoothLeService.getScanResult().observe(MainActivity.this, new Observer<ScanResult>() {
                     @Override
-                    public void onChanged(List<BleDevice> bleDevices) {
-                        mScanResultRecyclerAdapter.notifyDataSetChanged();
+                    public void onChanged(ScanResult scanResult) {
+                        mMainActivityViewModel.registerScanResult(scanResult);
                     }
                 });
             }
@@ -184,10 +196,10 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
 
     @Override
     public void onDeviceClick(int position) {
-        final BleDevice item = mBluetoothLeService.getScannedDevices().getValue().get(position);
-        mBluetoothLeService.connect(item);
+        final BleDevice bleDevice = mMainActivityViewModel.getmBleDevices().getValue().get(position);
+        mBluetoothLeService.connect(bleDevice);
 
-        BleDeviceOverviewActivity.staticBleDevice = item;
+        BleDeviceOverviewActivity.staticBleDevice = bleDevice;
         Intent intent = new Intent(this, BleDeviceOverviewActivity.class);
         startActivity(intent);
     }

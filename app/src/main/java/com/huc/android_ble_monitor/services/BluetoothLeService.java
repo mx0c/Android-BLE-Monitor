@@ -2,7 +2,6 @@ package com.huc.android_ble_monitor.services;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -16,17 +15,14 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Debug;
 import android.os.IBinder;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.util.BleUtility;
-import com.huc.android_ble_monitor.util.PermissionsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +33,7 @@ public class BluetoothLeService extends Service {
     public final static String EXTRA_DATA = "CHARACTERISTIC_DATA";
     public final static String ACTION_GATT_SERVICES_DISCOVERED = "ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_AVAILABLE = "ACTION_DATA_AVAILABLE";
+    public final static String CONNECTION_STATE_CHANGED = "ACTION_CONNECTION_STATE_CHANGED";
 
     private final IBinder mBinder = new LocalBinder();
     private BluetoothManager mBluetoothManager;
@@ -44,6 +41,7 @@ public class BluetoothLeService extends Service {
     private BluetoothGatt mBluetoothGatt;
     private BleDevice mBluetoothDevice;
     private MutableLiveData<List<BleDevice>> mScannedDevices;
+    private MutableLiveData<ScanResult> mScanResult;
     public int mConnectionState = BluetoothProfile.STATE_DISCONNECTED;
 
     @Override
@@ -62,13 +60,7 @@ public class BluetoothLeService extends Service {
             BleUtility.mBleScanner.startScan(filters, scanSettings, new ScanCallback() {
                 @Override
                 public void onScanResult(int callbackType, ScanResult result) {
-                    if(!BleUtility.containsDevice(mScannedDevices.getValue(), result)){
-                        List<BleDevice> devices = mScannedDevices.getValue();
-                        devices.add(new BleDevice(result, null));
-                        mScannedDevices.postValue(devices);
-                    }else{
-                        mScannedDevices.setValue(BleUtility.updateDevice(mScannedDevices.getValue(), new BleDevice(result, null)));
-                    }
+                    mScanResult.postValue(result);
                 }
 
                 //not working, but would be better
@@ -93,6 +85,7 @@ public class BluetoothLeService extends Service {
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            broadcastUpdate(CONNECTION_STATE_CHANGED);
             switch (newState){
                 case BluetoothProfile.STATE_CONNECTED:
                     Log.d(TAG, "Connected to GATT server.");
@@ -163,6 +156,7 @@ public class BluetoothLeService extends Service {
     public IBinder onBind(Intent intent) {
         mScannedDevices = new MutableLiveData<>();
         mScannedDevices.setValue(new ArrayList<BleDevice>());
+        mScanResult = new MutableLiveData<>();
         return mBinder;
     }
 
@@ -256,5 +250,9 @@ public class BluetoothLeService extends Service {
     public List<BluetoothGattService> getSupportedGattServices() {
         if (mBluetoothGatt == null) return null;
         return mBluetoothGatt.getServices();
+    }
+
+    public LiveData<ScanResult> getScanResult() {
+        return mScanResult;
     }
 }

@@ -28,6 +28,7 @@ public class BleDeviceOverviewViewModel extends ViewModel {
 
             ScanResult toBeScannedBleDevice = this.mBleDevice.getValue().mScanResult;
 
+
             List<ScanFilter> filter = Arrays.asList(new ScanFilter.Builder()
                     .setDeviceAddress(toBeScannedBleDevice.getDevice().getAddress()).build());
             final ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build();
