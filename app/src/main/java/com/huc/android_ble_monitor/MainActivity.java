@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     @Override
     public void onDeviceClick(int position) {
         final BleDevice bleDevice = mMainActivityViewModel.getmBleDevices().getValue().get(position);
-
+        mBluetoothLeService.connect(bleDevice);
 
         BleDeviceOverviewActivity.staticBleDevice = bleDevice;
         Intent intent = new Intent(this, BleDeviceOverviewActivity.class);
