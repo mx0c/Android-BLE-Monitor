@@ -1,28 +1,35 @@
 package com.huc.android_ble_monitor;
 
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.le.ScanResult;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.huc.android_ble_monitor.adapters.ServicesListAdapter;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BLEPropertyToViewResolver;
 import com.huc.android_ble_monitor.viewmodels.BleDeviceOverviewViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BleDeviceOverviewActivity extends AppCompatActivity {
     private static final String TAG = "BLEM_BleDeviceOverview";
 
     public static BleDevice  staticBleDevice;
     private BleDeviceOverviewViewModel mBleDeviceOverviewViewModel;
-    private  BLEPropertyToViewResolver blePropertyToViewResolver;
+    private BLEPropertyToViewResolver blePropertyToViewResolver;
+    private ServicesListAdapter mServicesListAdapter;
 
     private TextView tvName;
     private TextView tvAddress;
@@ -32,6 +39,7 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
     private TextView tvCompanyIdentifier;
     private TextView tvServices;
     private ImageView ivBondstate;
+    public ListView lvServices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +49,10 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
 
         ActivityUtil.setToolbar(this, false);
         initializeViews();
+
+        mServicesListAdapter = new ServicesListAdapter(this, new ArrayList<BluetoothGattService>());
+        lvServices.setAdapter(mServicesListAdapter);
+
         blePropertyToViewResolver = new BLEPropertyToViewResolver(this);
 
         mBleDeviceOverviewViewModel = ViewModelProviders.of(this).get(BleDeviceOverviewViewModel.class);
@@ -53,8 +65,23 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
                 mapBleObjectToView(bleDevice);
             }
         });
-    }
 
+        mBleDeviceOverviewViewModel.getmBluetoothGattServices().observe(this, new Observer<List<BluetoothGattService>>() {
+            @Override
+            public void onChanged(List<BluetoothGattService> bluetoothGattServices) {
+                mServicesListAdapter.clear();
+                mServicesListAdapter.addAll(bluetoothGattServices);
+                mServicesListAdapter.notifyDataSetChanged();
+            }
+        });
+
+        lvServices.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "onItemClick: Clicked on List Item: " + ((BluetoothGattService)parent.getItemAtPosition(position)).getUuid());
+            }
+        });
+    }
     public void initializeViews() {
         tvName = findViewById(R.id.DeviceName_TextView);
         tvAddress = findViewById(R.id.DeviceUUID_TextView);
@@ -64,6 +91,8 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
         tvCompanyIdentifier = findViewById(R.id.CompanyIdentifier_TextView);
         ivBondstate = findViewById(R.id.BondState_ImageView);
         tvServices = findViewById(R.id.Services_TextView);
+
+        lvServices = findViewById(R.id.lv_services);
     }
 
     public void mapBleObjectToView(BleDevice bleDevice) {
@@ -79,4 +108,6 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
         ArrayList<String> uuids = blePropertyToViewResolver.deviceServiceResolver(bleDevice, bleScanResult);
         tvServices.setText("Services (" + bleDevice.getServiceCount() + ")");
     }
+
+
 }

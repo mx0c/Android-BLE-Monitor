@@ -14,17 +14,19 @@
 
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/appbarLayout"
         android:paddingHorizontal="5dp"
-        android:paddingVertical="10dp">
+        android:paddingVertical="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/appbarLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,11 +39,11 @@
                     app:srcCompat="@drawable/round_rss_feed_white_48" />
 
                 <TextView
+                    android:id="@+id/RSSI_TextView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_horizontal"
-                    android:text="-0db"
-                    android:id="@+id/RSSI_TextView"/>
+                    android:text="-0db" />
             </LinearLayout>
 
             <LinearLayout
@@ -54,8 +56,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:paddingTop="1.5dp"
                     android:paddingBottom="1.5dp">
 
@@ -68,10 +70,10 @@
                         android:tint="@color/secondaryColor" />
 
                     <TextView
+                        android:id="@+id/DeviceName_TextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/dummy_device"
-                        android:id="@+id/DeviceName_TextView"/>
+                        android:text="@string/dummy_device" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -91,10 +93,10 @@
                         android:tint="@color/secondaryColor" />
 
                     <TextView
+                        android:id="@+id/DeviceUUID_TextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/dummy_uuid"
-                        android:id="@+id/DeviceUUID_TextView"/>
+                        android:text="@string/dummy_uuid" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -102,25 +104,25 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="end|center_vertical"
+                android:orientation="horizontal"
                 android:paddingTop="8dp">
 
                 <ImageView
+                    android:id="@+id/BondState_ImageView"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
-                    android:id="@+id/BondState_ImageView"
                     android:src="@drawable/round_bluetooth_connected_white_48"
                     android:tint="@color/secondaryColor" />
 
                 <TextView
+                    android:id="@+id/BondState_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/dummy_connected"
                     android:layout_marginStart="3dp"
-                    android:id="@+id/BondState_TextView"/>
+                    android:text="@string/dummy_connected" />
             </LinearLayout>
 
 
@@ -129,9 +131,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -150,10 +152,10 @@
                     android:tint="@color/secondaryColor" />
 
                 <TextView
+                    android:id="@+id/CompanyIdentifier_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/dummy_company"
-                    android:id="@+id/CompanyIdentifier_TextView"/>
+                    android:text="@string/dummy_company" />
             </LinearLayout>
 
             <LinearLayout
@@ -173,10 +175,10 @@
                     android:tint="@color/secondaryColor" />
 
                 <TextView
+                    android:id="@+id/Connectability_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/dummy_not_connectable"
-                    android:id="@+id/Connectability_TextView"/>
+                    android:text="@string/dummy_not_connectable" />
             </LinearLayout>
 
             <LinearLayout
@@ -196,13 +198,33 @@
                     android:tint="@color/secondaryColor" />
 
                 <TextView
+                    android:id="@+id/Services_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/dummy_services"
-                    android:id="@+id/Services_TextView"/>
+                    android:text="@string/dummy_services" />
             </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <include
+            android:id="@+id/hr_divider"
+            layout="@layout/horizontal_divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ListView
+            android:id="@+id/lv_services"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
 
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
