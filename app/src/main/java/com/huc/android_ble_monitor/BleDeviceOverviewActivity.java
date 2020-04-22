@@ -3,39 +3,42 @@ package com.huc.android_ble_monitor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
 import com.huc.android_ble_monitor.adapters.ServicesListAdapter;
 import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.models.NameInformation;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BLEPropertyToViewResolver;
+import com.huc.android_ble_monitor.util.DataIO;
 import com.huc.android_ble_monitor.viewmodels.BleDeviceOverviewViewModel;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BleDeviceOverviewActivity extends AppCompatActivity {
     private static final String TAG = "BLEM_BleDeviceOverview";
 
-    public static BleDevice  staticBleDevice;
+    public static BleDevice staticBleDevice;
     private BleDeviceOverviewViewModel mBleDeviceOverviewViewModel;
     private BLEPropertyToViewResolver blePropertyToViewResolver;
     private ServicesListAdapter mServicesListAdapter;
-    private BroadcastReceiver bleBroadcastReceiver;
 
     private TextView tvName;
     private TextView tvAddress;
@@ -46,6 +49,7 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
     private TextView tvServices;
     private ImageView ivBondstate;
     public ListView lvServices;
+    private BluetoothLeService mBluetoothLeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,11 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
 
         ActivityUtil.setToolbar(this, false);
         initializeViews();
+
+        //Bind to BluetoothLeService
+        Intent serviceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
+        boolean success = getApplicationContext().bindService(serviceIntent, mServiceConnection, BIND_AUTO_CREATE);
+        Log.d(TAG,"bindService returned: " + Boolean.toString(success));
 
         IntentFilter filter = new IntentFilter(BluetoothLeService.CONNECTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
@@ -91,6 +100,23 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
             }
         });
     }
+
+    public final ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            if (!mBluetoothLeService.initialize()) {
+                Log.d(TAG, "Unable to initialize Bluetooth");
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBluetoothLeService.disconnect();
+            mBluetoothLeService = null;
+        }
+    };
+
     public void initializeViews() {
         tvName = findViewById(R.id.DeviceName_TextView);
         tvAddress = findViewById(R.id.DeviceUUID_TextView);
@@ -100,7 +126,6 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
         tvCompanyIdentifier = findViewById(R.id.CompanyIdentifier_TextView);
         ivBondstate = findViewById(R.id.BondState_ImageView);
         tvServices = findViewById(R.id.Services_TextView);
-
         lvServices = findViewById(R.id.lv_services);
     }
 
@@ -123,8 +148,10 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
 
-            if (action.equals(BluetoothLeService.CONNECTION_STATE_CHANGED)) {
-                Log.d(TAG, "onReceive: DeviceState: " + staticBleDevice.mScanResult.getDevice().getBondState());
+            switch (action){
+                case BluetoothLeService.CONNECTION_STATE_CHANGED:
+                    ivBondstate.setImageResource(blePropertyToViewResolver.bondStateImageResolver(mBluetoothLeService.mConnectionState));
+                    break;
             }
         }
     };

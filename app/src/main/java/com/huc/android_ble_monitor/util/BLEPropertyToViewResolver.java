@@ -35,8 +35,7 @@ public class BLEPropertyToViewResolver {
         mServiceUUIDtoNameInformationsMap = DataIO.loadServiceData(ctx);
     }
 
-    public int bondStateImageResolver(ScanResult scanResult) {
-        int state = scanResult.getDevice().getBondState();
+    public int bondStateImageResolver(int state) {
         int id = 0;
         if (state == 11) {
             id = BOND_STATE_BONDING;
@@ -47,6 +46,11 @@ public class BLEPropertyToViewResolver {
         }
 
         return id;
+    }
+
+    public int bondStateImageResolver(ScanResult scanResult) {
+        int state = scanResult.getDevice().getBondState();
+        return bondStateImageResolver(state);
     }
 
     public String bondStateTextResolver(ScanResult scanResult) {
