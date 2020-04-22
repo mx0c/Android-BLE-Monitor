@@ -4,14 +4,11 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.util.BleUtility;
-
 import java.util.Arrays;
 import java.util.List;
 

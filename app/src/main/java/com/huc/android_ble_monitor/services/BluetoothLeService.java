@@ -9,11 +9,26 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Debug;
 import android.os.IBinder;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.util.BleUtility;
+import com.huc.android_ble_monitor.util.PermissionsUtil;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class BluetoothLeService extends Service {
@@ -27,12 +42,52 @@ public class BluetoothLeService extends Service {
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothGatt mBluetoothGatt;
-    private String mBluetoothDeviceAddress;
+    private BleDevice mBluetoothDevice;
+    private MutableLiveData<List<BleDevice>> mScannedDevices;
     public int mConnectionState = BluetoothProfile.STATE_DISCONNECTED;
 
     @Override
     public void onCreate() {
         super.onCreate();
+    }
+
+    public LiveData<List<BleDevice>> getScannedDevices() {
+        return mScannedDevices;
+    }
+
+    public void scanForDevices(boolean enable){
+        if(enable) {
+            ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build();
+            List<ScanFilter> filters = new ArrayList<ScanFilter>();
+            BleUtility.mBleScanner.startScan(filters, scanSettings, new ScanCallback() {
+                @Override
+                public void onScanResult(int callbackType, ScanResult result) {
+                    if(!BleUtility.containsDevice(mScannedDevices.getValue(), result)){
+                        List<BleDevice> devices = mScannedDevices.getValue();
+                        devices.add(new BleDevice(result, null));
+                        mScannedDevices.postValue(devices);
+                    }else{
+                        mScannedDevices.setValue(BleUtility.updateDevice(mScannedDevices.getValue(), new BleDevice(result, null)));
+                    }
+                }
+
+                //not working, but would be better
+                /*@Override
+                public void onBatchScanResults(List<ScanResult> results) {
+                    for (ScanResult result : results) {
+                        if(!BleUtility.containsDevice(mScannedDevices.getValue(), result)){
+                            List<BleDevice> devices = mScannedDevices.getValue();
+                            devices.add(new BleDevice(result, null));
+                            mScannedDevices.postValue(devices);
+                        }else{
+                            mScannedDevices.setValue(BleUtility.updateDevice(mScannedDevices.getValue(), new BleDevice(result, null)));
+                        }
+                    }
+                }*/
+            });
+        } else {
+            BleUtility.mBleScanner.stopScan(new ScanCallback() {});
+        }
     }
 
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
@@ -99,13 +154,15 @@ public class BluetoothLeService extends Service {
     }
 
     public class LocalBinder extends Binder {
-        public BluetoothLeService getService() {
+         public BluetoothLeService getService() {
             return BluetoothLeService.this;
-        }
+         }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
+        mScannedDevices = new MutableLiveData<>();
+        mScannedDevices.setValue(new ArrayList<BleDevice>());
         return mBinder;
     }
 
@@ -147,14 +204,14 @@ public class BluetoothLeService extends Service {
         mBluetoothGatt.disconnect();
     }
 
-    public boolean connect(final String address) {
-        if (mBluetoothAdapter == null || address == null) {
-            Log.d(TAG, "BluetoothAdapter not initialized or unspecified address.");
+    public boolean connect(final BleDevice device) {
+        if (mBluetoothAdapter == null || device == null) {
+            Log.d(TAG, "BluetoothAdapter not initialized or unspecified device.");
             return false;
         }
 
         // Previously connected device.  Try to reconnect.
-        if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
+        if (mBluetoothDevice != null && device.mScanResult.getDevice().getAddress().equals(mBluetoothDevice.mScanResult.getDevice().getAddress())
                 && mBluetoothGatt != null) {
             Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             if (mBluetoothGatt.connect()) {
@@ -165,16 +222,11 @@ public class BluetoothLeService extends Service {
             }
         }
 
-        final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-        if (device == null) {
-            Log.d(TAG, "Device not found.  Unable to connect.");
-            return false;
-        }
         // We want to directly connect to the device, so we are setting the autoConnect
         // parameter to false.
-        mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
+        mBluetoothGatt = device.mScanResult.getDevice().connectGatt(this, false, mGattCallback);
         Log.d(TAG, "Trying to create a new connection.");
-        mBluetoothDeviceAddress = address;
+        mBluetoothDevice = device;
         mConnectionState = BluetoothProfile.STATE_CONNECTING;
         return true;
     }

@@ -46,16 +46,6 @@ public class BleUtility {
         }
     }
 
-    public static void scanForDevices(boolean enable, @Nullable ScanCallback callback){
-        if(enable && callback != null) {
-            ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build();
-            List<ScanFilter> filters = new ArrayList<ScanFilter>();
-            BleUtility.mBleScanner.startScan(filters, scanSettings, callback);
-        } else {
-            BleUtility.mBleScanner.stopScan(new ScanCallback() {});
-        }
-    }
-
     public static void checkBleAvailability(Activity ctx){
         if (!ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(ctx, "Seems like your device doesn\\'t support BLE!", Toast.LENGTH_SHORT ).show();
