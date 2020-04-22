@@ -99,10 +99,12 @@ public class BLEPropertyToViewResolver {
             for (ParcelUuid uuid : uuids) {
                 String uuidString = uuid.getUuid().toString();
                 NameInformation nameInfo = this.mServiceUUIDtoNameInformationsMap.get(uuidString);
-                String name = "uuid not recognized";
+                String name;
 
-                if(name != null)
+                if(nameInfo != null)
                     name = nameInfo.name;
+                else
+                    name = "SIG unknown service";
 
                 uuidStrings.add(uuidString + " | " + name);
             }
