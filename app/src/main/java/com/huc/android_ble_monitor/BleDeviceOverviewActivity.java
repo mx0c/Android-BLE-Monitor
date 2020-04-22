@@ -28,6 +28,7 @@ import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BLEPropertyToViewResolver;
 import com.huc.android_ble_monitor.util.BleUtility;
 import com.huc.android_ble_monitor.util.DataIO;
+import com.huc.android_ble_monitor.util.DataIO;
 import com.huc.android_ble_monitor.viewmodels.BleDeviceOverviewViewModel;
 import java.util.ArrayList;
 import java.util.HashMap;
