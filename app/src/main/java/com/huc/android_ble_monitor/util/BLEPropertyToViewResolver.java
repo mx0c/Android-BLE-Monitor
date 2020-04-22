@@ -15,7 +15,6 @@ import com.huc.android_ble_monitor.models.NameInformation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.jar.Attributes;
 
 public class BLEPropertyToViewResolver {
     private static final String TAG = "BLEM_PropertyToViewReso";
@@ -119,7 +118,8 @@ public class BLEPropertyToViewResolver {
     }
 
     public String serviceNameResolver(BluetoothGattService bluetoothGattService) {
-        NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid());
+        NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid().toString().substring(4,8));
+        Log.d(TAG, "serviceIdentifierResolver: Resolved UUID: " + bluetoothGattService.getUuid().toString().substring(4,8));
         String serviceName;
 
 
@@ -137,7 +137,8 @@ public class BLEPropertyToViewResolver {
     }
 
     public String serviceIdentifierResolver(BluetoothGattService bluetoothGattService) {
-        NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid());
+        NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid().toString().substring(4,8));
+        Log.d(TAG, "serviceIdentifierResolver: Resolved UUID: " + bluetoothGattService.getUuid().toString().substring(4,8));
         String serviceIdentifier;
 
         if(knownSigService == null) {
