@@ -57,7 +57,7 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         ((ViewHolder)holder).tvConnectability.setText(blePropertyToViewResolver.deviceConnectabilityResolver(scanResult));
 
         ArrayList<String> uuids = blePropertyToViewResolver.deviceServiceResolver(mBleDevices.get(position), scanResult);
-        ((ViewHolder)holder).tvServices.setText("Services (" + mBleDevices.get(position).getServiceCount() + ")");
+        ((ViewHolder)holder).tvServices.setText("Advertised Services (" + mBleDevices.get(position).getServiceCount() + ")");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.advertised_service_list_item, uuids);
         ((ViewHolder)holder).servicesListView.setAdapter(adapter);
     }

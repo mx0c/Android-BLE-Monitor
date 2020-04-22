@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
             if (!mBluetoothLeService.initialize()) {
                 Log.d(TAG, "Unable to initialize Bluetooth");
-                finish();
             }
         }
 
