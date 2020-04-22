@@ -42,7 +42,7 @@ public class BluetoothLeService extends Service {
     private BleDevice mBluetoothDevice;
     private MutableLiveData<List<BleDevice>> mScannedDevices;
     private MutableLiveData<ScanResult> mScanResult;
-    private MutableLiveData<Integer> mConnectionState = new MutableLiveData<>();
+    private MutableLiveData<Integer> mConnectionState;
 
     @Override
     public void onCreate() {
@@ -161,6 +161,12 @@ public class BluetoothLeService extends Service {
             mScannedDevices = new MutableLiveData<>();
             mScannedDevices.setValue(new ArrayList<BleDevice>());
         }
+
+        if(mConnectionState == null){
+            mConnectionState = new MutableLiveData<>();
+            mConnectionState.setValue(BluetoothProfile.STATE_DISCONNECTED);
+        }
+
         if(mScanResult == null) mScanResult = new MutableLiveData<>();
         return mBinder;
     }
