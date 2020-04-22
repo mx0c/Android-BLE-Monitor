@@ -15,6 +15,7 @@ import com.huc.android_ble_monitor.models.NameInformation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.jar.Attributes;
 
 public class BLEPropertyToViewResolver {
     private static final String TAG = "BLEM_PropertyToViewReso";
@@ -98,10 +99,11 @@ public class BLEPropertyToViewResolver {
         if(item.mServices.size() > 0 && item != null){
             for (BluetoothGattService service: item.mServices) {
                 String uuid = service.getUuid().toString();
-                String name = this.mServiceUUIDtoNameInformationsMap.get(uuid).name;
+                NameInformation nameInfo = this.mServiceUUIDtoNameInformationsMap.get(uuid);
+                String name = "uuid not recognized";
 
-                if(name == null || name.equals(""))
-                    name = "uuid not recognized";
+                if(name != null)
+                    name = nameInfo.name;
 
                 uuidStrings.add(uuid + " | " + name);
             }
