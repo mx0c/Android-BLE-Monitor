@@ -1,5 +1,6 @@
 package com.huc.android_ble_monitor.util;
 
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
@@ -52,19 +53,36 @@ public class BLEPropertyToViewResolver {
         return bondStateImageResolver(state);
     }
 
+    public String bondStateTextResolver(int state) {
+        return BleUtility.BondIntToString(state);
+    }
+
     public String bondStateTextResolver(ScanResult scanResult) {
         int state =  scanResult.getDevice().getBondState();
-        return BleUtility.BondIntToString(state);
+        return this.bondStateTextResolver(state);
+    }
+
+    public String deviceNameResolver(String name) {
+        return name == null ? "unknown" : name;
     }
 
     public String deviceNameResolver(ScanResult result) {
         String name = result.getScanRecord().getDeviceName();
-        return name == null ? "unknown" : name;
+        return this.deviceNameResolver(name);
+    }
+
+    public String deviceAddressResolver(String deviceAddress) {
+        return deviceAddress;
+    }
+
+    public String deviceAddressResolver(BluetoothDevice bleDevice) {
+        return this.deviceAddressResolver(bleDevice.getAddress());
     }
 
     public String deviceAddressResolver(ScanResult result) {
-        return result.getDevice().getAddress();
+        return this.deviceAddressResolver(result.getDevice());
     }
+
 
     public String deviceRssiResolver(ScanResult result) {
         return Integer.toString(result.getRssi()) + " dBm";

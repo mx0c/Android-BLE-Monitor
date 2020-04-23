@@ -39,7 +39,7 @@ public class BluetoothLeService extends Service {
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothGatt mBluetoothGatt;
-    private BleDevice mBluetoothDevice;
+    private MutableLiveData<BleDevice> mBluetoothDevice;
     private MutableLiveData<List<BleDevice>> mScannedDevices;
     private MutableLiveData<ScanResult> mScanResult;
     private MutableLiveData<Integer> mConnectionState;
@@ -87,29 +87,39 @@ public class BluetoothLeService extends Service {
     }
 
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
+
+        private void updateConnectedBleDevice(BluetoothGatt bluetoothGatt) {
+            Log.d(TAG, "updateConnectedBleDevice: Updading BluetoothDevice in Service");
+            BleDevice bleDevice = mBluetoothDevice.getValue();
+            bleDevice.setmBluetoothGatt(bluetoothGatt);
+            bleDevice.setmServices(mBluetoothGatt.getServices());
+            mBluetoothDevice.postValue(bleDevice);
+        }
+
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            updateConnectedBleDevice(mBluetoothGatt);
             switch (newState){
                 case BluetoothProfile.STATE_CONNECTED:
                     Log.d(TAG, "Connected to GATT server.");
                     // Attempts to discover services after successful connection.
                     Log.d(TAG, "Attempting to start service discovery:" +
                             mBluetoothGatt.discoverServices());
-                    mConnectionState.setValue(BluetoothProfile.STATE_CONNECTED);
+                    mConnectionState.postValue(BluetoothProfile.STATE_CONNECTED);
                     break;
                 case BluetoothProfile.STATE_DISCONNECTED:
                     Log.d(TAG, "Disconnected from GATT server.");
-                    mConnectionState.setValue(BluetoothProfile.STATE_DISCONNECTED);
                     break;
                 case BluetoothProfile.STATE_CONNECTING:
                     Log.d(TAG, "Connecting to GATT server.");
-                    mConnectionState.setValue(BluetoothProfile.STATE_CONNECTING);
                     break;
             }
         }
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            updateConnectedBleDevice(mBluetoothGatt);
+
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
             } else {
@@ -121,6 +131,7 @@ public class BluetoothLeService extends Service {
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
+            updateConnectedBleDevice(mBluetoothGatt);
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
             }
@@ -129,6 +140,7 @@ public class BluetoothLeService extends Service {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
+            updateConnectedBleDevice(mBluetoothGatt);
             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
         }
     };
@@ -167,6 +179,10 @@ public class BluetoothLeService extends Service {
             mConnectionState.setValue(BluetoothProfile.STATE_DISCONNECTED);
         }
 
+        if(mBluetoothDevice == null) {
+            mBluetoothDevice = new MutableLiveData<>();
+        }
+
         if(mScanResult == null) mScanResult = new MutableLiveData<>();
         return mBinder;
     }
@@ -187,14 +203,14 @@ public class BluetoothLeService extends Service {
         if (mBluetoothManager == null) {
             mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
             if (mBluetoothManager == null) {
-                Log.d(TAG, "Unable to initialize BluetoothManager.");
+                Log.e(TAG, "Unable to initialize BluetoothManager.");
                 return false;
             }
         }
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();
         if (mBluetoothAdapter == null) {
-            Log.d(TAG, "Unable to obtain a BluetoothAdapter.");
+            Log.e(TAG, "Unable to obtain a BluetoothAdapter.");
             return false;
         }
 
@@ -211,29 +227,27 @@ public class BluetoothLeService extends Service {
 
     public boolean connect(final BleDevice device) {
         if (mBluetoothAdapter == null || device == null) {
-            Log.d(TAG, "BluetoothAdapter not initialized or unspecified device.");
+            Log.e(TAG, "BluetoothAdapter not initialized or unspecified device.");
             return false;
-        }
-
-        // Previously connected device.  Try to reconnect.
-        if (mBluetoothDevice != null && device.mScanResult.getDevice().getAddress().equals(mBluetoothDevice.mScanResult.getDevice().getAddress())
-                && mBluetoothGatt != null) {
-            Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
-            if (mBluetoothGatt.connect()) {
-                mConnectionState.setValue(BluetoothProfile.STATE_CONNECTING);
-                return true;
-            } else {
-                return false;
+        } else {
+            // Previously connected device.  Try to reconnect.
+            if (mBluetoothDevice.getValue() != null && device.mScanResult.getDevice().getAddress().equals(mBluetoothDevice.getValue().mScanResult.getDevice().getAddress())
+                    && mBluetoothGatt != null) {
+                Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
+                if (mBluetoothGatt.connect()) {
+                    mConnectionState.setValue(BluetoothProfile.STATE_CONNECTING);
+                    return true;
+                }
             }
-        }
 
-        // We want to directly connect to the device, so we are setting the autoConnect
-        // parameter to false.
-        mBluetoothGatt = device.mScanResult.getDevice().connectGatt(this, false, mGattCallback);
-        Log.d(TAG, "Trying to create a new connection.");
-        mBluetoothDevice = device;
-        mConnectionState.setValue(BluetoothProfile.STATE_CONNECTING);
-        return true;
+            // We want to directly connect to the device, so we are setting the autoConnect
+            // parameter to false.
+            mBluetoothGatt = device.mScanResult.getDevice().connectGatt(this, false, mGattCallback);
+            Log.d(TAG, "Trying to create a new connection.");
+            mBluetoothDevice.setValue(device);
+            mConnectionState.setValue(BluetoothProfile.STATE_CONNECTING);
+            return true;
+        }
     }
 
     public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
@@ -265,5 +279,13 @@ public class BluetoothLeService extends Service {
 
     public LiveData<ScanResult> getScanResult() {
         return mScanResult;
+    }
+
+    public LiveData<BleDevice> getBluetoothDevice() {
+        return mBluetoothDevice;
+    }
+
+    public BluetoothGatt getmBluetoothGatt() {
+        return mBluetoothGatt;
     }
 }

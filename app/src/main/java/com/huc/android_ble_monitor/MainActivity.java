@@ -99,10 +99,11 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     public final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
+            Log.d(TAG, "onServiceConnected: BluetoothLeService connected.");
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
             if (!mBluetoothLeService.initialize()) {
-                Log.d(TAG, "Unable to initialize Bluetooth");
-            }else{
+                Log.e(TAG, "Unable to initialize Bluetooth");
+            } else {
                 mBluetoothLeService.getScanResult().observe(MainActivity.this, new Observer<ScanResult>() {
                     @Override
                     public void onChanged(ScanResult scanResult) {
@@ -114,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
+            Log.d(TAG, "onServiceDisconnected: BluetoothLeService disconnected.");
             mBluetoothLeService.disconnect();
             mBluetoothLeService = null;
         }
