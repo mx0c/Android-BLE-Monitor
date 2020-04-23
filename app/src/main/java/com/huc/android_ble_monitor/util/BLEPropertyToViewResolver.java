@@ -2,6 +2,7 @@ package com.huc.android_ble_monitor.util;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.os.Build;
@@ -20,12 +21,11 @@ import java.util.List;
 public class BLEPropertyToViewResolver {
     private static final String TAG = "BLEM_PropertyToViewReso";
 
-    final static int BOND_STATE_BONDING = R.drawable.round_bluetooth_searching_white_48;
-    final static int BOND_STATE_BONDED = R.drawable.round_bluetooth_connected_white_48;
-    final static int BOND_STATE_NOT_CONNECTED_OR_RECOGNIZED = R.drawable.round_bluetooth_disabled_white_48;
+    final static int BONDING_IMG_ID = R.drawable.round_bluetooth_searching_white_48;
+    final static int BONDED_IMG_ID = R.drawable.round_bluetooth_connected_white_48;
+    final static int NOT_BONDED_IMG_ID = R.drawable.round_bluetooth_disabled_white_48;
     final static String SIG_UNKNOWN_SERVICE_NAME = "SIG unknown service";
     final static String SIG_UNKNOWN_SERVICE_IDENTIFIER = "SIG unknown service identifier";
-
 
     private HashMap<Integer, String> mManufacturerIdToStringMap;
     private HashMap<String, NameInformation> mServiceUUIDtoNameInformationsMap;
@@ -35,16 +35,59 @@ public class BLEPropertyToViewResolver {
         mServiceUUIDtoNameInformationsMap = DataIO.loadServiceData(ctx);
     }
 
-    public int bondStateImageResolver(int state) {
-        int id = 0;
-        if (state == 11) {
-            id = BOND_STATE_BONDING;
-        } else if (state == 12) {
-            id = BOND_STATE_BONDED;
-        } else {
-            id = BOND_STATE_NOT_CONNECTED_OR_RECOGNIZED;
+    public String connectionStateToStringResolver(int connState){
+        String res = "";
+        switch (connState){
+            case BluetoothProfile.STATE_CONNECTED:
+                res = "CONNECTED";
+                break;
+            case BluetoothProfile.STATE_CONNECTING:
+                res = "CONNECTING";
+                break;
+            case BluetoothProfile.STATE_DISCONNECTED:
+                res = "DISCONNECTED";
+                break;
+            case BluetoothProfile.STATE_DISCONNECTING:
+                res = "DISCONNECTING";
+                break;
+        }
+        return res;
+    }
+
+    public int connectionStateImageResolver(int connState) {
+        int imgId = 0;
+        switch (connState) {
+            case BluetoothProfile.STATE_CONNECTED:
+                imgId = BONDED_IMG_ID;
+                break;
+            case BluetoothProfile.STATE_CONNECTING:
+                imgId = BONDING_IMG_ID;
+                break;
+            case BluetoothProfile.STATE_DISCONNECTED:
+                imgId = NOT_BONDED_IMG_ID;
+                break;
+            case BluetoothProfile.STATE_DISCONNECTING:
+                imgId = NOT_BONDED_IMG_ID;
+                break;
         }
 
+        return imgId;
+    }
+
+    public int bondStateImageResolver(int state) {
+        int id = 0;
+        switch(state){
+            case BluetoothDevice.BOND_BONDING:
+                id = BONDING_IMG_ID;
+                break;
+            case BluetoothDevice.BOND_BONDED:
+                id = BONDED_IMG_ID;
+                break;
+            default:
+            case BluetoothDevice.BOND_NONE:
+                id = NOT_BONDED_IMG_ID;
+                break;
+        }
         return id;
     }
 
@@ -58,7 +101,7 @@ public class BLEPropertyToViewResolver {
     }
 
     public String bondStateTextResolver(ScanResult scanResult) {
-        int state =  scanResult.getDevice().getBondState();
+        int state = scanResult.getDevice().getBondState();
         return this.bondStateTextResolver(state);
     }
 
@@ -82,7 +125,6 @@ public class BLEPropertyToViewResolver {
     public String deviceAddressResolver(ScanResult result) {
         return this.deviceAddressResolver(result.getDevice());
     }
-
 
     public String deviceRssiResolver(ScanResult result) {
         return Integer.toString(result.getRssi()) + " dBm";

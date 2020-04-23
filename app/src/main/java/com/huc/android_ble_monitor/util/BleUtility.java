@@ -65,7 +65,7 @@ public class BleUtility {
     public static String BondIntToString(int bondInt) {
         switch (bondInt) {
             case 10:
-                return "NOT CONNECTED";
+                return "NOT BONDED";
             case 11:
                 return "BONDING";
             case 12:

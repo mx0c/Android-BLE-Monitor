@@ -35,10 +35,10 @@ public class MainActivityViewModel extends ViewModel {
     public void registerScanResult(ScanResult scanResult) {
         if(!BleUtility.containsDevice(mBleDevices.getValue(), scanResult)){
             List<BleDevice> devices = mBleDevices.getValue();
-            devices.add(new BleDevice(scanResult, null));
+            devices.add(new BleDevice(scanResult));
             mBleDevices.postValue(devices);
         }else{
-            mBleDevices.postValue(BleUtility.updateDevice(mBleDevices.getValue(), new BleDevice(scanResult, null)));
+            mBleDevices.postValue(BleUtility.updateDevice(mBleDevices.getValue(), new BleDevice(scanResult)));
         }
     }
 

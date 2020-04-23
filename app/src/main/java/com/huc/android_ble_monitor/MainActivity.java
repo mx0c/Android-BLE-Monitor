@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -101,16 +102,12 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
         public void onServiceConnected(ComponentName componentName, IBinder service) {
             Log.d(TAG, "onServiceConnected: BluetoothLeService connected.");
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
-            if (!mBluetoothLeService.initialize()) {
-                Log.e(TAG, "Unable to initialize Bluetooth");
-            } else {
-                mBluetoothLeService.getScanResult().observe(MainActivity.this, new Observer<ScanResult>() {
-                    @Override
-                    public void onChanged(ScanResult scanResult) {
-                        mMainActivityViewModel.registerScanResult(scanResult);
-                    }
-                });
-            }
+            mBluetoothLeService.getScanResult().observe(MainActivity.this, new Observer<ScanResult>() {
+                @Override
+                public void onChanged(ScanResult scanResult) {
+                    mMainActivityViewModel.registerScanResult(scanResult);
+                }
+            });
         }
 
         @Override
@@ -198,7 +195,17 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     @Override
     public void onDeviceClick(int position) {
         final BleDevice bleDevice = mMainActivityViewModel.getmBleDevices().getValue().get(position);
-        mBluetoothLeService.connect(bleDevice);
+
+        if(Build.VERSION.SDK_INT >= 26) {
+            if (bleDevice.mScanResult.isConnectable()) {
+                mBluetoothLeService.connect(bleDevice);
+            } else {
+                Toast.makeText(this, "Device is not connectable.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }else{
+            mBluetoothLeService.connect(bleDevice);
+        }
 
         BleDeviceOverviewActivity.staticBleDevice = bleDevice;
         Intent intent = new Intent(this, BleDeviceOverviewActivity.class);
