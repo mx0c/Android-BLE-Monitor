@@ -62,17 +62,22 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
         BleUtility.checkIsBluetoothEnabled(this);
         BleUtility.checkBleAvailability(this);
 
+        mMainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        mMainActivityViewModel.init();
+
         //Bind to BluetoothLeService
         Intent serviceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
-        boolean success = getApplicationContext().bindService(serviceIntent, mServiceConnection, BIND_AUTO_CREATE);
+        boolean success = getApplicationContext().bindService(serviceIntent, mMainActivityViewModel.getmServiceConnection(), BIND_AUTO_CREATE);
         Log.d(TAG,"bindService returned: " + Boolean.toString(success));
 
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
 
-        mMainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
-        mMainActivityViewModel.init();
+        setObservers();
+        initRecyclerView();
+    }
 
+    public void setObservers(){
         mMainActivityViewModel.getToast().observe(this, new Observer<ToastModel>() {
             @Override
             public void onChanged(ToastModel toastModel) {
@@ -80,14 +85,33 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
             }
         });
 
-        mMainActivityViewModel.getmBleDevices().observe(MainActivity.this, new Observer<List<BleDevice>>() {
+        mMainActivityViewModel.getmBleDevices().observe(this, new Observer<List<BleDevice>>() {
             @Override
             public void onChanged(List<BleDevice> bleDevices) {
                 mScanResultRecyclerAdapter.notifyDataSetChanged();
             }
         });
 
-        initRecyclerView();
+        mMainActivityViewModel.getmBinder().observe(this, new Observer<BluetoothLeService.LocalBinder>() {
+            @Override
+            public void onChanged(BluetoothLeService.LocalBinder localBinder) {
+                if(localBinder == null){
+                    //unbinded
+                    mBluetoothLeService.disconnect();
+                    mBluetoothLeService = null;
+                }else{
+                    //bind to service
+                    mBluetoothLeService = localBinder.getService();
+                    mBluetoothLeService.getScanResult().observe(MainActivity.this, new Observer<ScanResult>() {
+                        @Override
+                        public void onChanged(ScanResult scanResult) {
+                            mMainActivityViewModel.registerScanResult(scanResult);
+                        }
+                    });
+                }
+
+            }
+        });
     }
 
     private void initRecyclerView(){
@@ -96,27 +120,6 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
         mScanResultRecyclerView.setLayoutManager(linearLayoutManager);
         mScanResultRecyclerView.setAdapter(mScanResultRecyclerAdapter);
     }
-
-    public final ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            Log.d(TAG, "onServiceConnected: BluetoothLeService connected.");
-            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
-            mBluetoothLeService.getScanResult().observe(MainActivity.this, new Observer<ScanResult>() {
-                @Override
-                public void onChanged(ScanResult scanResult) {
-                    mMainActivityViewModel.registerScanResult(scanResult);
-                }
-            });
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            Log.d(TAG, "onServiceDisconnected: BluetoothLeService disconnected.");
-            mBluetoothLeService.disconnect();
-            mBluetoothLeService = null;
-        }
-    };
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -142,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mServiceConnection);
+        unbindService(mMainActivityViewModel.getmServiceConnection());
         // unregisterReceiver(mReceiver);
     }
 

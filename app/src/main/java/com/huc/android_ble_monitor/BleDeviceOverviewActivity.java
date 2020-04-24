@@ -56,11 +56,6 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
         ActivityUtil.setToolbar(this, false);
         initializeViews();
 
-        //Bind to BluetoothLeService
-        Intent serviceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
-        boolean success = getApplicationContext().bindService(serviceIntent, mServiceConnection, BIND_AUTO_CREATE);
-        Log.d(TAG,"bindService returned: " + Boolean.toString(success));
-
         mServicesListAdapter = new ServicesListAdapter(this, new ArrayList<BluetoothGattService>());
         lvServices.setAdapter(mServicesListAdapter);
 
@@ -69,13 +64,12 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
         mBleDeviceOverviewViewModel = ViewModelProviders.of(this).get(BleDeviceOverviewViewModel.class);
         mBleDeviceOverviewViewModel.init(staticBleDevice);
 
-        mBleDeviceOverviewViewModel.getmBleDevice().observe(this, new Observer<BleDevice>() {
-            @Override
-            public void onChanged(BleDevice bleDevice) {
-                Log.d(TAG, "onChanged: BleDevice value changed");
-                mapBleObjectToActivity(bleDevice);
-            }
-        });
+        //Bind to BluetoothLeService
+        Intent serviceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
+        boolean success = getApplicationContext().bindService(serviceIntent, mBleDeviceOverviewViewModel.getmServiceConnection(), BIND_AUTO_CREATE);
+        Log.d(TAG,"bindService returned: " + Boolean.toString(success));
+
+        setObservers();
 
         lvServices.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
@@ -85,24 +79,34 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
         });
     }
 
-    public final ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
-            mBluetoothLeService.getBluetoothDevice().observe(BleDeviceOverviewActivity.this, new Observer<BleDevice>() {
-                @Override
-                public void onChanged(BleDevice bleDevice) {
-                    mBleDeviceOverviewViewModel.updateBleDevie(bleDevice);
-                }
-            });
-        }
+    public void setObservers(){
+        mBleDeviceOverviewViewModel.getmBleDevice().observe(this, new Observer<BleDevice>() {
+            @Override
+            public void onChanged(BleDevice bleDevice) {
+                Log.d(TAG, "onChanged: BleDevice value changed");
+                mapBleObjectToActivity(bleDevice);
+            }
+        });
 
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            mBluetoothLeService.disconnect();
-            mBluetoothLeService = null;
-        }
-    };
+        mBleDeviceOverviewViewModel.getmBinder().observe(this, new Observer<BluetoothLeService.LocalBinder>() {
+            @Override
+            public void onChanged(BluetoothLeService.LocalBinder localBinder) {
+                if(localBinder == null){
+                    mBluetoothLeService.disconnect();
+                    mBluetoothLeService = null;
+                }else{
+                    //bound to service
+                    mBluetoothLeService = localBinder.getService();
+                    mBluetoothLeService.getBluetoothDevice().observe(BleDeviceOverviewActivity.this, new Observer<BleDevice>() {
+                        @Override
+                        public void onChanged(BleDevice bleDevice) {
+                            mBleDeviceOverviewViewModel.updateBleDevie(bleDevice);
+                        }
+                    });
+                }
+            }
+        });
+    }
 
     public void initializeViews() {
         tvName = findViewById(R.id.DeviceName_TextView);
