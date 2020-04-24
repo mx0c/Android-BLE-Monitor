@@ -24,6 +24,9 @@ public class BLEPropertyToViewResolver {
     final static int BONDING_IMG_ID = R.drawable.round_bluetooth_searching_white_48;
     final static int BONDED_IMG_ID = R.drawable.round_bluetooth_connected_white_48;
     final static int NOT_BONDED_IMG_ID = R.drawable.round_bluetooth_disabled_white_48;
+    final static int NOT_CONNECTED_IMG_ID = R.drawable.round_power_off_white_48;
+    final static int CONNECTED_IMG_ID = R.drawable.round_power_white_48;
+    final static int CONNECTING_IMG_ID = R.drawable.round_settings_ethernet_white_48dp;
     final static String SIG_UNKNOWN_SERVICE_NAME = "SIG unknown service";
     final static String SIG_UNKNOWN_SERVICE_IDENTIFIER = "SIG unknown service identifier";
 
@@ -58,16 +61,16 @@ public class BLEPropertyToViewResolver {
         int imgId = 0;
         switch (connState) {
             case BluetoothProfile.STATE_CONNECTED:
-                imgId = BONDED_IMG_ID;
+                imgId = CONNECTED_IMG_ID;
                 break;
             case BluetoothProfile.STATE_CONNECTING:
-                imgId = BONDING_IMG_ID;
+                imgId = CONNECTING_IMG_ID;
                 break;
             case BluetoothProfile.STATE_DISCONNECTED:
-                imgId = NOT_BONDED_IMG_ID;
+                imgId = NOT_CONNECTED_IMG_ID;
                 break;
             case BluetoothProfile.STATE_DISCONNECTING:
-                imgId = NOT_BONDED_IMG_ID;
+                imgId = CONNECTING_IMG_ID;
                 break;
         }
 

@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanResult;
 import android.os.ParcelUuid;
 
@@ -17,6 +18,7 @@ public class BleDevice implements Serializable {
     public BluetoothGatt mBluetoothGatt;
 
     public BleDevice(ScanResult sr){
+        this.mConnectionState = BluetoothProfile.STATE_DISCONNECTED;
         this.mScanResult = sr;
     }
 

@@ -46,7 +46,8 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ScanResult scanResult = mBleDevices.get(position).mScanResult;
+        BleDevice device = mBleDevices.get(position);
+        ScanResult scanResult = device.mScanResult;
 
         ((ViewHolder)holder).tvBonded.setText(blePropertyToViewResolver.bondStateTextResolver(scanResult));
         ((ViewHolder)holder).ivBondstate.setImageResource(blePropertyToViewResolver.bondStateImageResolver(scanResult));
@@ -55,8 +56,9 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         ((ViewHolder)holder).tvRssi.setText(blePropertyToViewResolver.deviceRssiResolver(scanResult));
         ((ViewHolder)holder).tvCompanyIdentifier.setText(blePropertyToViewResolver.deviceManufacturerResolver(scanResult));
         ((ViewHolder)holder).tvConnectability.setText(blePropertyToViewResolver.deviceConnectabilityResolver(scanResult));
+        ((ViewHolder)holder).tvConnState.setText(blePropertyToViewResolver.connectionStateToStringResolver(device.mConnectionState));
+        ((ViewHolder)holder).ivConnState.setImageResource(blePropertyToViewResolver.connectionStateImageResolver(device.mConnectionState));
 
-        BleDevice device = mBleDevices.get(position);
         ArrayList<String> uuids = blePropertyToViewResolver.deviceServiceResolver(device, scanResult);
         ((ViewHolder)holder).tvServices.setText("Advertised Services (" + device.getServiceCount() + ")");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.advertised_service_list_item, uuids);
@@ -73,11 +75,13 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         private TextView tvName;
         private TextView tvAddress;
         private TextView tvBonded;
+        private TextView tvConnState;
         private TextView tvRssi;
         private TextView tvConnectability;
         private TextView tvCompanyIdentifier;
         private TextView tvServices;
         private ImageView ivBondstate;
+        private ImageView ivConnState;
         private ListView servicesListView;
         private OnDeviceConnectListener onDeviceConnectListener;
 
@@ -92,6 +96,8 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             ivBondstate = itemView.findViewById(R.id.BondState_ImageView);
             tvServices = itemView.findViewById(R.id.Services_TextView);
             servicesListView = itemView.findViewById(R.id.serviceUUIDs_ListView);
+            tvConnState = itemView.findViewById(R.id.ConnectionState_TextView);
+            ivConnState = itemView.findViewById(R.id.ConnectionState_ImageView);
             this.onDeviceConnectListener = onDeviceConnectListener;
 
             itemView.setOnClickListener(this);
