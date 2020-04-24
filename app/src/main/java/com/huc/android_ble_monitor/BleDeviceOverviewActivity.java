@@ -73,7 +73,7 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
             @Override
             public void onChanged(BleDevice bleDevice) {
                 Log.d(TAG, "onChanged: BleDevice value changed");
-                mapBleObjectToView(bleDevice);
+                mapBleObjectToActivity(bleDevice);
             }
         });
 
@@ -116,29 +116,21 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
         lvServices = findViewById(R.id.lv_services);
     }
 
-    public void mapBleObjectToView(BleDevice bleDevice) {
-        if (bleDevice.mBluetoothGatt == null) {
-            ScanResult bleScanResult = bleDevice.mScanResult;
-            tvBonded.setText(blePropertyToViewResolver.bondStateTextResolver(bleScanResult));
-            ivBondstate.setImageResource(blePropertyToViewResolver.bondStateImageResolver(bleScanResult));
-            tvName.setText(blePropertyToViewResolver.deviceNameResolver(bleScanResult));
-            tvAddress.setText(blePropertyToViewResolver.deviceAddressResolver(bleScanResult));
-            tvRssi.setText(blePropertyToViewResolver.deviceRssiResolver(bleScanResult));
-            tvCompanyIdentifier.setText(blePropertyToViewResolver.deviceManufacturerResolver(bleScanResult));
-            tvConnectability.setText(blePropertyToViewResolver.deviceConnectabilityResolver(bleScanResult));
-            tvServices.setText("Services (" + bleDevice.getServiceCount() + ")");
-        } else {
-            BluetoothDevice bluetoothDevice = bleDevice.mBluetoothGatt.getDevice();
+    public void mapBleObjectToActivity(BleDevice bleDevice) {
+        BluetoothDevice nativeDevice = bleDevice.mBluetoothGatt.getDevice();
 
-            tvBonded.setText(blePropertyToViewResolver.connectionStateToStringResolver(bleDevice.mConnectionState));
-            ivBondstate.setImageResource(blePropertyToViewResolver.connectionStateImageResolver(bluetoothDevice.getBondState()));
-            tvName.setText(blePropertyToViewResolver.deviceNameResolver(bluetoothDevice.getName()));
-            tvAddress.setText(blePropertyToViewResolver.deviceAddressResolver(bluetoothDevice.getAddress()));
+        tvBonded.setText(blePropertyToViewResolver.connectionStateToStringResolver(bleDevice.mConnectionState));
+        ivBondstate.setImageResource(blePropertyToViewResolver.connectionStateImageResolver(bleDevice.mConnectionState));
+        tvName.setText(blePropertyToViewResolver.deviceNameResolver(nativeDevice.getName()));
+        tvAddress.setText(blePropertyToViewResolver.deviceAddressResolver(nativeDevice));
+        tvRssi.setText(blePropertyToViewResolver.deviceRssiResolver(bleDevice.mScanResult));
+        tvCompanyIdentifier.setText(blePropertyToViewResolver.deviceManufacturerResolver(bleDevice.mScanResult));
+        tvConnectability.setText(blePropertyToViewResolver.deviceConnectabilityResolver(bleDevice.mScanResult));
+        tvServices.setText("Services (" + bleDevice.getServiceCount() + ")");
 
-            // Update services in the view
-            mServicesListAdapter.clear();
-            mServicesListAdapter.addAll(bleDevice.mBluetoothGatt.getServices());
-            mServicesListAdapter.notifyDataSetChanged();
-        }
+        // Update services in the view
+        mServicesListAdapter.clear();
+        mServicesListAdapter.addAll(bleDevice.mBluetoothGatt.getServices());
+        mServicesListAdapter.notifyDataSetChanged();
     }
 }
