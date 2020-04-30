@@ -63,6 +63,12 @@ public class MainActivityViewModel extends ViewModel {
         }
     }
 
+    public void clearBleDevices() {
+        List<BleDevice> devices = mBleDevices.getValue();
+        devices.clear();
+        this.mBleDevices.postValue(devices);
+    }
+
     public LiveData<ToastModel> getToast() {
         return mToastBroadcast;
     }
