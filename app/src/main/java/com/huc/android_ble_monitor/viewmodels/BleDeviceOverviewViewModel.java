@@ -6,10 +6,8 @@ import android.os.IBinder;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
-import com.huc.android_ble_monitor.BleDeviceOverviewActivity;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 
@@ -29,10 +27,6 @@ public class BleDeviceOverviewViewModel extends ViewModel {
         }
     };
 
-    public MutableLiveData<BluetoothLeService.LocalBinder> getmBinder() {
-        return mBinder;
-    }
-
     public ServiceConnection getmServiceConnection() {
         return mServiceConnection;
     }
@@ -49,5 +43,9 @@ public class BleDeviceOverviewViewModel extends ViewModel {
 
     public void updateBleDevie(BleDevice bleDevice) {
         this.mBleDevice.setValue(bleDevice);
+    }
+
+    public LiveData<BluetoothLeService.LocalBinder> getmBinder() {
+        return mBinder;
     }
 }

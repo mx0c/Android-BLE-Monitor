@@ -3,11 +3,8 @@ package com.huc.android_ble_monitor;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.le.ScanResult;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -135,7 +132,6 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
             tvServices.setText("Services (" + bleDevice.getServiceCount() + ")");
         } else {
             BluetoothDevice mBluetoothDevice = bleDevice.mBluetoothGatt.getDevice();
-            Log.d(TAG, "mapBleObjectToView: " + mBluetoothDevice.getBondState());
 
             tvBonded.setText(blePropertyToViewResolver.bondStateTextResolver(mBluetoothDevice.getBondState()));
             ivBondstate.setImageResource(blePropertyToViewResolver.bondStateImageResolver(mBluetoothDevice.getBondState()));

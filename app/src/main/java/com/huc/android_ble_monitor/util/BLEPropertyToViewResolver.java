@@ -182,7 +182,6 @@ public class BLEPropertyToViewResolver {
 
     public String serviceNameResolver(BluetoothGattService bluetoothGattService) {
         NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid().toString().substring(4,8));
-        Log.d(TAG, "serviceIdentifierResolver: Resolved UUID: " + bluetoothGattService.getUuid().toString().substring(4,8));
         String serviceName;
 
 
@@ -201,7 +200,6 @@ public class BLEPropertyToViewResolver {
 
     public String serviceIdentifierResolver(BluetoothGattService bluetoothGattService) {
         NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid().toString().substring(4,8));
-        Log.d(TAG, "serviceIdentifierResolver: Resolved UUID: " + bluetoothGattService.getUuid().toString().substring(4,8));
         String serviceIdentifier;
 
         if(knownSigService == null) {

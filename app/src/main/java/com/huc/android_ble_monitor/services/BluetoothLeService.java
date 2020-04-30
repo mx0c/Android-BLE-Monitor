@@ -82,18 +82,24 @@ public class BluetoothLeService extends Service {
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            if(status == BluetoothGatt.GATT_SUCCESS) {
+                Log.d(TAG, "onConnectionStateChange: Operation was successful");
+            } else {
+                Log.e(TAG, "onConnectionStateChange: Operation failed");
+            }
+
             switch (newState){
                 case BluetoothProfile.STATE_CONNECTED:
-                    Log.d(TAG, "Connected to GATT server.");
+                    Log.d(TAG, "onConnectionStateChange: Connected to GATT server.");
                     // Attempts to discover services after successful connection.
-                    Log.d(TAG, "Attempting to start service discovery:" +
+                    Log.d(TAG, "onConnectionStateChange: Attempting to start service discovery:" +
                             mBluetoothGatt.discoverServices());
                     break;
                 case BluetoothProfile.STATE_DISCONNECTED:
-                    Log.d(TAG, "Disconnected from GATT server.");
+                    Log.d(TAG, "onConnectionStateChange: Disconnected from GATT server.");
                     break;
                 case BluetoothProfile.STATE_CONNECTING:
-                    Log.d(TAG, "Connecting to GATT server.");
+                    Log.d(TAG, "onConnectionStateChange: Connecting to GATT server.");
                     break;
             }
             updateBleDeviceGatt(gatt);
@@ -158,6 +164,7 @@ public class BluetoothLeService extends Service {
     }
 
     public boolean connect(final BleDevice device) {
+        mBleDevice.postValue(device);
         if (BleUtility.mBluetoothAdapter == null || device == null) {
             return false;
         } else {
