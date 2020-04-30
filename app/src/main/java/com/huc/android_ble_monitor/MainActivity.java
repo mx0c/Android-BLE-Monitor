@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +23,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.huc.android_ble_monitor.adapters.ScanResultRecyclerAdapter;
 import com.huc.android_ble_monitor.models.BleDevice;
@@ -41,7 +39,7 @@ import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class MainActivity extends AppCompatActivity implements ScanResultRecyclerAdapter.OnDeviceConnectListener {
+public class MainActivity extends AppCompatActivity implements ScanResultRecyclerAdapter.OnDeviceConnectListener,  SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "BLEM_MainActivity";
 
     private SwitchCompat mBluetoothSwitch;
@@ -49,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     private RecyclerView mScanResultRecyclerView;
     private ScanResultRecyclerAdapter mScanResultRecyclerAdapter;
     private BluetoothLeService mBluetoothLeService;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +114,10 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     }
 
     private void initRecyclerView(){
+        // Parent of Recycler View
+        mSwipeRefreshLayout = findViewById(R.id.swipe_container_scan_result);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
         mScanResultRecyclerAdapter = new ScanResultRecyclerAdapter(this, mMainActivityViewModel.getmBleDevices().getValue(), this);
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mScanResultRecyclerView.setLayoutManager(linearLayoutManager);
@@ -230,5 +233,17 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
                 super.onActivityResult(requestCode, resultCode, data);
                 break;
         }
+    }
+
+    /**
+     * Called when a swipe gesture triggers a refresh.
+     */
+    @Override
+    public void onRefresh() {
+        Log.d(TAG, "onRefresh: ScanResult List refreshed.");
+        mBluetoothLeService.scanForDevices(false);
+        mMainActivityViewModel.clearBleDevices();
+        mSwipeRefreshLayout.setRefreshing(false);
+        mBluetoothLeService.scanForDevices(true);
     }
 }

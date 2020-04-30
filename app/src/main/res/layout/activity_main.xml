@@ -13,9 +13,17 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"/>
 
-    <androidx.recyclerview.widget.RecyclerView
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_container_scan_result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scan_result_recycler_view" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scan_result_recycler_view" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>
