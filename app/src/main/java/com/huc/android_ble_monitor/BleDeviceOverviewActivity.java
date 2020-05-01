@@ -1,6 +1,5 @@
 package com.huc.android_ble_monitor;
 
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanResult;
@@ -28,8 +27,6 @@ import com.huc.android_ble_monitor.util.BLEPropertyToViewResolver;
 import com.huc.android_ble_monitor.viewmodels.BleDeviceOverviewViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class BleDeviceOverviewActivity extends AppCompatActivity {
     private static final String TAG = "BLEM_BleDeviceOverview";
@@ -171,6 +168,9 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
                                     }
                                 })
                                 .show();
+                    }
+                    else {
+                        return false;
                     }
                 }
                 break;
