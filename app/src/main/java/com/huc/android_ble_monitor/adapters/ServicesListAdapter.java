@@ -15,19 +15,16 @@ import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.util.BLEPropertyToViewResolver;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
-
     BLEPropertyToViewResolver blePropertyToViewResolver;
-
     TextView tvServiceName;
     TextView tvServiceUuid;
     TextView tvServiceIdentifier;
 
-
     public ServicesListAdapter(@NonNull Context context, List<BluetoothGattService> bluetoothGattServices) {
         super(context, 0, bluetoothGattServices);
-
         blePropertyToViewResolver = new BLEPropertyToViewResolver(context);
     }
 

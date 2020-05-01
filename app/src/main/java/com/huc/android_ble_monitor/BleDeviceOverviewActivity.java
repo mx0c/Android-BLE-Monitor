@@ -1,6 +1,7 @@
 package com.huc.android_ble_monitor;
 
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.le.ScanResult;
 import android.content.ComponentName;
@@ -27,6 +28,8 @@ import com.huc.android_ble_monitor.util.BLEPropertyToViewResolver;
 import com.huc.android_ble_monitor.viewmodels.BleDeviceOverviewViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class BleDeviceOverviewActivity extends AppCompatActivity {
     private static final String TAG = "BLEM_BleDeviceOverview";
@@ -70,13 +73,6 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
         Log.d(TAG,"bindService returned: " + Boolean.toString(success));
 
         setObservers();
-
-        lvServices.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "onItemClick: Clicked on List Item: " + ((BluetoothGattService)parent.getItemAtPosition(position)).getUuid());
-            }
-        });
     }
 
     public void setObservers(){
@@ -101,6 +97,20 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
                         @Override
                         public void onChanged(BleDevice bleDevice) {
                             mBleDeviceOverviewViewModel.updateBleDevie(bleDevice);
+                        }
+                    });
+                    lvServices.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            UUID serviceUUID  = ((BluetoothGattService)parent.getAdapter().getItem(position)).getUuid();
+                            List<BluetoothGattCharacteristic> characteristics =  staticBleDevice.mBluetoothGatt.getService(serviceUUID).getCharacteristics();
+
+                            String characteristicUUIDS = "";
+                            for (BluetoothGattCharacteristic characteristic:characteristics) {
+                                characteristicUUIDS += characteristic.getUuid().toString() + "\n";
+                            }
+
+                            Log.d(TAG, "Service " + serviceUUID.toString() + " contains following characteristics: " + characteristicUUIDS);
                         }
                     });
                 }
