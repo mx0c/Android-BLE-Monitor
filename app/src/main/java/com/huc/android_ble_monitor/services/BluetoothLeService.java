@@ -161,6 +161,8 @@ public class BluetoothLeService extends Service {
             return;
         }
         mBluetoothGatt.disconnect();
+
+        mBluetoothGatt = null;
     }
 
     public boolean connect(final BleDevice device) {
