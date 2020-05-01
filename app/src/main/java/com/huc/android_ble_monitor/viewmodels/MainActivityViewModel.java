@@ -4,14 +4,11 @@ import android.bluetooth.le.ScanResult;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
-import com.huc.android_ble_monitor.MainActivity;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
@@ -48,10 +45,6 @@ public class MainActivityViewModel extends ViewModel {
         return mServiceConnection;
     }
 
-    public MutableLiveData<BluetoothLeService.LocalBinder> getmBinder() {
-        return mBinder;
-    }
-
     public void setBluetoothEnabled(boolean bluetoothEnabled) {
         isBluetoothEnabled = bluetoothEnabled;
     }
@@ -70,11 +63,21 @@ public class MainActivityViewModel extends ViewModel {
         }
     }
 
+    public void clearBleDevices() {
+        List<BleDevice> devices = mBleDevices.getValue();
+        devices.clear();
+        this.mBleDevices.postValue(devices);
+    }
+
     public LiveData<ToastModel> getToast() {
         return mToastBroadcast;
     }
 
     public LiveData<List<BleDevice>> getmBleDevices() {
         return mBleDevices;
+    }
+
+    public LiveData<BluetoothLeService.LocalBinder> getmBinder() {
+        return mBinder;
     }
 }
