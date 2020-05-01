@@ -102,15 +102,9 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
                     lvServices.setOnItemClickListener( new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            UUID serviceUUID  = ((BluetoothGattService)parent.getAdapter().getItem(position)).getUuid();
-                            List<BluetoothGattCharacteristic> characteristics =  staticBleDevice.mBluetoothGatt.getService(serviceUUID).getCharacteristics();
-
-                            String characteristicUUIDS = "";
-                            for (BluetoothGattCharacteristic characteristic:characteristics) {
-                                characteristicUUIDS += characteristic.getUuid().toString() + "\n";
-                            }
-
-                            Log.d(TAG, "Service " + serviceUUID.toString() + " contains following characteristics: " + characteristicUUIDS);
+                            ServicesOverviewActivity.staticGattService = (BluetoothGattService)parent.getAdapter().getItem(position);
+                            Intent intent = new Intent(BleDeviceOverviewActivity.this, ServicesOverviewActivity.class);
+                            startActivity(intent);
                         }
                     });
                 }
