@@ -124,8 +124,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginTop="10dp"
-            android:background="#000000">
-
+            android:background="@color/primaryColor">
         </View>
 
         <LinearLayout
@@ -185,6 +184,13 @@
                 android:layout_weight="1"
                 android:text="mock"></TextView>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="10dp"
+            android:background="@color/primaryColor">
+        </View>
 
         <ListView
             android:id="@+id/characteristic_listview"
