@@ -100,6 +100,7 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             ServicesOverviewActivity.staticGattService = (BluetoothGattService)parent.getAdapter().getItem(position);
+                            ServicesOverviewActivity.staticBleDevice = BleDeviceOverviewActivity.staticBleDevice;
                             Intent intent = new Intent(BleDeviceOverviewActivity.this, ServicesOverviewActivity.class);
                             startActivity(intent);
                         }

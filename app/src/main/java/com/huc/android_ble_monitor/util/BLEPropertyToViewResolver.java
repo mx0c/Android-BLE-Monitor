@@ -1,6 +1,7 @@
 package com.huc.android_ble_monitor.util;
 
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanResult;
@@ -17,6 +18,7 @@ import com.huc.android_ble_monitor.models.NameInformation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.jar.Attributes;
 
 public class BLEPropertyToViewResolver {
     private static final String TAG = "BLEM_PropertyToViewReso";
@@ -28,14 +30,18 @@ public class BLEPropertyToViewResolver {
     final static int CONNECTED_IMG_ID = R.drawable.round_power_white_48;
     final static int CONNECTING_IMG_ID = R.drawable.round_settings_ethernet_white_48dp;
     final static String SIG_UNKNOWN_SERVICE_NAME = "SIG unknown service";
+    final static String SIG_UNKNOWN_CHARACTERISTIC_NAME = "SIG unknown characteristic";
+    final static String SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER = "SIG unknown characteristic identifier";
     final static String SIG_UNKNOWN_SERVICE_IDENTIFIER = "SIG unknown service identifier";
 
     private HashMap<Integer, String> mManufacturerIdToStringMap;
     private HashMap<String, NameInformation> mServiceUUIDtoNameInformationsMap;
+    private HashMap<String, NameInformation> mCharacteristicUUIDNameInformationsMap;
 
     public BLEPropertyToViewResolver(Context ctx) {
         mManufacturerIdToStringMap = DataIO.loadManufacturerIdToStringMap(ctx);
         mServiceUUIDtoNameInformationsMap = DataIO.loadServiceData(ctx);
+        mCharacteristicUUIDNameInformationsMap = DataIO.loadCharacteristicData(ctx);
     }
 
     public String connectionStateToStringResolver(int connState){
@@ -184,7 +190,6 @@ public class BLEPropertyToViewResolver {
         NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid().toString().substring(4,8));
         String serviceName;
 
-
         if(knownSigService == null) {
             serviceName =  SIG_UNKNOWN_SERVICE_NAME;
         } else {
@@ -192,6 +197,16 @@ public class BLEPropertyToViewResolver {
         }
 
         return serviceName;
+    }
+
+    public String characteristicNameResolver(BluetoothGattCharacteristic bluetoothGattCharacteristic){
+        NameInformation characteristicNi = mCharacteristicUUIDNameInformationsMap.get(bluetoothGattCharacteristic.getUuid().toString().substring(4,8));
+        return characteristicNi == null ? SIG_UNKNOWN_CHARACTERISTIC_NAME : characteristicNi.name;
+    }
+
+    public String characteristicIdentifierResolver(BluetoothGattCharacteristic bluetoothGattCharacteristic){
+        NameInformation characteristicNi = mCharacteristicUUIDNameInformationsMap.get(bluetoothGattCharacteristic.getUuid().toString().substring(4,8));
+        return characteristicNi == null ? SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER : characteristicNi.identifier;
     }
 
     public String serviceUuidResolver(BluetoothGattService bluetoothGattService) {
