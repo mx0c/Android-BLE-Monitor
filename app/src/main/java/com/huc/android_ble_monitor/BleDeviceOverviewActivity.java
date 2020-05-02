@@ -1,12 +1,13 @@
 package com.huc.android_ble_monitor;
 
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanResult;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.adapters.ServicesListAdapter;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
@@ -25,8 +27,6 @@ import com.huc.android_ble_monitor.util.BLEPropertyToViewResolver;
 import com.huc.android_ble_monitor.viewmodels.BleDeviceOverviewViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class BleDeviceOverviewActivity extends AppCompatActivity {
     private static final String TAG = "BLEM_BleDeviceOverview";
@@ -123,30 +123,59 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
     }
 
     public void mapBleObjectToActivity(BleDevice bleDevice) {
-        if (bleDevice.mBluetoothGatt == null) {
-            ScanResult bleScanResult = bleDevice.mScanResult;
-            tvBonded.setText(blePropertyToViewResolver.bondStateTextResolver(bleScanResult));
-            ivBondstate.setImageResource(blePropertyToViewResolver.bondStateImageResolver(bleScanResult));
-            tvName.setText(blePropertyToViewResolver.deviceNameResolver(bleScanResult));
-            tvAddress.setText(blePropertyToViewResolver.deviceAddressResolver(bleScanResult));
-            tvRssi.setText(blePropertyToViewResolver.deviceRssiResolver(bleScanResult));
-            tvCompanyIdentifier.setText(blePropertyToViewResolver.deviceManufacturerResolver(bleScanResult));
-            tvConnectability.setText(blePropertyToViewResolver.deviceConnectabilityResolver(bleScanResult));
+        ScanResult bleScanResult = bleDevice.mScanResult;
+        tvBonded.setText(blePropertyToViewResolver.bondStateTextResolver(bleScanResult));
+        ivBondstate.setImageResource(blePropertyToViewResolver.bondStateImageResolver(bleScanResult));
+        tvName.setText(blePropertyToViewResolver.deviceNameResolver(bleScanResult));
+        tvAddress.setText(blePropertyToViewResolver.deviceAddressResolver(bleScanResult));
+        tvRssi.setText(blePropertyToViewResolver.deviceRssiResolver(bleScanResult));
+        tvCompanyIdentifier.setText(blePropertyToViewResolver.deviceManufacturerResolver(bleScanResult));
+        tvConnectability.setText(blePropertyToViewResolver.deviceConnectabilityResolver(bleScanResult));
 
-            ArrayList<String> uuids = blePropertyToViewResolver.deviceServiceResolver(bleDevice, bleScanResult);
-            tvServices.setText("Services (" + bleDevice.getServiceCount() + ")");
-        } else {
-            BluetoothDevice mBluetoothDevice = bleDevice.mBluetoothGatt.getDevice();
+        ArrayList<String> uuids = blePropertyToViewResolver.deviceServiceResolver(bleDevice, bleScanResult);
+        tvServices.setText("Services (" + bleDevice.getServiceCount() + ")");
 
-            tvBonded.setText(blePropertyToViewResolver.bondStateTextResolver(mBluetoothDevice.getBondState()));
-            ivBondstate.setImageResource(blePropertyToViewResolver.bondStateImageResolver(mBluetoothDevice.getBondState()));
-            tvName.setText(blePropertyToViewResolver.deviceNameResolver(mBluetoothDevice.getName()));
-            tvAddress.setText(blePropertyToViewResolver.deviceAddressResolver(mBluetoothDevice.getAddress()));
-
-            // Update services in the view
+        if (bleDevice.mBluetoothGatt != null) {
             mServicesListAdapter.clear();
             mServicesListAdapter.addAll(bleDevice.mBluetoothGatt.getServices());
             mServicesListAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                BleDevice bleDevice =  mBleDeviceOverviewViewModel.getmBleDevice().getValue();
+                if (bleDevice != null) {
+                    if (bleDevice.mConnectionState == BluetoothProfile.STATE_CONNECTED) {
+                        new MaterialAlertDialogBuilder(BleDeviceOverviewActivity.this)
+                                .setTitle("Disconnect")
+                                .setMessage("Disconnect from " + staticBleDevice.mScanResult.getDevice().getName())
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Log.d(TAG, "onClick: yes");
+                                        mBluetoothLeService.disconnect();
+                                        finish();
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Log.d(TAG, "onClick: no");
+                                        finish();
+                                    }
+                                })
+                                .show();
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                break;
+        }
+        return true;
     }
 }

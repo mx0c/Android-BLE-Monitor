@@ -241,9 +241,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     @Override
     public void onRefresh() {
         Log.d(TAG, "onRefresh: ScanResult List refreshed.");
-        mBluetoothLeService.scanForDevices(false);
         mMainActivityViewModel.clearBleDevices();
         mSwipeRefreshLayout.setRefreshing(false);
-        mBluetoothLeService.scanForDevices(true);
     }
 }

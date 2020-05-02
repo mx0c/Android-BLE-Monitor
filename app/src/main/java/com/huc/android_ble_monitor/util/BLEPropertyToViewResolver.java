@@ -8,7 +8,6 @@ import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.os.Build;
 import android.os.ParcelUuid;
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.huc.android_ble_monitor.R;
@@ -155,7 +154,6 @@ public class BLEPropertyToViewResolver {
         if (buildVersion >= 26) {
             connectabilityText = "Connectable: " + result.isConnectable();
         } else {
-            Log.v(TAG, "deviceConnectabilityResolver: Current api level is " + buildVersion + " Devices below API level 26 cannot detect if connectable");
             connectabilityText = "Connectable: UNKNOWN";
         }
 
