@@ -51,9 +51,18 @@ public class CharacteristicsAdapter extends ArrayAdapter<BluetoothGattCharacteri
         Button writeBtn = convertView.findViewById(R.id.writeBtn);
         Button notifyBtn = convertView.findViewById(R.id.notifyBtn);
 
-        readBtn.setClickable(BleUtility.isCharacteristicReadable(characteristic));
-        writeBtn.setClickable(BleUtility.isCharacteristicWritable(characteristic));
-        notifyBtn.setClickable(BleUtility.isCharacteristicNotifiable(characteristic));
+        if(!BleUtility.isCharacteristicReadable(characteristic)){
+            readBtn.setEnabled(false);
+            readBtn.setAlpha(0.5f);
+        }
+        if(!BleUtility.isCharacteristicWritable(characteristic)){
+            writeBtn.setEnabled(false);
+            writeBtn.setAlpha(0.5f);
+        }
+        if(!BleUtility.isCharacteristicNotifiable(characteristic)){
+            notifyBtn.setEnabled(false);
+            notifyBtn.setAlpha(0.5f);
+        }
 
         return convertView;
     }

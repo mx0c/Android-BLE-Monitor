@@ -44,7 +44,7 @@ public class ServicesOverviewActivity extends AppCompatActivity {
         DeviceNameTextView.setText(resolver.deviceNameResolver(staticBleDevice.mScanResult));
 
         TextView DeviceUUIDTextView = findViewById(R.id.DeviceUUID_TextView);
-        DeviceNameTextView.setText(resolver.deviceAddressResolver(staticBleDevice.mScanResult.getDevice()));
+        DeviceUUIDTextView.setText(resolver.deviceAddressResolver(staticBleDevice.mScanResult.getDevice()));
 
         ImageView BondStateImageView = findViewById(R.id.BondState_ImageView);
         BondStateImageView.setImageResource(resolver.bondStateImageResolver(staticBleDevice.mScanResult));
