@@ -32,6 +32,7 @@ public class BluetoothLeService extends Service {
     private MutableLiveData<BleDevice> mBleDevice;
     private MutableLiveData<List<BleDevice>> mScannedDevices;
     private MutableLiveData<ScanResult> mScanResult;
+    private MutableLiveData<BluetoothGattCharacteristic> mReadCharacteristic = new MutableLiveData<>();
 
     @Override
     public void onCreate() {
@@ -119,9 +120,7 @@ public class BluetoothLeService extends Service {
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
-            if (status == BluetoothGatt.GATT_SUCCESS) {
-                updateBleDeviceGatt(gatt);
-            }
+            mReadCharacteristic.setValue(characteristic);
         }
     };
 
@@ -222,4 +221,6 @@ public class BluetoothLeService extends Service {
     public LiveData<BleDevice> getBluetoothDevice() {
         return mBleDevice;
     }
+
+    public LiveData<BluetoothGattCharacteristic> getReadCharacteristic(){ return mReadCharacteristic; };
 }

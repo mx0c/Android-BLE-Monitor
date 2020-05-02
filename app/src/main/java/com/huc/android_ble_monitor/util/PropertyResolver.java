@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.jar.Attributes;
 
-public class BLEPropertyToViewResolver {
+public class PropertyResolver {
     private static final String TAG = "BLEM_PropertyToViewReso";
 
     final static int BONDING_IMG_ID = R.drawable.round_bluetooth_searching_white_48;
@@ -37,7 +37,7 @@ public class BLEPropertyToViewResolver {
     private HashMap<String, NameInformation> mServiceUUIDtoNameInformationsMap;
     private HashMap<String, NameInformation> mCharacteristicUUIDNameInformationsMap;
 
-    public BLEPropertyToViewResolver(Context ctx) {
+    public PropertyResolver(Context ctx) {
         mManufacturerIdToStringMap = DataIO.loadManufacturerIdToStringMap(ctx);
         mServiceUUIDtoNameInformationsMap = DataIO.loadServiceData(ctx);
         mCharacteristicUUIDNameInformationsMap = DataIO.loadCharacteristicData(ctx);

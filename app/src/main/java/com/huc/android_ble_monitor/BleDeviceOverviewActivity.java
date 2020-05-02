@@ -23,7 +23,7 @@ import com.huc.android_ble_monitor.adapters.ServicesListAdapter;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.ActivityUtil;
-import com.huc.android_ble_monitor.util.BLEPropertyToViewResolver;
+import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.viewmodels.BleDeviceOverviewViewModel;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
 
     public static BleDevice staticBleDevice;
     private BleDeviceOverviewViewModel mBleDeviceOverviewViewModel;
-    private BLEPropertyToViewResolver blePropertyToViewResolver;
+    private PropertyResolver propertyResolver;
     private ServicesListAdapter mServicesListAdapter;
 
     private TextView tvName;
@@ -59,7 +59,7 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
         mServicesListAdapter = new ServicesListAdapter(this, new ArrayList<BluetoothGattService>());
         lvServices.setAdapter(mServicesListAdapter);
 
-        blePropertyToViewResolver = new BLEPropertyToViewResolver(this);
+        propertyResolver = new PropertyResolver(this);
 
         mBleDeviceOverviewViewModel = ViewModelProviders.of(this).get(BleDeviceOverviewViewModel.class);
         mBleDeviceOverviewViewModel.init(staticBleDevice);
@@ -124,15 +124,15 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
 
     public void mapBleObjectToActivity(BleDevice bleDevice) {
         ScanResult bleScanResult = bleDevice.mScanResult;
-        tvBonded.setText(blePropertyToViewResolver.bondStateTextResolver(bleScanResult));
-        ivBondstate.setImageResource(blePropertyToViewResolver.bondStateImageResolver(bleScanResult));
-        tvName.setText(blePropertyToViewResolver.deviceNameResolver(bleScanResult));
-        tvAddress.setText(blePropertyToViewResolver.deviceAddressResolver(bleScanResult));
-        tvRssi.setText(blePropertyToViewResolver.deviceRssiResolver(bleScanResult));
-        tvCompanyIdentifier.setText(blePropertyToViewResolver.deviceManufacturerResolver(bleScanResult));
-        tvConnectability.setText(blePropertyToViewResolver.deviceConnectabilityResolver(bleScanResult));
+        tvBonded.setText(propertyResolver.bondStateTextResolver(bleScanResult));
+        ivBondstate.setImageResource(propertyResolver.bondStateImageResolver(bleScanResult));
+        tvName.setText(propertyResolver.deviceNameResolver(bleScanResult));
+        tvAddress.setText(propertyResolver.deviceAddressResolver(bleScanResult));
+        tvRssi.setText(propertyResolver.deviceRssiResolver(bleScanResult));
+        tvCompanyIdentifier.setText(propertyResolver.deviceManufacturerResolver(bleScanResult));
+        tvConnectability.setText(propertyResolver.deviceConnectabilityResolver(bleScanResult));
 
-        ArrayList<String> uuids = blePropertyToViewResolver.deviceServiceResolver(bleDevice, bleScanResult);
+        ArrayList<String> uuids = propertyResolver.deviceServiceResolver(bleDevice, bleScanResult);
         tvServices.setText("Services (" + bleDevice.getServiceCount() + ")");
 
         if (bleDevice.mBluetoothGatt != null) {

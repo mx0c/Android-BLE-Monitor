@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.models.BleDevice;
-import com.huc.android_ble_monitor.util.BLEPropertyToViewResolver;
+import com.huc.android_ble_monitor.util.PropertyResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +27,13 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
     private List<BleDevice> mBleDevices;
     private Context mContext;
-    private BLEPropertyToViewResolver blePropertyToViewResolver;
+    private PropertyResolver propertyResolver;
 
     public ScanResultRecyclerAdapter(Context context, List<BleDevice> bleDevices, OnDeviceConnectListener onDeviceConnectListener) {
         mBleDevices = bleDevices;
         mContext = context;
         mOnDeviceConnectListener = onDeviceConnectListener;
-        blePropertyToViewResolver = new BLEPropertyToViewResolver(context);
+        propertyResolver = new PropertyResolver(context);
     }
 
     @NonNull
@@ -49,17 +49,17 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         BleDevice device = mBleDevices.get(position);
         ScanResult scanResult = device.mScanResult;
 
-        ((ViewHolder)holder).tvBonded.setText(blePropertyToViewResolver.bondStateTextResolver(scanResult));
-        ((ViewHolder)holder).ivBondstate.setImageResource(blePropertyToViewResolver.bondStateImageResolver(scanResult));
-        ((ViewHolder)holder).tvName.setText(blePropertyToViewResolver.deviceNameResolver(scanResult));
-        ((ViewHolder)holder).tvAddress.setText(blePropertyToViewResolver.deviceAddressResolver(scanResult));
-        ((ViewHolder)holder).tvRssi.setText(blePropertyToViewResolver.deviceRssiResolver(scanResult));
-        ((ViewHolder)holder).tvCompanyIdentifier.setText(blePropertyToViewResolver.deviceManufacturerResolver(scanResult));
-        ((ViewHolder)holder).tvConnectability.setText(blePropertyToViewResolver.deviceConnectabilityResolver(scanResult));
-        ((ViewHolder)holder).tvConnState.setText(blePropertyToViewResolver.connectionStateToStringResolver(device.mConnectionState));
-        ((ViewHolder)holder).ivConnState.setImageResource(blePropertyToViewResolver.connectionStateImageResolver(device.mConnectionState));
+        ((ViewHolder)holder).tvBonded.setText(propertyResolver.bondStateTextResolver(scanResult));
+        ((ViewHolder)holder).ivBondstate.setImageResource(propertyResolver.bondStateImageResolver(scanResult));
+        ((ViewHolder)holder).tvName.setText(propertyResolver.deviceNameResolver(scanResult));
+        ((ViewHolder)holder).tvAddress.setText(propertyResolver.deviceAddressResolver(scanResult));
+        ((ViewHolder)holder).tvRssi.setText(propertyResolver.deviceRssiResolver(scanResult));
+        ((ViewHolder)holder).tvCompanyIdentifier.setText(propertyResolver.deviceManufacturerResolver(scanResult));
+        ((ViewHolder)holder).tvConnectability.setText(propertyResolver.deviceConnectabilityResolver(scanResult));
+        ((ViewHolder)holder).tvConnState.setText(propertyResolver.connectionStateToStringResolver(device.mConnectionState));
+        ((ViewHolder)holder).ivConnState.setImageResource(propertyResolver.connectionStateImageResolver(device.mConnectionState));
 
-        ArrayList<String> uuids = blePropertyToViewResolver.deviceServiceResolver(device, scanResult);
+        ArrayList<String> uuids = propertyResolver.deviceServiceResolver(device, scanResult);
         ((ViewHolder)holder).tvServices.setText("Advertised Services (" + device.getServiceCount() + ")");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.advertised_service_list_item, uuids);
         ((ViewHolder)holder).servicesListView.setAdapter(adapter);
