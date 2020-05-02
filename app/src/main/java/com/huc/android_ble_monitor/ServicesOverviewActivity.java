@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.huc.android_ble_monitor.adapters.CharacteristicsAdapter;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.util.BLEPropertyToViewResolver;
 
@@ -52,6 +53,6 @@ public class ServicesOverviewActivity extends AppCompatActivity {
         BondStateTextView.setText(resolver.bondStateTextResolver(staticBleDevice.mScanResult));
 
         ListView characteristicListview = findViewById(R.id.characteristic_listview);
-
+        characteristicListview.setAdapter(new CharacteristicsAdapter(this,staticGattService.getCharacteristics()));
     }
 }
