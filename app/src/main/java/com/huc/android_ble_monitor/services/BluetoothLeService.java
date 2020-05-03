@@ -120,7 +120,7 @@ public class BluetoothLeService extends Service {
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
-            mReadCharacteristic.setValue(characteristic);
+            mReadCharacteristic.postValue(characteristic);
         }
     };
 

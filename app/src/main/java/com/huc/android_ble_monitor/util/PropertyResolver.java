@@ -17,7 +17,7 @@ import com.huc.android_ble_monitor.models.NameInformation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.jar.Attributes;
+import java.util.UUID;
 
 public class PropertyResolver {
     private static final String TAG = "BLEM_PropertyToViewReso";
@@ -185,7 +185,7 @@ public class PropertyResolver {
     }
 
     public String serviceNameResolver(BluetoothGattService bluetoothGattService) {
-        NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid().toString().substring(4,8));
+        NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid().toString().substring(4,8).toUpperCase());
         String serviceName;
 
         if(knownSigService == null) {
@@ -198,12 +198,15 @@ public class PropertyResolver {
     }
 
     public String characteristicNameResolver(BluetoothGattCharacteristic bluetoothGattCharacteristic){
-        NameInformation characteristicNi = mCharacteristicUUIDNameInformationsMap.get(bluetoothGattCharacteristic.getUuid().toString().substring(4,8));
+        UUID uuid = bluetoothGattCharacteristic.getUuid();
+        String sUuid = uuid.toString();
+        String subsUuid = sUuid.substring(4,8);
+        NameInformation characteristicNi = mCharacteristicUUIDNameInformationsMap.get(bluetoothGattCharacteristic.getUuid().toString().substring(4,8).toUpperCase());
         return characteristicNi == null ? SIG_UNKNOWN_CHARACTERISTIC_NAME : characteristicNi.name;
     }
 
     public String characteristicIdentifierResolver(BluetoothGattCharacteristic bluetoothGattCharacteristic){
-        NameInformation characteristicNi = mCharacteristicUUIDNameInformationsMap.get(bluetoothGattCharacteristic.getUuid().toString().substring(4,8));
+        NameInformation characteristicNi = mCharacteristicUUIDNameInformationsMap.get(bluetoothGattCharacteristic.getUuid().toString().substring(4,8).toUpperCase());
         return characteristicNi == null ? SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER : characteristicNi.identifier;
     }
 
@@ -212,7 +215,7 @@ public class PropertyResolver {
     }
 
     public String serviceIdentifierResolver(BluetoothGattService bluetoothGattService) {
-        NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid().toString().substring(4,8));
+        NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid().toString().substring(4,8).toUpperCase());
         String serviceIdentifier;
 
         if(knownSigService == null) {

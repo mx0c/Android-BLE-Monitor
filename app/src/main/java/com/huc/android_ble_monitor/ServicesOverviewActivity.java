@@ -1,20 +1,17 @@
 package com.huc.android_ble_monitor;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
-import android.bluetooth.le.ScanResult;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.adapters.CharacteristicListAdapter;
@@ -22,7 +19,6 @@ import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.PropertyResolver;
-import com.huc.android_ble_monitor.viewmodels.MainActivityViewModel;
 import com.huc.android_ble_monitor.viewmodels.ServicesOverviewActivityViewModel;
 
 public class ServicesOverviewActivity extends AppCompatActivity {
@@ -36,8 +32,8 @@ public class ServicesOverviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppTheme);
-        ActivityUtil.setToolbar(this, true);
         setContentView(R.layout.services_overview_activity);
+        ActivityUtil.setToolbar(this, false);
 
         mViewModel = ViewModelProviders.of(this).get(ServicesOverviewActivityViewModel.class);
         mViewModel.init(staticGattService);
