@@ -200,22 +200,26 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
 
     @Override
     public void onDeviceClick(int position) {
-        final BleDevice bleDevice = mMainActivityViewModel.getmBleDevices().getValue().get(position);
+        try {
+            final BleDevice bleDevice = mMainActivityViewModel.getmBleDevices().getValue().get(position);
 
-        if(Build.VERSION.SDK_INT >= 26) {
-            if (bleDevice.mScanResult.isConnectable()) {
-                mBluetoothLeService.connect(bleDevice);
+            if (Build.VERSION.SDK_INT >= 26) {
+                if (bleDevice.mScanResult.isConnectable()) {
+                    mBluetoothLeService.connect(bleDevice);
+                } else {
+                    Toast.makeText(this, "Device is not connectable.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             } else {
-                Toast.makeText(this, "Device is not connectable.", Toast.LENGTH_SHORT).show();
-                return;
+                mBluetoothLeService.connect(bleDevice);
             }
-        }else{
-            mBluetoothLeService.connect(bleDevice);
-        }
 
-        BleDeviceOverviewActivity.staticBleDevice = bleDevice;
-        Intent intent = new Intent(this, BleDeviceOverviewActivity.class);
-        startActivity(intent);
+            BleDeviceOverviewActivity.staticBleDevice = bleDevice;
+            Intent intent = new Intent(this, BleDeviceOverviewActivity.class);
+            startActivity(intent);
+        }catch (IndexOutOfBoundsException e){
+            Log.e(TAG, "onDeviceClick: IndexOutOfBounds Exception: " + e.getStackTrace().toString());
+        }
     }
 
     @Override

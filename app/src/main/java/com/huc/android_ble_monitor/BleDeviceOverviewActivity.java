@@ -78,6 +78,7 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
             @Override
             public void onChanged(BleDevice bleDevice) {
                 Log.d(TAG, "onChanged: BleDevice value changed");
+                if(bleDevice == null) return;
                 mapBleObjectToActivity(bleDevice);
                 findViewById(R.id.loading_spinner).setVisibility(View.GONE);
                 findViewById(R.id.lv_services).setVisibility(View.VISIBLE);
