@@ -63,15 +63,14 @@ public class ServicesOverviewActivity extends AppCompatActivity {
                         public void onChanged(BluetoothGattCharacteristic characteristic) {
                             //gets called when characteristic is read
                             new MaterialAlertDialogBuilder(ServicesOverviewActivity.this)
-                                    .setTitle("Disconnect")
-                                    .setMessage("Read Characteristic "+ characteristic.getUuid().toString() + " :\nRaw: " + characteristic.getValue() + "\nString: " + characteristic.getStringValue(0)
+                                    .setTitle("Received from Characteristic:")
+                                    .setMessage("Read Characteristic "+ characteristic.getUuid().toString() + ":\nRaw: " + characteristic.getValue() + "\nString: " + characteristic.getStringValue(0)
                                     + "\nInt32: "+ characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT32,0))
                                     .setNeutralButton("Ok", null)
                                     .show();
                         }
                     });
                 }
-
             }
         });
     }

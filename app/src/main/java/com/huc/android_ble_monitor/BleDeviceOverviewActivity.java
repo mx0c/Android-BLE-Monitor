@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,6 +79,8 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
             public void onChanged(BleDevice bleDevice) {
                 Log.d(TAG, "onChanged: BleDevice value changed");
                 mapBleObjectToActivity(bleDevice);
+                findViewById(R.id.loading_spinner).setVisibility(View.GONE);
+                findViewById(R.id.lv_services).setVisibility(View.VISIBLE);
             }
         });
 
