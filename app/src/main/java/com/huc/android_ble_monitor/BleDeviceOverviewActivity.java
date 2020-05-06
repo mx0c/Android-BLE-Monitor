@@ -80,8 +80,6 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
                 Log.d(TAG, "onChanged: BleDevice value changed");
                 if(bleDevice == null) return;
                 mapBleObjectToActivity(bleDevice);
-                findViewById(R.id.loading_spinner).setVisibility(View.GONE);
-                findViewById(R.id.lv_services).setVisibility(View.VISIBLE);
             }
         });
         mBleDeviceOverviewViewModel.getmBinder().observe(this, new Observer<BluetoothLeService.LocalBinder>() {
@@ -142,6 +140,10 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
             mServicesListAdapter.clear();
             mServicesListAdapter.addAll(bleDevice.mBluetoothGatt.getServices());
             mServicesListAdapter.notifyDataSetChanged();
+            if(mServicesListAdapter.getCount() > 0) {
+                findViewById(R.id.loading_spinner).setVisibility(View.GONE);
+                findViewById(R.id.lv_services).setVisibility(View.VISIBLE);
+            }
         }
     }
 
