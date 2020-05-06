@@ -83,7 +83,6 @@ public class BleDeviceOverviewActivity extends AppCompatActivity {
                 findViewById(R.id.lv_services).setVisibility(View.VISIBLE);
             }
         });
-
         mBleDeviceOverviewViewModel.getmBinder().observe(this, new Observer<BluetoothLeService.LocalBinder>() {
             @Override
             public void onChanged(BluetoothLeService.LocalBinder localBinder) {
