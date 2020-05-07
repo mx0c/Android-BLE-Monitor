@@ -18,27 +18,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Launcher">
+        <activity android:name=".ServicesOverviewActivity"
+            android:launchMode="singleInstance"
+            android:parentActivityName=".BleDeviceOverviewActivity"></activity>
 
         <service
-            android:enabled="true"
-            android:name="com.huc.android_ble_monitor.services.BluetoothLeService">
-        </service>
+            android:name=".services.BluetoothLeService"
+            android:enabled="true"></service>
 
-        <activity android:name=".MainActivity" android:launchMode="singleInstance">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BleDeviceOverviewActivity" android:launchMode="singleInstance"
-                android:parentActivityName="com.huc.android_ble_monitor.MainActivity" >
+        <activity
+            android:name=".BleDeviceOverviewActivity"
+            android:launchMode="singleInstance"
+            android:parentActivityName=".MainActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.huc.android_ble_monitor.MainActivity" />
-
         </activity>
     </application>
 

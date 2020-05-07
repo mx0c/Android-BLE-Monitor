@@ -12,23 +12,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.util.BLEPropertyToViewResolver;
+import com.huc.android_ble_monitor.util.PropertyResolver;
 
 import java.util.List;
 
 public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
-
-    BLEPropertyToViewResolver blePropertyToViewResolver;
-
+    PropertyResolver propertyResolver;
     TextView tvServiceName;
     TextView tvServiceUuid;
     TextView tvServiceIdentifier;
 
-
     public ServicesListAdapter(@NonNull Context context, List<BluetoothGattService> bluetoothGattServices) {
         super(context, 0, bluetoothGattServices);
-
-        blePropertyToViewResolver = new BLEPropertyToViewResolver(context);
+        propertyResolver = new PropertyResolver(context);
     }
 
     @NonNull
@@ -53,8 +49,8 @@ public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
     }
 
     private void resolveViews(BluetoothGattService bluetoothGattService) {
-        tvServiceName.setText(this.blePropertyToViewResolver.serviceNameResolver(bluetoothGattService));
-        tvServiceUuid.setText(this.blePropertyToViewResolver.serviceUuidResolver(bluetoothGattService));
-        tvServiceIdentifier.setText(this.blePropertyToViewResolver.serviceIdentifierResolver(bluetoothGattService));
+        tvServiceName.setText(this.propertyResolver.serviceNameResolver(bluetoothGattService));
+        tvServiceUuid.setText(this.propertyResolver.serviceUuidResolver(bluetoothGattService));
+        tvServiceIdentifier.setText(this.propertyResolver.serviceIdentifierResolver(bluetoothGattService));
     }
 }
