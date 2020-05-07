@@ -42,14 +42,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/readBtn"
-            android:paddingHorizontal="5dp"
+            android:layout_marginHorizontal="5dp"
             android:text="Read">
         </Button>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/writeBtn"
-            android:paddingHorizontal="5dp"
+            android:layout_marginHorizontal="5dp"
             android:layout_weight="1"
             android:text="Write">
         </Button>
@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/notifyBtn"
-            android:paddingHorizontal="5dp"
+            android:layout_marginHorizontal="5dp"
             android:layout_weight="1"
             android:text="Notify">
         </Button>
