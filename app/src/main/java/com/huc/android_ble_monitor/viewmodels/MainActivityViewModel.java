@@ -21,6 +21,7 @@ public class MainActivityViewModel extends BaseViewModel {
 
     private boolean isBluetoothEnabled;
 
+    @Override
     public void init() {
         mBleDevices.setValue(new ArrayList<BleDevice>());
         isBluetoothEnabled = true;

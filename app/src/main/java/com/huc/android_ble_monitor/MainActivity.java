@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
-        ((MainActivityViewModel)mViewModel).init();
+        mViewModel.init();
 
         //call BaseActivity onCreate
         super.onCreate(savedInstanceState);
@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
             }
         });
 
-        ((MainActivityViewModel)mViewModel).getmBinder().observe(this, new Observer<BluetoothLeService.LocalBinder>() {
+        mViewModel.getmBinder().observe(this, new Observer<BluetoothLeService.LocalBinder>() {
             @Override
             public void onChanged(BluetoothLeService.LocalBinder localBinder) {
                 if(localBinder == null){

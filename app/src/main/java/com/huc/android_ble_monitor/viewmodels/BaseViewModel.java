@@ -25,6 +25,8 @@ public abstract class BaseViewModel extends ViewModel {
         }
     };
 
+    public void init(){};
+
     public LiveData<BluetoothLeService.LocalBinder> getmBinder() {
         return mBinder;
     }
