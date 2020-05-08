@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothGattService;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -63,9 +64,20 @@ public class ServicesOverviewActivity extends AppCompatActivity {
                         public void onChanged(BluetoothGattCharacteristic characteristic) {
                             //gets called when characteristic is read
                             new MaterialAlertDialogBuilder(ServicesOverviewActivity.this)
-                                    .setTitle("Received from Characteristic:")
+                                    .setTitle("Read from Characteristic returned:")
                                     .setMessage("Read Characteristic "+ characteristic.getUuid().toString() + ":\nRaw: " + characteristic.getValue() + "\nString: " + characteristic.getStringValue(0)
                                     + "\nInt32: "+ characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT32,0))
+                                    .setNeutralButton("Ok", null)
+                                    .show();
+                        }
+                    });
+                    mBluetoothLeService.getWriteCharacteristic().observe(ServicesOverviewActivity.this, new Observer<BluetoothGattCharacteristic>() {
+                        @Override
+                        public void onChanged(BluetoothGattCharacteristic characteristic) {
+                            EditText et = new EditText(ServicesOverviewActivity.this);
+                            new MaterialAlertDialogBuilder(ServicesOverviewActivity.this)
+                                    .setTitle("Write from Characteristic returned:")
+                                    .setMessage("Successfully wrote: " + characteristic.getValue().toString())
                                     .setNeutralButton("Ok", null)
                                     .show();
                         }

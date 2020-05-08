@@ -2,17 +2,22 @@ package com.huc.android_ble_monitor.adapters;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
+import com.huc.android_ble_monitor.ServicesOverviewActivity;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.util.BleUtility;
@@ -56,15 +61,15 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
 
         if(!BleUtility.isCharacteristicReadable(characteristic)){
             readBtn.setEnabled(false);
-            readBtn.setAlpha(0.5f);
+            readBtn.setAlpha(0.6f);
         }
         if(!BleUtility.isCharacteristicWritable(characteristic)){
             writeBtn.setEnabled(false);
-            writeBtn.setAlpha(0.5f);
+            writeBtn.setAlpha(0.6f);
         }
         if(!BleUtility.isCharacteristicNotifiable(characteristic)){
             notifyBtn.setEnabled(false);
-            notifyBtn.setAlpha(0.5f);
+            notifyBtn.setAlpha(0.6f);
         }
 
         readBtn.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +82,19 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
         writeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                final EditText et = new EditText(mContext);
+                new MaterialAlertDialogBuilder(mContext)
+                        .setTitle("Write to Characteristic")
+                        .setMessage("Enter value to write:")
+                        .setView(et)
+                        .setNeutralButton("OK", new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                characteristic.setValue(et.getText().toString());
+                                mService.writeCharacteristic(characteristic);
+                            }
+                        })
+                        .show();
             }
         });
 

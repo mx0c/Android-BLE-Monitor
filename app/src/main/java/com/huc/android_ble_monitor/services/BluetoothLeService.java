@@ -4,6 +4,7 @@ import android.app.Service;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanCallback;
@@ -23,6 +24,7 @@ import com.huc.android_ble_monitor.util.BleUtility;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class BluetoothLeService extends Service {
     public final static String TAG = "BLEM_BLuetoothLeService";
@@ -33,6 +35,8 @@ public class BluetoothLeService extends Service {
     private MutableLiveData<List<BleDevice>> mScannedDevices;
     private MutableLiveData<ScanResult> mScanResult;
     private MutableLiveData<BluetoothGattCharacteristic> mReadCharacteristic = new MutableLiveData<>();
+    private MutableLiveData<BluetoothGattCharacteristic> mWriteCharacteristic = new MutableLiveData<>();
+    private MutableLiveData<BluetoothGattCharacteristic> mNotifyCharacteristic = new MutableLiveData<>();
 
     @Override
     public void onCreate() {
@@ -120,7 +124,21 @@ public class BluetoothLeService extends Service {
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
-            mReadCharacteristic.postValue(characteristic);
+            if(status == BluetoothGatt.GATT_SUCCESS) {
+                mReadCharacteristic.postValue(characteristic);
+            }
+        }
+
+        @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            if(status == BluetoothGatt.GATT_SUCCESS) {
+                mWriteCharacteristic.postValue(characteristic);
+            }
+        }
+
+        @Override
+        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+            super.onCharacteristicChanged(gatt, characteristic);
         }
     };
 
@@ -195,12 +213,26 @@ public class BluetoothLeService extends Service {
         mBluetoothGatt.readCharacteristic(characteristic);
     }
 
+    public void writeCharacteristic(BluetoothGattCharacteristic characteristic){
+        if (BleUtility.mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.d(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
+        mBluetoothGatt.writeCharacteristic(characteristic);
+    }
+
     public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, boolean enabled) {
         if (BleUtility.mBluetoothAdapter == null || mBluetoothGatt == null) {
             Log.d(TAG, "BluetoothAdapter not initialized");
             return;
         }
         mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
+        // https://stackoverflow.com/questions/27068673/subscribe-to-a-ble-gatt-notification-android
+        // 0x2902 = org.bluetooth.descriptor.gatt.client_characteristic_configuration
+        UUID uuid = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
+        BluetoothGattDescriptor descriptor = characteristic.getDescriptor(uuid);
+        descriptor.setValue(enabled ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
+        mBluetoothGatt.writeDescriptor(descriptor);
     }
 
     /**
@@ -222,5 +254,9 @@ public class BluetoothLeService extends Service {
         return mBleDevice;
     }
 
-    public LiveData<BluetoothGattCharacteristic> getReadCharacteristic(){ return mReadCharacteristic; };
+    public LiveData<BluetoothGattCharacteristic> getWriteCharacteristic(){ return mWriteCharacteristic; }
+
+    public LiveData<BluetoothGattCharacteristic> getNotifiedCharacteristic(){ return mNotifyCharacteristic; }
+
+    public LiveData<BluetoothGattCharacteristic> getReadCharacteristic(){ return mReadCharacteristic; }
 }
