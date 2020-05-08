@@ -45,25 +45,32 @@ public class MainActivityViewModel extends ViewModel {
     public void init() {
         mBleDevices.setValue(new ArrayList<BleDevice>());
         isBluetoothEnabled = true;
-        ScheduledExecutorService exec = Executors.newScheduledThreadPool(5);
+        ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 checkTimeStamp();
             }
-        }, 0, 1, TimeUnit.SECONDS);
+        }, 0, 2, TimeUnit.SECONDS);
     }
 
     private void checkTimeStamp(){
-        long currTime = new Date().getTime();
-        List<BleDevice> devices = mBleDevices.getValue();
-        for(BleDevice dev : devices){
-            if(dev.mTimestamp <= currTime){
-                Log.d(TAG, "checkTimeStamp: removed "+ dev.mScanResult.getDevice().getAddress() +" because TTL is exceeded.");
-                devices.remove(dev);
+        try {
+            long currTime = new Date().getTime();
+            List<BleDevice> devices = mBleDevices.getValue();
+            List<BleDevice> toRemove = new ArrayList<>();
+            for (BleDevice dev : devices) {
+                if (dev.mTimestamp <= currTime) {
+                    Log.d(TAG, "checkTimeStamp: removed " + dev.mScanResult.getDevice().getAddress() + " because TTL is exceeded.");
+                    toRemove.add(dev);
+                }
             }
+            devices.removeAll(toRemove);
+            mBleDevices.postValue(devices);
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.e(TAG, "checkTimeStamp: " + e.getMessage());
         }
-        mBleDevices.postValue(devices);
     }
 
     public ServiceConnection getmServiceConnection() {

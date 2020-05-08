@@ -8,6 +8,8 @@ import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanResult;
 import android.os.ParcelUuid;
 
+import androidx.annotation.Nullable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,6 +35,11 @@ public class BleDevice implements Serializable {
     public int getServiceCount() {
         List<ParcelUuid> listUuids = this.mScanResult.getScanRecord().getServiceUuids();
         return listUuids != null ? listUuids.size() : 0;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return mScanResult.getDevice().getAddress().equals(((BleDevice)obj).mScanResult.getDevice().getAddress());
     }
 }
 
