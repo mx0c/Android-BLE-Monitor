@@ -14,21 +14,8 @@ import com.huc.android_ble_monitor.services.BluetoothLeService;
 
 import java.util.List;
 
-public class ServicesOverviewActivityViewModel extends ViewModel {
+public class ServicesOverviewActivityViewModel extends BaseViewModel {
     private MutableLiveData<BluetoothGattService> mService;
-    private MutableLiveData<BluetoothLeService.LocalBinder> mBinder;
-
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            mBinder.postValue((BluetoothLeService.LocalBinder) service);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            mBinder.postValue(null);
-        }
-    };
 
     public void init(BluetoothGattService service){
         mService = new MutableLiveData<>(service);
@@ -38,7 +25,6 @@ public class ServicesOverviewActivityViewModel extends ViewModel {
     public LiveData<BluetoothLeService.LocalBinder> getBinder() {
         return mBinder;
     }
-
     public ServiceConnection getServiceConnection() {
         return mServiceConnection;
     }

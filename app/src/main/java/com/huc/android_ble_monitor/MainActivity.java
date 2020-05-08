@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
@@ -15,19 +14,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.adapters.ScanResultRecyclerAdapter;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
@@ -42,20 +39,22 @@ import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class MainActivity extends AppCompatActivity implements ScanResultRecyclerAdapter.OnDeviceConnectListener,  SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends BaseActivity implements ScanResultRecyclerAdapter.OnDeviceConnectListener,  SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "BLEM_MainActivity";
 
     private SwitchCompat mBluetoothSwitch;
-    private MainActivityViewModel mMainActivityViewModel;
     private RecyclerView mScanResultRecyclerView;
     private ScanResultRecyclerAdapter mScanResultRecyclerAdapter;
-    private BluetoothLeService mBluetoothLeService;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        ((MainActivityViewModel)mViewModel).init();
+
+        //call BaseActivity onCreate
         super.onCreate(savedInstanceState);
-        setTheme(R.style.AppTheme); // Resets default theme after app was loaded
+
         setContentView(R.layout.activity_main);
         mScanResultRecyclerView = findViewById(R.id.scan_result_recycler_view);
         ActivityUtil.setToolbar(this, true);
@@ -63,14 +62,6 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
         PermissionsUtil.requestLocationPermission(this);
         BleUtility.checkIsBluetoothEnabled(this);
         BleUtility.checkBleAvailability(this);
-
-        mMainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
-        mMainActivityViewModel.init();
-
-        //Bind to BluetoothLeService
-        Intent serviceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
-        boolean success = getApplicationContext().bindService(serviceIntent, mMainActivityViewModel.getmServiceConnection(), BIND_AUTO_CREATE);
-        Log.d(TAG,"bindService returned: " + Boolean.toString(success));
 
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
@@ -80,21 +71,21 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     }
 
     public void setObservers(){
-        mMainActivityViewModel.getToast().observe(this, new Observer<ToastModel>() {
+        ((MainActivityViewModel)mViewModel).getToast().observe(this, new Observer<ToastModel>() {
             @Override
             public void onChanged(ToastModel toastModel) {
                 Toast.makeText(MainActivity.this, toastModel.getMessage(), toastModel.getDuration()).show();
             }
         });
 
-        mMainActivityViewModel.getmBleDevices().observe(this, new Observer<List<BleDevice>>() {
+        ((MainActivityViewModel)mViewModel).getmBleDevices().observe(this, new Observer<List<BleDevice>>() {
             @Override
             public void onChanged(List<BleDevice> bleDevices) {
                 mScanResultRecyclerAdapter.notifyDataSetChanged();
             }
         });
 
-        mMainActivityViewModel.getmBinder().observe(this, new Observer<BluetoothLeService.LocalBinder>() {
+        ((MainActivityViewModel)mViewModel).getmBinder().observe(this, new Observer<BluetoothLeService.LocalBinder>() {
             @Override
             public void onChanged(BluetoothLeService.LocalBinder localBinder) {
                 if(localBinder == null){
@@ -107,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
                     mBluetoothLeService.getScanResult().observe(MainActivity.this, new Observer<ScanResult>() {
                         @Override
                         public void onChanged(ScanResult scanResult) {
-                            mMainActivityViewModel.registerScanResult(scanResult);
+                            ((MainActivityViewModel)mViewModel).registerScanResult(scanResult);
                         }
                     });
                 }
@@ -121,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
         mSwipeRefreshLayout = findViewById(R.id.swipe_container_scan_result);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        mScanResultRecyclerAdapter = new ScanResultRecyclerAdapter(this, mMainActivityViewModel.getmBleDevices().getValue(), this);
+        mScanResultRecyclerAdapter = new ScanResultRecyclerAdapter(this, ((MainActivityViewModel)mViewModel).getmBleDevices().getValue(), this);
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mScanResultRecyclerView.setLayoutManager(linearLayoutManager);
         mScanResultRecyclerView.setAdapter(mScanResultRecyclerAdapter);
@@ -142,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
                     case BluetoothAdapter.STATE_ON:
                         BleUtility.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                         BleUtility.mBleScanner = BleUtility.mBluetoothAdapter.getBluetoothLeScanner();
-                        mMainActivityViewModel.setBluetoothEnabled(true);
+                        ((MainActivityViewModel)mViewModel).setBluetoothEnabled(true);
                 }
             }
         }
@@ -151,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mMainActivityViewModel.getmServiceConnection());
+        unbindService(mViewModel.getServiceConnection());
         // unregisterReceiver(mReceiver);
     }
 
@@ -163,9 +154,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
-    /*
-        EventHandlers related to the toolbar
-     */
+    // EventHandlers related to the toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -177,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    if(mMainActivityViewModel.isBluetoothEnabled()) {
+                    if(((MainActivityViewModel)mViewModel).isBluetoothEnabled()) {
                         Log.d(TAG, "BLE Switch checked. Scanning BLE Devices.");
                         mBluetoothLeService.scanForDevices(true);
                     } else {
@@ -192,6 +181,11 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
         return true;
     }
 
+    /**
+     * Called when clicking on an option in the Toolbar
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Toast.makeText(this, "Item Selected", Toast.LENGTH_SHORT).show();
@@ -201,10 +195,14 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
         }
     }
 
+    /**
+     * Called when clicking on a Device Item
+     * @param position
+     */
     @Override
     public void onDeviceClick(int position) {
         try {
-            final BleDevice bleDevice = mMainActivityViewModel.getmBleDevices().getValue().get(position);
+            final BleDevice bleDevice = ((MainActivityViewModel)mViewModel).getmBleDevices().getValue().get(position);
 
             if (Build.VERSION.SDK_INT >= 26) {
                 if (bleDevice.mScanResult.isConnectable()) {
@@ -217,23 +215,29 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
                 mBluetoothLeService.connect(bleDevice);
             }
 
-            BleDeviceOverviewActivity.staticBleDevice = bleDevice;
-            Intent intent = new Intent(this, BleDeviceOverviewActivity.class);
+            DeviceDetailActivity.staticBleDevice = bleDevice;
+            Intent intent = new Intent(this, DeviceDetailActivity.class);
             startActivity(intent);
         }catch (IndexOutOfBoundsException e){
             Log.e(TAG, "onDeviceClick: IndexOutOfBounds Exception: " + e.getStackTrace().toString());
         }
     }
 
+    /**
+     * called after location permission are requested
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult: " + "Request code " + requestCode +  ", Result Code " + resultCode);
         switch (requestCode) {
             case PermissionsUtil.REQUEST_ENABLE_BT_RESULT:
                 if (resultCode == Activity.RESULT_OK) {
-                    mMainActivityViewModel.setBluetoothEnabled(true);
+                    ((MainActivityViewModel)mViewModel).setBluetoothEnabled(true);
                 } else {
-                    mMainActivityViewModel.setBluetoothEnabled(false);
+                    ((MainActivityViewModel)mViewModel).setBluetoothEnabled(false);
                 }
                 break;
             default:
@@ -248,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements ScanResultRecycle
     @Override
     public void onRefresh() {
         Log.d(TAG, "onRefresh: ScanResult List refreshed.");
-        mMainActivityViewModel.clearBleDevices();
+        ((MainActivityViewModel)mViewModel).clearBleDevices();
         mSwipeRefreshLayout.setRefreshing(false);
     }
 }

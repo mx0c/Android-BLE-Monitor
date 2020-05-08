@@ -78,7 +78,6 @@ public class PropertyResolver {
                 imgId = CONNECTING_IMG_ID;
                 break;
         }
-
         return imgId;
     }
 
@@ -104,13 +103,22 @@ public class PropertyResolver {
         return bondStateImageResolver(state);
     }
 
-    public String bondStateTextResolver(int state) {
-        return BleUtility.BondIntToString(state);
+    public static String BondIntToString(int bondInt) {
+        switch (bondInt) {
+            case 10:
+                return "NOT BONDED";
+            case 11:
+                return "BONDING";
+            case 12:
+                return "BONDED";
+            default:
+                return "NOT RECOGNIZED";
+        }
     }
 
     public String bondStateTextResolver(ScanResult scanResult) {
         int state = scanResult.getDevice().getBondState();
-        return this.bondStateTextResolver(state);
+        return BondIntToString(state);
     }
 
     public String deviceNameResolver(String name) {
@@ -120,18 +128,6 @@ public class PropertyResolver {
     public String deviceNameResolver(ScanResult result) {
         String name = result.getScanRecord().getDeviceName();
         return this.deviceNameResolver(name);
-    }
-
-    public String deviceAddressResolver(String deviceAddress) {
-        return deviceAddress;
-    }
-
-    public String deviceAddressResolver(BluetoothDevice bleDevice) {
-        return this.deviceAddressResolver(bleDevice.getAddress());
-    }
-
-    public String deviceAddressResolver(ScanResult result) {
-        return this.deviceAddressResolver(result.getDevice());
     }
 
     public String deviceRssiResolver(ScanResult result) {

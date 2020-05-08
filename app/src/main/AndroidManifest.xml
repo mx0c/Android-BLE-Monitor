@@ -20,7 +20,7 @@
         android:theme="@style/AppTheme.Launcher">
         <activity android:name=".ServicesOverviewActivity"
             android:launchMode="singleInstance"
-            android:parentActivityName=".BleDeviceOverviewActivity"></activity>
+            android:parentActivityName=".DeviceDetailActivity"></activity>
 
         <service
             android:name=".services.BluetoothLeService"
@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BleDeviceOverviewActivity"
+            android:name=".DeviceDetailActivity"
             android:launchMode="singleInstance"
             android:parentActivityName=".MainActivity">
 

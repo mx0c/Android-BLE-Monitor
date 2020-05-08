@@ -1,20 +1,12 @@
 package com.huc.android_ble_monitor.viewmodels;
 
 import android.bluetooth.le.ScanResult;
-import android.content.ComponentName;
-import android.content.ServiceConnection;
-import android.os.IBinder;
 import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
-import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.BleUtility;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,25 +14,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivityViewModel extends ViewModel {
+public class MainActivityViewModel extends BaseViewModel {
     private static final String TAG = "BLEM_MAViewModel";
     private MutableLiveData<List<BleDevice>> mBleDevices = new MutableLiveData<>();
     private MutableLiveData<ToastModel> mToastBroadcast = new MutableLiveData<>();
-    private MutableLiveData<BluetoothLeService.LocalBinder> mBinder = new MutableLiveData<>();
 
     private boolean isBluetoothEnabled;
-
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            mBinder.postValue((BluetoothLeService.LocalBinder) service);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            mBinder.postValue(null);
-        }
-    };
 
     public void init() {
         mBleDevices.setValue(new ArrayList<BleDevice>());
@@ -71,10 +50,6 @@ public class MainActivityViewModel extends ViewModel {
             e.printStackTrace();
             Log.e(TAG, "checkTimeStamp: " + e.getMessage());
         }
-    }
-
-    public ServiceConnection getmServiceConnection() {
-        return mServiceConnection;
     }
 
     public void setBluetoothEnabled(boolean bluetoothEnabled) {
@@ -109,7 +84,5 @@ public class MainActivityViewModel extends ViewModel {
         return mBleDevices;
     }
 
-    public LiveData<BluetoothLeService.LocalBinder> getmBinder() {
-        return mBinder;
-    }
+
 }

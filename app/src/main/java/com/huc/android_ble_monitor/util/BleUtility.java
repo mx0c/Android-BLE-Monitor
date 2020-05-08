@@ -63,19 +63,6 @@ public class BleUtility {
         return resList;
     }
 
-    public static String BondIntToString(int bondInt) {
-        switch (bondInt) {
-            case 10:
-                return "NOT BONDED";
-            case 11:
-                return "BONDING";
-            case 12:
-                return "BONDED";
-            default:
-                return "NOT RECOGNIZED";
-        }
-    }
-
     /**
      * @return Returns <b>true</b> if property is writable
      */
