@@ -129,6 +129,7 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
                         mBluetoothSwitch.setChecked(false);
+                        ((MainActivityViewModel)mViewModel).setBluetoothEnabled(false);
                         break;
                     case BluetoothAdapter.STATE_ON:
                         BleUtility.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();

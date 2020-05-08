@@ -84,6 +84,4 @@ public class MainActivityViewModel extends BaseViewModel {
     public LiveData<List<BleDevice>> getmBleDevices() {
         return mBleDevices;
     }
-
-
 }
