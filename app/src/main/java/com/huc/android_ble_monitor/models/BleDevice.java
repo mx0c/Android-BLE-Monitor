@@ -10,16 +10,24 @@ import android.os.ParcelUuid;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+
+
 public class BleDevice implements Serializable {
+    //TTL in Milliseconds
+    private static int timeToLive = 10000;
+
     public ScanResult mScanResult;
     public Integer mConnectionState;
     public BluetoothGatt mBluetoothGatt;
+    public long mTimestamp;
 
     public BleDevice(ScanResult sr){
         this.mConnectionState = BluetoothProfile.STATE_DISCONNECTED;
         this.mScanResult = sr;
+        mTimestamp = new Date().getTime() + timeToLive;
     }
 
     public int getServiceCount() {
