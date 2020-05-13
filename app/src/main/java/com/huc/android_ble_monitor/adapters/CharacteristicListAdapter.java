@@ -3,7 +3,6 @@ package com.huc.android_ble_monitor.adapters;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +16,9 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.ServicesOverviewActivity;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.PropertyResolver;
-import com.huc.android_ble_monitor.util.BleUtility;
+import com.huc.android_ble_monitor.util.BleUtil;
 
 import java.util.List;
 
@@ -59,15 +57,15 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
         Button writeBtn = convertView.findViewById(R.id.writeBtn);
         Button notifyBtn = convertView.findViewById(R.id.notifyBtn);
 
-        if(!BleUtility.isCharacteristicReadable(characteristic)){
+        if(!BleUtil.isCharacteristicReadable(characteristic)){
             readBtn.setEnabled(false);
             readBtn.setAlpha(0.6f);
         }
-        if(!BleUtility.isCharacteristicWritable(characteristic)){
+        if(!BleUtil.isCharacteristicWritable(characteristic)){
             writeBtn.setEnabled(false);
             writeBtn.setAlpha(0.6f);
         }
-        if(!BleUtility.isCharacteristicNotifiable(characteristic)){
+        if(!BleUtil.isCharacteristicNotifiable(characteristic)){
             notifyBtn.setEnabled(false);
             notifyBtn.setAlpha(0.6f);
         }

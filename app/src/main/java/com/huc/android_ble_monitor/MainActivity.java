@@ -17,7 +17,6 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,8 +29,10 @@ import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.ActivityUtil;
-import com.huc.android_ble_monitor.util.BleUtility;
+import com.huc.android_ble_monitor.util.BleUtil;
+import com.huc.android_ble_monitor.util.ServiceIDXmlResolver;
 import com.huc.android_ble_monitor.util.PermissionsUtil;
+import com.huc.android_ble_monitor.util.IAsyncDownload;
 import com.huc.android_ble_monitor.viewmodels.MainActivityViewModel;
 
 import java.util.List;
@@ -39,7 +40,7 @@ import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class MainActivity extends BaseActivity implements ScanResultRecyclerAdapter.OnDeviceConnectListener,  SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends BaseActivity implements ScanResultRecyclerAdapter.OnDeviceConnectListener, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "BLEM_MainActivity";
 
     private SwitchCompat mBluetoothSwitch;
@@ -60,8 +61,8 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
         ActivityUtil.setToolbar(this, true);
 
         PermissionsUtil.requestLocationPermission(this);
-        BleUtility.checkIsBluetoothEnabled(this);
-        BleUtility.checkBleAvailability(this);
+        BleUtil.checkIsBluetoothEnabled(this);
+        BleUtil.checkBleAvailability(this);
 
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
@@ -93,7 +94,7 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
                     mBluetoothLeService.disconnect();
                     mBluetoothLeService = null;
                 }else{
-                    //bind to service
+                    //binded to service
                     mBluetoothLeService = localBinder.getService();
                     mBluetoothLeService.getScanResult().observe(MainActivity.this, new Observer<ScanResult>() {
                         @Override
@@ -132,8 +133,8 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
                         ((MainActivityViewModel)mViewModel).setBluetoothEnabled(false);
                         break;
                     case BluetoothAdapter.STATE_ON:
-                        BleUtility.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                        BleUtility.mBleScanner = BleUtility.mBluetoothAdapter.getBluetoothLeScanner();
+                        BleUtil.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                        BleUtil.mBleScanner = BleUtil.mBluetoothAdapter.getBluetoothLeScanner();
                         ((MainActivityViewModel)mViewModel).setBluetoothEnabled(true);
                 }
             }
@@ -171,7 +172,7 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
                         Log.d(TAG, "BLE Switch checked. Scanning BLE Devices.");
                         mBluetoothLeService.scanForDevices(true);
                     } else {
-                        BleUtility.checkIsBluetoothEnabled(MainActivity.this);
+                        BleUtil.checkIsBluetoothEnabled(MainActivity.this);
                         buttonView.setChecked(false);
                     }
                 } else {

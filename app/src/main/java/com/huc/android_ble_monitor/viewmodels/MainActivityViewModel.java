@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
-import com.huc.android_ble_monitor.util.BleUtility;
+import com.huc.android_ble_monitor.util.BleUtil;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -62,12 +62,12 @@ public class MainActivityViewModel extends BaseViewModel {
     }
 
     public void registerScanResult(ScanResult scanResult) {
-        if(!BleUtility.containsDevice(mBleDevices.getValue(), scanResult)){
+        if(!BleUtil.containsDevice(mBleDevices.getValue(), scanResult)){
             List<BleDevice> devices = mBleDevices.getValue();
             devices.add(new BleDevice(scanResult));
             mBleDevices.postValue(devices);
         }else{
-            mBleDevices.postValue(BleUtility.updateDevice(mBleDevices.getValue(), new BleDevice(scanResult)));
+            mBleDevices.postValue(BleUtil.updateDevice(mBleDevices.getValue(), new BleDevice(scanResult)));
         }
     }
 

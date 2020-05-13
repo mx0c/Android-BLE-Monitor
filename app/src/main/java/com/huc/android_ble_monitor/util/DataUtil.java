@@ -16,8 +16,7 @@ import java.util.jar.Attributes;
  * This class can be used to read in json files located in the assets folder. They contain f.e. useful
  * informations about standardized characteristics and services. Source: https://github.com/NordicSemiconductor/bluetooth-numbers-database
  */
-public class DataIO {
-
+public class DataUtil {
     /**
      * Used to read in json files from asset folder.
      * @param context

@@ -38,9 +38,9 @@ public class PropertyResolver {
     private HashMap<String, NameInformation> mCharacteristicUUIDNameInformationsMap;
 
     public PropertyResolver(Context ctx) {
-        mManufacturerIdToStringMap = DataIO.loadManufacturerIdToStringMap(ctx);
-        mServiceUUIDtoNameInformationsMap = DataIO.loadServiceData(ctx);
-        mCharacteristicUUIDNameInformationsMap = DataIO.loadCharacteristicData(ctx);
+        mManufacturerIdToStringMap = DataUtil.loadManufacturerIdToStringMap(ctx);
+        mServiceUUIDtoNameInformationsMap = DataUtil.loadServiceData(ctx);
+        mCharacteristicUUIDNameInformationsMap = DataUtil.loadCharacteristicData(ctx);
     }
 
     public String connectionStateToStringResolver(int connState){

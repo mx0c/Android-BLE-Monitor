@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -40,7 +41,6 @@ public class DeviceDetailActivity extends BaseActivity {
         ((DeviceDetailViewModel)mViewModel).init(staticBleDevice);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ble_device_overview);
-
         setObservers();
     }
 

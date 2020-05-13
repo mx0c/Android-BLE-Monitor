@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 
-public class BleUtility {
+public class BleUtil {
     public static final int REQUEST_ENABLE_BT_RESULT = 313;
 
     public static BluetoothAdapter mBluetoothAdapter;

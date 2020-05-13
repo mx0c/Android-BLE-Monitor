@@ -20,7 +20,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.huc.android_ble_monitor.models.BleDevice;
-import com.huc.android_ble_monitor.util.BleUtility;
+import com.huc.android_ble_monitor.util.BleUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,7 @@ public class BluetoothLeService extends Service {
         if(enable) {
             ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build();
             List<ScanFilter> filters = new ArrayList<ScanFilter>();
-            BleUtility.mBleScanner.startScan(filters, scanSettings, new ScanCallback() {
+            BleUtil.mBleScanner.startScan(filters, scanSettings, new ScanCallback() {
                 @Override
                 public void onScanResult(int callbackType, ScanResult result) {
                     mScanResult.postValue(result);
@@ -68,7 +68,7 @@ public class BluetoothLeService extends Service {
                 }*/
             });
         } else {
-            BleUtility.mBleScanner.stopScan(new ScanCallback() {});
+            BleUtil.mBleScanner.stopScan(new ScanCallback() {});
         }
     }
 
@@ -184,7 +184,7 @@ public class BluetoothLeService extends Service {
 
     public boolean connect(final BleDevice device) {
         mBleDevice.postValue(device);
-        if (BleUtility.mBluetoothAdapter == null || device == null) {
+        if (BleUtil.mBluetoothAdapter == null || device == null) {
             return false;
         } else {
             //if previously connected
@@ -206,7 +206,7 @@ public class BluetoothLeService extends Service {
     }
 
     public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
-        if (BleUtility.mBluetoothAdapter == null || mBluetoothGatt == null) {
+        if (BleUtil.mBluetoothAdapter == null || mBluetoothGatt == null) {
             Log.d(TAG, "BluetoothAdapter not initialized");
             return;
         }
@@ -214,7 +214,7 @@ public class BluetoothLeService extends Service {
     }
 
     public void writeCharacteristic(BluetoothGattCharacteristic characteristic){
-        if (BleUtility.mBluetoothAdapter == null || mBluetoothGatt == null) {
+        if (BleUtil.mBluetoothAdapter == null || mBluetoothGatt == null) {
             Log.d(TAG, "BluetoothAdapter not initialized");
             return;
         }
@@ -222,7 +222,7 @@ public class BluetoothLeService extends Service {
     }
 
     public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, boolean enabled) {
-        if (BleUtility.mBluetoothAdapter == null || mBluetoothGatt == null) {
+        if (BleUtil.mBluetoothAdapter == null || mBluetoothGatt == null) {
             Log.d(TAG, "BluetoothAdapter not initialized");
             return;
         }
