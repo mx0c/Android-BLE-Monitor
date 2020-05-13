@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -40,6 +39,8 @@ public class DeviceDetailActivity extends BaseActivity {
         ((DeviceDetailViewModel)mViewModel).init(staticBleDevice);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ble_device_overview);
+
+        ActivityUtil.setToolbar(this, false);
 
         setObservers();
     }
@@ -68,6 +69,15 @@ public class DeviceDetailActivity extends BaseActivity {
                             ((DeviceDetailViewModel)mViewModel).updateBleDevie(bleDevice);
                         }
                     });
+
+                    mBluetoothLeService.getFilteredScanResult().observe(DeviceDetailActivity.this, new Observer<ScanResult>() {
+                        @Override
+                        public void onChanged(ScanResult scanResult) {
+                            Log.d(TAG, "onChanged: Received result " + scanResult.toString());
+                            ((DeviceDetailViewModel)mViewModel).updateScanResult(scanResult);
+                        }
+                    });
+
                     mListViewOfServices.setOnItemClickListener( new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -138,6 +148,7 @@ public class DeviceDetailActivity extends BaseActivity {
                                     public void onClick(DialogInterface dialog, int which) {
                                         Log.d(TAG, "onClick: yes");
                                         mBluetoothLeService.disconnect();
+                                        mBluetoothLeService.scanForDevices(true);
                                         finish();
                                     }
                                 })
@@ -145,12 +156,13 @@ public class DeviceDetailActivity extends BaseActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Log.d(TAG, "onClick: no");
+                                        mBluetoothLeService.scanForDevices(true);
                                         finish();
                                     }
                                 })
                                 .show();
-                    }
-                    else {
+                    } else {
+                        mBluetoothLeService.scanForDevices(true);
                         return false;
                     }
                 }

@@ -34,9 +34,11 @@ public class BluetoothLeService extends Service {
     private MutableLiveData<BleDevice> mBleDevice;
     private MutableLiveData<List<BleDevice>> mScannedDevices;
     private MutableLiveData<ScanResult> mScanResult;
+    private MutableLiveData<ScanResult> mFilteredScanResult;
     private MutableLiveData<BluetoothGattCharacteristic> mReadCharacteristic = new MutableLiveData<>();
     private MutableLiveData<BluetoothGattCharacteristic> mWriteCharacteristic = new MutableLiveData<>();
     private MutableLiveData<BluetoothGattCharacteristic> mNotifyCharacteristic = new MutableLiveData<>();
+    private ScanCallback mScanCallback;
 
     @Override
     public void onCreate() {
@@ -45,31 +47,59 @@ public class BluetoothLeService extends Service {
 
     public void scanForDevices(boolean enable){
         if(enable) {
+            if(mScanCallback != null) {
+                BleUtility.mBleScanner.stopScan(mScanCallback);
+                mScanCallback = null;
+            }
+
             ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build();
             List<ScanFilter> filters = new ArrayList<ScanFilter>();
-            BleUtility.mBleScanner.startScan(filters, scanSettings, new ScanCallback() {
+            Log.i(TAG, "scanForDevices: Starting to scan for ble devices");
+            BleUtility.mBleScanner.startScan(filters, scanSettings, mScanCallback = new ScanCallback() {
                 @Override
                 public void onScanResult(int callbackType, ScanResult result) {
-                    mScanResult.postValue(result);
+                    if(mScanCallback != null) {
+                        mScanResult.postValue(result);
+                    }
+                }
+                @Override
+                public void onScanFailed(int errorCode) {
+                    Log.e(TAG, "onScanFailed: Scanning of devices failed with error code " +  errorCode);
+                }
+            });
+
+        } else {
+            Log.i(TAG, "scanForDevices: Stopping to scan for ble devices");
+            BleUtility.mBleScanner.stopScan(mScanCallback);
+            mScanCallback = null;
+        }
+    }
+
+    public void scanForDevice(final BleDevice bleDevice) {
+        if (mScanCallback != null) {
+            BleUtility.mBleScanner.stopScan(mScanCallback);
+            mScanCallback = null;
+        }
+
+        ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build();
+        List<ScanFilter> filters = new ArrayList<>();
+        filters.add(new ScanFilter.Builder().setDeviceAddress(bleDevice.mScanResult.getDevice().getAddress()).build());
+        Log.i(TAG, "scanForDevice: Started scanning for device " + bleDevice.mScanResult.getDevice().getAddress());
+        BleUtility.mBleScanner.startScan(filters, scanSettings, mScanCallback = new ScanCallback() {
+            @Override
+            public void onScanResult(int callbackType, ScanResult result) {
+                if(result.getDevice().getAddress().equals(bleDevice.mScanResult.getDevice().getAddress())) {
+                    mFilteredScanResult.setValue(result);
                 }
 
-                //not working, but would be better
-                /*@Override
-                public void onBatchScanResults(List<ScanResult> results) {
-                    for (ScanResult result : results) {
-                        if(!BleUtility.containsDevice(mScannedDevices.getValue(), result)){
-                            List<BleDevice> devices = mScannedDevices.getValue();
-                            devices.add(new BleDevice(result, null));
-                            mScannedDevices.postValue(devices);
-                        }else{
-                            mScannedDevices.setValue(BleUtility.updateDevice(mScannedDevices.getValue(), new BleDevice(result, null)));
-                        }
-                    }
-                }*/
-            });
-        } else {
-            BleUtility.mBleScanner.stopScan(new ScanCallback() {});
-        }
+            }
+
+            @Override
+            public void onScanFailed(int errorCode) {
+                Log.e(TAG, "onScanFailed: Scanning of device " + bleDevice.mScanResult.getDevice().getAddress() + " failed with error code " +  errorCode);
+            }
+        });
+
     }
 
     void updateBleDeviceGatt(BluetoothGatt gatt){
@@ -160,6 +190,7 @@ public class BluetoothLeService extends Service {
         }
 
         if(mScanResult == null) mScanResult = new MutableLiveData<>();
+        if(mFilteredScanResult == null) mFilteredScanResult = new MutableLiveData<>();
         return mBinder;
     }
 
@@ -248,6 +279,10 @@ public class BluetoothLeService extends Service {
 
     public LiveData<ScanResult> getScanResult() {
         return mScanResult;
+    }
+
+    public LiveData<ScanResult> getFilteredScanResult() {
+        return mFilteredScanResult;
     }
 
     public LiveData<BleDevice> getBluetoothDevice() {

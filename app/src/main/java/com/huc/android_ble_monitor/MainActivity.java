@@ -17,7 +17,6 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -204,6 +203,7 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
     public void onDeviceClick(int position) {
         try {
             final BleDevice bleDevice = ((MainActivityViewModel)mViewModel).getmBleDevices().getValue().get(position);
+            Log.d(TAG, "onDeviceClick: Selected device: " + bleDevice.mScanResult.toString());
 
             if (Build.VERSION.SDK_INT >= 26) {
                 if (bleDevice.mScanResult.isConnectable()) {
@@ -215,6 +215,8 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
             } else {
                 mBluetoothLeService.connect(bleDevice);
             }
+
+            mBluetoothLeService.scanForDevice(bleDevice);
 
             DeviceDetailActivity.staticBleDevice = bleDevice;
             Intent intent = new Intent(this, DeviceDetailActivity.class);
@@ -254,6 +256,10 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
     public void onRefresh() {
         Log.d(TAG, "onRefresh: ScanResult List refreshed.");
         ((MainActivityViewModel)mViewModel).clearBleDevices();
+        if(((MainActivityViewModel) mViewModel).isBluetoothEnabled()) {
+            mBluetoothLeService.scanForDevices(true);
+        }
+
         mSwipeRefreshLayout.setRefreshing(false);
     }
 }

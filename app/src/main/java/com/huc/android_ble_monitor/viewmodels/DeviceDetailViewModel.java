@@ -1,12 +1,9 @@
 package com.huc.android_ble_monitor.viewmodels;
 
-import android.content.ComponentName;
-import android.content.ServiceConnection;
-import android.os.IBinder;
+import android.bluetooth.le.ScanResult;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
@@ -26,6 +23,12 @@ public class DeviceDetailViewModel extends BaseViewModel {
 
     public void updateBleDevie(BleDevice bleDevice) {
         this.mBleDevice.setValue(bleDevice);
+    }
+
+    public void updateScanResult(ScanResult scanResult) {
+        BleDevice updatedBleDevice = this.mBleDevice.getValue();
+        updatedBleDevice.mScanResult = scanResult;
+        this.mBleDevice.postValue(updatedBleDevice);
     }
 
     public LiveData<BluetoothLeService.LocalBinder> getmBinder() {
