@@ -25,7 +25,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(R.style.AppTheme); // Resets default theme after app was loaded
-
+        initializeViewModel();
         //Bind to BluetoothLeService
         Intent serviceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
         boolean success = getApplicationContext().bindService(serviceIntent, mViewModel.getServiceConnection(), BIND_AUTO_CREATE);
@@ -33,4 +33,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
     }
+
+    protected abstract void initializeViewModel();
 }

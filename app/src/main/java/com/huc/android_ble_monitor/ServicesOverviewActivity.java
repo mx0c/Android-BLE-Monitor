@@ -24,14 +24,16 @@ public class ServicesOverviewActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this).get(ServicesOverviewActivityViewModel.class);
-        ((ServicesOverviewActivityViewModel)mViewModel).init(staticGattService);
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.services_overview_activity);
         ActivityUtil.setToolbar(this, false);
-
         setObservers();
+    }
+
+    @Override
+    protected void initializeViewModel() {
+        mViewModel = new ViewModelProvider(this).get(ServicesOverviewActivityViewModel.class);
+        ((ServicesOverviewActivityViewModel)mViewModel).init(staticGattService);
     }
 
     private void setObservers(){

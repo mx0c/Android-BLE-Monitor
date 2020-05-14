@@ -37,8 +37,6 @@ public class DeviceDetailActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this).get(DeviceDetailViewModel.class);
-        ((DeviceDetailViewModel)mViewModel).init(staticBleDevice);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ble_device_overview);
         setObservers();
@@ -120,6 +118,12 @@ public class DeviceDetailActivity extends BaseActivity {
                 findViewById(R.id.lv_services).setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    @Override
+    protected void initializeViewModel() {
+        mViewModel = new ViewModelProvider(this).get(DeviceDetailViewModel.class);
+        ((DeviceDetailViewModel)mViewModel).init(staticBleDevice);
     }
 
     @Override

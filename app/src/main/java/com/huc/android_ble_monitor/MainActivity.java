@@ -50,10 +50,7 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
-        mViewModel.init();
-
-        //call BaseActivity onCreate
+        //BaseActivity onCreate
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -69,6 +66,12 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
 
         setObservers();
         initRecyclerView();
+    }
+
+    @Override
+    protected void initializeViewModel() {
+        mViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        mViewModel.init();
     }
 
     public void setObservers(){
@@ -103,7 +106,6 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
                         }
                     });
                 }
-
             }
         });
     }
@@ -151,7 +153,6 @@ public class MainActivity extends BaseActivity implements ScanResultRecyclerAdap
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
