@@ -25,11 +25,13 @@ public class BleDevice implements Serializable {
     public Integer mConnectionState;
     public BluetoothGatt mBluetoothGatt;
     public long mTimestamp;
+    public Integer mCurrentRssi;
 
     public BleDevice(ScanResult sr){
         this.mConnectionState = BluetoothProfile.STATE_DISCONNECTED;
         this.mScanResult = sr;
         mTimestamp = new Date().getTime() + timeToLive;
+        mCurrentRssi = sr.getRssi();
     }
 
     public int getServiceCount() {

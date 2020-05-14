@@ -25,15 +25,20 @@ import com.huc.android_ble_monitor.util.BleUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class BluetoothLeService extends Service {
     public final static String TAG = "BLEM_BLuetoothLeService";
 
     private final IBinder mBinder = new LocalBinder();
+    private ScheduledExecutorService mRssiRequestScheduler;
     private BluetoothGatt mBluetoothGatt;
     private MutableLiveData<BleDevice> mBleDevice;
     private MutableLiveData<List<BleDevice>> mScannedDevices;
     private MutableLiveData<ScanResult> mScanResult;
+    private MutableLiveData<Integer> mCurrentRssi = new MutableLiveData<>();
     private MutableLiveData<BluetoothGattCharacteristic> mReadCharacteristic = new MutableLiveData<>();
     private MutableLiveData<BluetoothGattCharacteristic> mWriteCharacteristic = new MutableLiveData<>();
     private MutableLiveData<BluetoothGattCharacteristic> mNotifyCharacteristic = new MutableLiveData<>();
@@ -52,23 +57,24 @@ public class BluetoothLeService extends Service {
                 public void onScanResult(int callbackType, ScanResult result) {
                     mScanResult.postValue(result);
                 }
-
-                //not working, but would be better
-                /*@Override
-                public void onBatchScanResults(List<ScanResult> results) {
-                    for (ScanResult result : results) {
-                        if(!BleUtility.containsDevice(mScannedDevices.getValue(), result)){
-                            List<BleDevice> devices = mScannedDevices.getValue();
-                            devices.add(new BleDevice(result, null));
-                            mScannedDevices.postValue(devices);
-                        }else{
-                            mScannedDevices.setValue(BleUtility.updateDevice(mScannedDevices.getValue(), new BleDevice(result, null)));
-                        }
-                    }
-                }*/
             });
         } else {
             BleUtil.mBleScanner.stopScan(new ScanCallback() {});
+        }
+    }
+
+    public void requestRssi(boolean enable){
+        if(enable) {
+            mRssiRequestScheduler = Executors.newSingleThreadScheduledExecutor();
+            mRssiRequestScheduler.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    boolean success = mBluetoothGatt.readRemoteRssi();
+                    Log.d(TAG, "requestRssi: " + success);
+                }
+            }, 0, 1, TimeUnit.SECONDS);
+        }else{
+            mRssiRequestScheduler.shutdown();
         }
     }
 
@@ -109,6 +115,15 @@ public class BluetoothLeService extends Service {
             }
             updateBleDeviceGatt(gatt);
             updateBleDeviceState(newState);
+        }
+
+        @Override
+        public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
+            if(status == BluetoothGatt.GATT_SUCCESS){
+                mCurrentRssi.postValue(rssi);
+            }else{
+                Log.d(TAG, "onReadRemoteRssi: receiving RSSI not successful");
+            }
         }
 
         @Override
@@ -249,6 +264,8 @@ public class BluetoothLeService extends Service {
     public LiveData<ScanResult> getScanResult() {
         return mScanResult;
     }
+
+    public LiveData<Integer> getCurrentRssi(){ return mCurrentRssi; }
 
     public LiveData<BleDevice> getBluetoothDevice() {
         return mBleDevice;

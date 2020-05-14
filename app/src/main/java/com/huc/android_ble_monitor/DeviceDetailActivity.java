@@ -60,10 +60,17 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
                 }else{
                     //bound to service
                     mBluetoothLeService = localBinder.getService();
+                    mBluetoothLeService.requestRssi(true);
                     mBluetoothLeService.getBluetoothDevice().observe(DeviceDetailActivity.this, new Observer<BleDevice>() {
                         @Override
                         public void onChanged(BleDevice bleDevice) {
                             mViewModel.updateBleDevie(bleDevice);
+                        }
+                    });
+                    mBluetoothLeService.getCurrentRssi().observe(DeviceDetailActivity.this, new Observer<Integer>() {
+                        @Override
+                        public void onChanged(Integer rssi) {
+                            mViewModel.updateRssi(rssi);
                         }
                     });
                     mListViewOfServices.setOnItemClickListener( new AdapterView.OnItemClickListener() {
@@ -82,6 +89,7 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
 
     public void initializeViews() {
         PropertyResolver resolver = new PropertyResolver(this);
+        BleDevice device = mViewModel.mBleDevice.getValue();
 
         TextView tvName = findViewById(R.id.DeviceName_TextView);
         TextView tvAddress = findViewById(R.id.DeviceUUID_TextView);
@@ -97,27 +105,39 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
         ServicesListAdapter adapter = new ServicesListAdapter(this, new ArrayList<BluetoothGattService>());
         mListViewOfServices.setAdapter(adapter);
 
-        ScanResult bleScanResult = staticBleDevice.mScanResult;
+        ScanResult bleScanResult = device.mScanResult;
         tvBonded.setText(resolver.bondStateTextResolver(bleScanResult));
         ivBondstate.setImageResource(resolver.bondStateImageResolver(bleScanResult));
         tvName.setText(resolver.deviceNameResolver(bleScanResult));
         tvAddress.setText(bleScanResult.getDevice().getAddress());
-        tvRssi.setText(resolver.deviceRssiResolver(bleScanResult));
+        tvRssi.setText(resolver.deviceRssiResolver(device.mCurrentRssi));
         tvCompanyIdentifier.setText(resolver.deviceManufacturerResolver(bleScanResult));
         tvConnectability.setText(resolver.deviceConnectabilityResolver(bleScanResult));
 
-        ArrayList<String> uuids = resolver.deviceServiceResolver(staticBleDevice, bleScanResult);
-        tvServices.setText("Services (" + staticBleDevice.getServiceCount() + ")");
+        ArrayList<String> uuids = resolver.deviceServiceResolver(device, bleScanResult);
+        tvServices.setText("Services (" + device.getServiceCount() + ")");
 
-        if (staticBleDevice.mBluetoothGatt != null) {
+        if (device.mBluetoothGatt != null) {
             adapter.clear();
-            adapter.addAll(staticBleDevice.mBluetoothGatt.getServices());
+            adapter.addAll(device.mBluetoothGatt.getServices());
             adapter.notifyDataSetChanged();
             if(adapter.getCount() > 0) {
                 findViewById(R.id.loading_spinner).setVisibility(View.GONE);
                 findViewById(R.id.lv_services).setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mBluetoothLeService.requestRssi(false);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        mBluetoothLeService.requestRssi(false);
     }
 
     @Override

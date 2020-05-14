@@ -12,7 +12,7 @@ import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 
 public class DeviceDetailViewModel extends BaseViewModel {
-    private MutableLiveData<BleDevice> mBleDevice = new MutableLiveData<>();
+    public MutableLiveData<BleDevice> mBleDevice = new MutableLiveData<>();
 
     public void init(final BleDevice bleDevice) {
         if (bleDevice != null) {
@@ -26,6 +26,12 @@ public class DeviceDetailViewModel extends BaseViewModel {
 
     public void updateBleDevie(BleDevice bleDevice) {
         this.mBleDevice.setValue(bleDevice);
+    }
+
+    public void updateRssi(Integer Rssi){
+        BleDevice newDevice = mBleDevice.getValue();
+        newDevice.mCurrentRssi = Rssi;
+        mBleDevice.setValue(newDevice);
     }
 
     public LiveData<BluetoothLeService.LocalBinder> getmBinder() {

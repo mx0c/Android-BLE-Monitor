@@ -218,11 +218,10 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
                 }
             } else {
                 mBluetoothLeService.connect(bleDevice);
+                DeviceDetailActivity.staticBleDevice = bleDevice;
+                Intent intent = new Intent(this, DeviceDetailActivity.class);
+                startActivity(intent);
             }
-
-            DeviceDetailActivity.staticBleDevice = bleDevice;
-            Intent intent = new Intent(this, DeviceDetailActivity.class);
-            startActivity(intent);
         }catch (IndexOutOfBoundsException e){
             Log.e(TAG, "onDeviceClick: IndexOutOfBounds Exception: " + e.getStackTrace().toString());
         }

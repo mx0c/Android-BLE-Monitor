@@ -134,6 +134,10 @@ public class PropertyResolver {
         return Integer.toString(result.getRssi()) + " dBm";
     }
 
+    public String deviceRssiResolver(Integer rssi) {
+        return Integer.toString(rssi) + " dBm";
+    }
+
     public String deviceManufacturerResolver(ScanResult result) {
         SparseArray<byte[]> manufacturerData = result.getScanRecord().getManufacturerSpecificData();
         int manufacturerId = 0;
