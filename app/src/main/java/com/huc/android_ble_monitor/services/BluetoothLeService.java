@@ -59,7 +59,7 @@ public class BluetoothLeService extends Service {
                 @Override
                 public void onScanResult(int callbackType, ScanResult result) {
                     if(mScanCallback != null) {
-                        mScanResult.postValue(result);
+                        mScanResult.setValue(result);
                     }
                 }
                 @Override
@@ -84,14 +84,11 @@ public class BluetoothLeService extends Service {
         ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build();
         List<ScanFilter> filters = new ArrayList<>();
         filters.add(new ScanFilter.Builder().setDeviceAddress(bleDevice.mScanResult.getDevice().getAddress()).build());
-        Log.i(TAG, "scanForDevice: Started scanning for device " + bleDevice.mScanResult.getDevice().getAddress());
+        Log.d(TAG, "scanForDevice: Started scanning for device " + bleDevice.mScanResult.getDevice().getAddress());
         BleUtility.mBleScanner.startScan(filters, scanSettings, mScanCallback = new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
-                if(result.getDevice().getAddress().equals(bleDevice.mScanResult.getDevice().getAddress())) {
-                    mFilteredScanResult.setValue(result);
-                }
-
+                mFilteredScanResult.setValue(result);
             }
 
             @Override

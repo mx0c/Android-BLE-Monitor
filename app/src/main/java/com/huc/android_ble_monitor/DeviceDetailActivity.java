@@ -73,8 +73,10 @@ public class DeviceDetailActivity extends BaseActivity {
                     mBluetoothLeService.getFilteredScanResult().observe(DeviceDetailActivity.this, new Observer<ScanResult>() {
                         @Override
                         public void onChanged(ScanResult scanResult) {
-                            Log.d(TAG, "onChanged: Received result " + scanResult.toString());
-                            ((DeviceDetailViewModel)mViewModel).updateScanResult(scanResult);
+                            Log.d(TAG, "onChanged in FilteredScanResult: Received result " + scanResult.toString());
+                            if(scanResult.getDevice().getAddress().equals(staticBleDevice.mScanResult.getDevice().getAddress())) {
+                                ((DeviceDetailViewModel)mViewModel).updateScanResult(scanResult);
+                            }
                         }
                     });
 
@@ -102,7 +104,6 @@ public class DeviceDetailActivity extends BaseActivity {
         TextView tvConnectability = findViewById(R.id.Connectability_TextView);
         TextView tvCompanyIdentifier = findViewById(R.id.CompanyIdentifier_TextView);
         ImageView ivBondstate = findViewById(R.id.BondState_ImageView);
-        TextView tvServices = findViewById(R.id.Services_TextView);
         mListViewOfServices = findViewById(R.id.lv_services);
 
         //setting ListView Adapter
@@ -117,9 +118,6 @@ public class DeviceDetailActivity extends BaseActivity {
         tvRssi.setText(resolver.deviceRssiResolver(bleScanResult));
         tvCompanyIdentifier.setText(resolver.deviceManufacturerResolver(bleScanResult));
         tvConnectability.setText(resolver.deviceConnectabilityResolver(bleScanResult));
-
-        ArrayList<String> uuids = resolver.deviceServiceResolver(staticBleDevice, bleScanResult);
-        tvServices.setText("Services (" + staticBleDevice.getServiceCount() + ")");
 
         if (staticBleDevice.mBluetoothGatt != null) {
             adapter.clear();
