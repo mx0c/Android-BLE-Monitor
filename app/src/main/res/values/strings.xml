@@ -19,4 +19,7 @@
     <string name="hr_text_service">Services</string>
     <string name="dummy_service_identifier">Dummy Service Identifier</string>
     <string name="dummy_service_name">Dummy Service Name</string>
+    <string name="dummy_legacy_scan">Legacy Scan: true</string>
+    <string name="dummy_adv_interval">Adv. Interval: 1.25ms</string>
+    <string name="dummy_timestamp">10-04-19 12:00:17</string>
 </resources>
