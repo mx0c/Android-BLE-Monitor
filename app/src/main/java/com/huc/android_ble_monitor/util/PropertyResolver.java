@@ -8,13 +8,16 @@ import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.os.Build;
 import android.os.ParcelUuid;
+import android.os.SystemClock;
 import android.util.SparseArray;
 
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.models.NameInformation;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -22,16 +25,24 @@ import java.util.UUID;
 public class PropertyResolver {
     private static final String TAG = "BLEM_PropertyToViewReso";
 
-    final static int BONDING_IMG_ID = R.drawable.round_bluetooth_searching_white_48;
-    final static int BONDED_IMG_ID = R.drawable.round_bluetooth_connected_white_48;
-    final static int NOT_BONDED_IMG_ID = R.drawable.round_bluetooth_disabled_white_48;
-    final static int NOT_CONNECTED_IMG_ID = R.drawable.round_power_off_white_48;
-    final static int CONNECTED_IMG_ID = R.drawable.round_power_white_48;
-    final static int CONNECTING_IMG_ID = R.drawable.round_settings_ethernet_white_48dp;
-    final static String SIG_UNKNOWN_SERVICE_NAME = "SIG unknown service";
-    final static String SIG_UNKNOWN_CHARACTERISTIC_NAME = "SIG unknown characteristic";
-    final static String SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER = "SIG unknown characteristic identifier";
-    final static String SIG_UNKNOWN_SERVICE_IDENTIFIER = "SIG unknown service identifier";
+    private final static int BONDING_IMG_ID = R.drawable.round_bluetooth_searching_white_48;
+    private final static int BONDED_IMG_ID = R.drawable.round_bluetooth_connected_white_48;
+    private final static int NOT_BONDED_IMG_ID = R.drawable.round_bluetooth_disabled_white_48;
+    private final static int NOT_CONNECTED_IMG_ID = R.drawable.round_power_off_white_48;
+    private final static int CONNECTED_IMG_ID = R.drawable.round_power_white_48;
+    private final static int CONNECTING_IMG_ID = R.drawable.round_settings_ethernet_white_48dp;
+    private final static String SIG_UNKNOWN_SERVICE_NAME = "SIG unknown service";
+    private final static String SIG_UNKNOWN_CHARACTERISTIC_NAME = "SIG unknown characteristic";
+    private final static String SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER = "SIG unknown characteristic identifier";
+    private final static String SIG_UNKNOWN_SERVICE_IDENTIFIER = "SIG unknown service identifier";
+    private final static String LEGACY_SCAN_RES = "Legacy Scan Result";
+    private final static String NOT_AVAIL = "n/a";
+    private final static String WHITESPACE = " ";
+    private final static String COLON = ":";
+    private final static String ADV_INTERVAL = "Advertising Interval";
+    private final static String MILLISECONDS_SHORT = "ms";
+    private final static String TIMESTAMP = "Timestamp";
+    private final static String CONNECTABLE = "Connectable";
 
     private HashMap<Integer, String> mManufacturerIdToStringMap;
     private HashMap<String, NameInformation> mServiceUUIDtoNameInformationsMap;
@@ -152,9 +163,9 @@ public class PropertyResolver {
         int buildVersion = Build.VERSION.SDK_INT;
         String connectabilityText = "";
         if (buildVersion >= 26) {
-            connectabilityText = "Connectable: " + result.isConnectable();
+            connectabilityText = CONNECTABLE + COLON + WHITESPACE + result.isConnectable();
         } else {
-            connectabilityText = "Connectable: UNKNOWN";
+            connectabilityText = CONNECTABLE + COLON + WHITESPACE + NOT_AVAIL;
         }
 
         return connectabilityText;
@@ -225,6 +236,44 @@ public class PropertyResolver {
         }
 
         return serviceIdentifier;
+    }
+
+    public String legacyScanResultResolver(ScanResult scanResult) {
+        String strLegacy;
+        int buildVersion = Build.VERSION.SDK_INT;
+        if (buildVersion >= 26) {
+            strLegacy = LEGACY_SCAN_RES + COLON + WHITESPACE + scanResult.isLegacy();
+        } else {
+            strLegacy = LEGACY_SCAN_RES + COLON + WHITESPACE + NOT_AVAIL;
+        }
+
+        return strLegacy;
+    }
+
+    public String advertisingIntervalResolver(ScanResult scanResult) {
+        double unit = 1.25;
+        String interval;
+        int buildVersion = Build.VERSION.SDK_INT;
+        if (buildVersion >= 26) {
+            interval = ADV_INTERVAL +
+                    COLON +
+                    WHITESPACE +
+                    unit * scanResult.getPeriodicAdvertisingInterval() +
+                    MILLISECONDS_SHORT;
+        } else {
+            interval = ADV_INTERVAL + COLON + WHITESPACE + NOT_AVAIL;
+        }
+        return interval;
+    }
+
+    public String timestampResolver(ScanResult scanResult) {
+        long timestampNanos = scanResult.getTimestampNanos();
+        long rxTimestampMillis = System.currentTimeMillis() -
+                SystemClock.elapsedRealtime() +
+                timestampNanos / 1000000;
+        Date rxDate = new Date(rxTimestampMillis);
+        String sDate = new SimpleDateFormat("HH:mm:ss.SSS").format(rxDate);
+        return TIMESTAMP + COLON + WHITESPACE + sDate;
     }
 }
 

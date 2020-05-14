@@ -39,6 +39,7 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ble_device_overview);
+        ActivityUtil.setToolbar(this, false);
         setObservers();
     }
 
@@ -149,6 +150,7 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Log.d(TAG, "onClick: yes");
+                                        mBluetoothLeService.requestRssi(false);
                                         mBluetoothLeService.disconnect();
                                         finish();
                                     }
@@ -157,6 +159,7 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Log.d(TAG, "onClick: no");
+                                        mBluetoothLeService.requestRssi(false);
                                         finish();
                                     }
                                 })

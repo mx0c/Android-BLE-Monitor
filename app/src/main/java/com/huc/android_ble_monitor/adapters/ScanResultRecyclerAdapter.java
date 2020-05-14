@@ -58,6 +58,9 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         ((ViewHolder)holder).tvConnectability.setText(propertyResolver.deviceConnectabilityResolver(scanResult));
         ((ViewHolder)holder).tvConnState.setText(propertyResolver.connectionStateToStringResolver(device.mConnectionState));
         ((ViewHolder)holder).ivConnState.setImageResource(propertyResolver.connectionStateImageResolver(device.mConnectionState));
+        ((ViewHolder)holder).tvLegacyScanResult.setText(propertyResolver.legacyScanResultResolver(scanResult));
+        ((ViewHolder)holder).tvAdvertisingInterval.setText(propertyResolver.advertisingIntervalResolver(scanResult));
+        ((ViewHolder)holder).tvTimestampNanos.setText(propertyResolver.timestampResolver(scanResult));
 
         ArrayList<String> uuids = propertyResolver.deviceServiceResolver(device, scanResult);
         ((ViewHolder)holder).tvServices.setText("Advertised Services (" + device.getServiceCount() + ")");
@@ -79,7 +82,10 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         private TextView tvRssi;
         private TextView tvConnectability;
         private TextView tvCompanyIdentifier;
+        private TextView tvLegacyScanResult;
+        private TextView tvAdvertisingInterval;
         private TextView tvServices;
+        private TextView tvTimestampNanos;
         private ImageView ivBondstate;
         private ImageView ivConnState;
         private ListView servicesListView;
@@ -98,6 +104,9 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             servicesListView = itemView.findViewById(R.id.serviceUUIDs_ListView);
             tvConnState = itemView.findViewById(R.id.ConnectionState_TextView);
             ivConnState = itemView.findViewById(R.id.ConnectionState_ImageView);
+            tvLegacyScanResult = itemView.findViewById(R.id.legacyScan_TextView);
+            tvAdvertisingInterval = itemView.findViewById(R.id.advetising_interval_TextView);
+            tvTimestampNanos = itemView.findViewById(R.id.advertising_timestamp_TextView);
             this.onDeviceConnectListener = onDeviceConnectListener;
 
             itemView.setOnClickListener(this);
