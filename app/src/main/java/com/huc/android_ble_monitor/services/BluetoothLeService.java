@@ -70,7 +70,6 @@ public class BluetoothLeService extends Service {
                 @Override
                 public void run() {
                     boolean success = mBluetoothGatt.readRemoteRssi();
-                    Log.d(TAG, "requestRssi: " + success);
                 }
             }, 0, 1, TimeUnit.SECONDS);
         }else{

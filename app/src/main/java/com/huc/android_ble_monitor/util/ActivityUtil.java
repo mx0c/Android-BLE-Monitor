@@ -49,8 +49,8 @@ public class ActivityUtil {
      * @param isHomeEnabled
      */
     public static void setToolbar(AppCompatActivity activity, boolean isHomeEnabled) {
-        MaterialToolbar mToolbar = activity.findViewById(R.id.toolbar);
-        activity.setSupportActionBar(mToolbar);
+        MaterialToolbar toolbar = activity.findViewById(R.id.toolbar);
+        activity.setSupportActionBar(toolbar);
         if (isHomeEnabled) {
             Objects.requireNonNull(activity.getSupportActionBar()).setHomeAsUpIndicator(R.drawable.baseline_menu_white_24dp); // Workaround because setDisplayHome did not work
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
