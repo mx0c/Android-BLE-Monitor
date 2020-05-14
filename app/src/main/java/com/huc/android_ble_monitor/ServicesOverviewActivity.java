@@ -17,7 +17,7 @@ import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.viewmodels.ServicesOverviewActivityViewModel;
 
-public class ServicesOverviewActivity extends BaseActivity {
+public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActivityViewModel> {
     static final String TAG = "BLEM_ServicesOverview";
     public static BluetoothGattService staticGattService;
     public static BleDevice staticBleDevice;
@@ -33,11 +33,11 @@ public class ServicesOverviewActivity extends BaseActivity {
     @Override
     protected void initializeViewModel() {
         mViewModel = new ViewModelProvider(this).get(ServicesOverviewActivityViewModel.class);
-        ((ServicesOverviewActivityViewModel)mViewModel).init(staticGattService);
+        mViewModel.init(staticGattService);
     }
 
     private void setObservers(){
-        ((ServicesOverviewActivityViewModel)mViewModel).getBinder().observe(ServicesOverviewActivity.this, new Observer<BluetoothLeService.LocalBinder>() {
+        mViewModel.getBinder().observe(ServicesOverviewActivity.this, new Observer<BluetoothLeService.LocalBinder>() {
             @Override
             public void onChanged(BluetoothLeService.LocalBinder localBinder) {
                 if(localBinder == null){

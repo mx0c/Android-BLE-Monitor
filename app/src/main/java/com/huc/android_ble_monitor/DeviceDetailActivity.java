@@ -29,7 +29,7 @@ import com.huc.android_ble_monitor.viewmodels.DeviceDetailViewModel;
 
 import java.util.ArrayList;
 
-public class DeviceDetailActivity extends BaseActivity {
+public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
     private static final String TAG = "BLEM_BleDeviceOverview";
 
     public static BleDevice staticBleDevice;
@@ -43,7 +43,7 @@ public class DeviceDetailActivity extends BaseActivity {
     }
 
     public void setObservers(){
-        ((DeviceDetailViewModel)mViewModel).getmBleDevice().observe(this, new Observer<BleDevice>() {
+        mViewModel.getmBleDevice().observe(this, new Observer<BleDevice>() {
             @Override
             public void onChanged(BleDevice bleDevice) {
                 Log.d(TAG, "onChanged: BleDevice value changed");
@@ -63,7 +63,7 @@ public class DeviceDetailActivity extends BaseActivity {
                     mBluetoothLeService.getBluetoothDevice().observe(DeviceDetailActivity.this, new Observer<BleDevice>() {
                         @Override
                         public void onChanged(BleDevice bleDevice) {
-                            ((DeviceDetailViewModel)mViewModel).updateBleDevie(bleDevice);
+                            mViewModel.updateBleDevie(bleDevice);
                         }
                     });
                     mListViewOfServices.setOnItemClickListener( new AdapterView.OnItemClickListener() {
@@ -123,7 +123,7 @@ public class DeviceDetailActivity extends BaseActivity {
     @Override
     protected void initializeViewModel() {
         mViewModel = new ViewModelProvider(this).get(DeviceDetailViewModel.class);
-        ((DeviceDetailViewModel)mViewModel).init(staticBleDevice);
+        mViewModel.init(staticBleDevice);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class DeviceDetailActivity extends BaseActivity {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case android.R.id.home:
-                BleDevice bleDevice =  ((DeviceDetailViewModel)mViewModel).getmBleDevice().getValue();
+                BleDevice bleDevice =  mViewModel.getmBleDevice().getValue();
                 if (bleDevice != null) {
                     if (bleDevice.mConnectionState == BluetoothProfile.STATE_CONNECTED) {
                         new MaterialAlertDialogBuilder(DeviceDetailActivity.this)
