@@ -129,18 +129,6 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        mBluetoothLeService.requestRssi(false);
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        mBluetoothLeService.requestRssi(false);
-    }
-
-    @Override
     protected void initializeViewModel() {
         mViewModel = new ViewModelProvider(this).get(DeviceDetailViewModel.class);
         mViewModel.init(staticBleDevice);
