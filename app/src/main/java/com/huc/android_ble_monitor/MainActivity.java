@@ -212,6 +212,9 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
             if (Build.VERSION.SDK_INT >= 26) {
                 if (bleDevice.mScanResult.isConnectable()) {
                     mBluetoothLeService.connect(bleDevice);
+                    DeviceDetailActivity.staticBleDevice = bleDevice;
+                    Intent intent = new Intent(this, DeviceDetailActivity.class);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(this, "Device is not connectable.", Toast.LENGTH_SHORT).show();
                     return;
