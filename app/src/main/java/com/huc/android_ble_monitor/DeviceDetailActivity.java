@@ -91,8 +91,6 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
     }
 
     public void initializeViews(BleDevice device) {
-
-
         TextView tvName = findViewById(R.id.DeviceName_TextView);
         TextView tvAddress = findViewById(R.id.DeviceUUID_TextView);
         TextView tvBonded = findViewById(R.id.BondState_TextView);
