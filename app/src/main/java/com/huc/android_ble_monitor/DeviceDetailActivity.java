@@ -13,9 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -30,7 +27,7 @@ import com.huc.android_ble_monitor.viewmodels.DeviceDetailViewModel;
 import java.util.ArrayList;
 
 public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
-    private static final String TAG = "BLEM_BleDeviceOverview";
+    private static final String TAG = "BLEM_DeviceDetailAct";
 
     public static BleDevice staticBleDevice;
     private ListView mListViewOfServices;
@@ -73,7 +70,7 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
                     mBluetoothLeService.getCurrentRssi().observe(DeviceDetailActivity.this, new Observer<Integer>() {
                         @Override
                         public void onChanged(Integer rssi) {
-                            mViewModel.updateRssi(rssi);
+                            updateRSSI(rssi);
                         }
                     });
                     mListViewOfServices.setOnItemClickListener( new AdapterView.OnItemClickListener() {
@@ -88,6 +85,11 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
                 }
             }
         });
+    }
+
+    public void updateRSSI(int newRssi){
+        TextView tvRssi = findViewById(R.id.RSSI_TextView);
+        tvRssi.setText(mResolver.deviceRssiResolver(newRssi));
     }
 
     public void initializeViews(BleDevice device) {

@@ -28,12 +28,6 @@ public class DeviceDetailViewModel extends BaseViewModel {
         this.mBleDevice.setValue(bleDevice);
     }
 
-    public void updateRssi(Integer Rssi){
-        BleDevice newDevice = mBleDevice.getValue();
-        newDevice.mCurrentRssi = Rssi;
-        mBleDevice.setValue(newDevice);
-    }
-
     public LiveData<BluetoothLeService.LocalBinder> getmBinder() {
         return mBinder;
     }

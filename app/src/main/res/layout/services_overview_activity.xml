@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+        <LinearLayout
         android:id="@+id/main_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -199,11 +199,10 @@
             android:layout_height="1px"
             android:layout_marginTop="10dp"
             android:background="@color/primaryColor"></View>
-
         <ListView
             android:id="@+id/characteristic_listview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="15dp"></ListView>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

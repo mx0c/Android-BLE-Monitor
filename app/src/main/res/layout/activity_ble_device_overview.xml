@@ -1,238 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DeviceDetailActivity">
 
-    <include
-        android:id="@+id/appbarLayout"
-        layout="@layout/appbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"/>
-
-
     <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="5dp"
-        android:paddingVertical="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/appbarLayout">
-
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+        <include
+            android:id="@+id/appbarLayout"
+            layout="@layout/appbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/appbarLayout">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:tint="@color/secondaryColor"
-                    app:srcCompat="@drawable/round_rss_feed_white_48" />
-
-                <TextView
-                    android:id="@+id/RSSI_TextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_horizontal"
-                    android:text="-0db" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingLeft="10dp"
-                android:paddingTop="8dp">
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingTop="1.5dp"
-                    android:paddingBottom="1.5dp">
+                    android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/round_tap_and_play_white_48"
-                        android:tint="@color/secondaryColor" />
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:tint="@color/secondaryColor"
+                        app:srcCompat="@drawable/round_rss_feed_white_48" />
 
                     <TextView
-                        android:id="@+id/DeviceName_TextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/dummy_device" />
+                        android:id="@+id/RSSI_TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:text="-0db" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="8dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="1.5dp"
+                        android:paddingBottom="1.5dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/round_tap_and_play_white_48"
+                            android:tint="@color/secondaryColor" />
+
+                        <TextView
+                            android:id="@+id/DeviceName_TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/dummy_device" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="1.5dp"
+                        android:paddingBottom="1.5dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/round_fingerprint_white_48"
+                            android:tint="@color/secondaryColor" />
+
+                        <TextView
+                            android:id="@+id/DeviceUUID_TextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/dummy_uuid" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
+                    android:gravity="end|center_vertical"
                     android:orientation="horizontal"
-                    android:paddingTop="1.5dp"
-                    android:paddingBottom="1.5dp">
+                    android:paddingTop="8dp">
 
                     <ImageView
+                        android:id="@+id/BondState_ImageView"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/round_fingerprint_white_48"
+                        android:src="@drawable/round_bluetooth_connected_white_48"
                         android:tint="@color/secondaryColor" />
 
                     <TextView
-                        android:id="@+id/DeviceUUID_TextView"
+                        android:id="@+id/BondState_TextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/dummy_uuid" />
+                        android:layout_marginStart="3dp"
+                        android:text="@string/dummy_connected" />
                 </LinearLayout>
+
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end|center_vertical"
-                android:orientation="horizontal"
-                android:paddingTop="8dp">
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/BondState_ImageView"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/round_bluetooth_connected_white_48"
-                    android:tint="@color/secondaryColor" />
-
-                <TextView
-                    android:id="@+id/BondState_TextView"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:text="@string/dummy_connected" />
-            </LinearLayout>
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="1.5dp"
+                    android:paddingBottom="1.5dp">
 
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/round_house_white_48"
+                        android:tint="@color/secondaryColor" />
 
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/CompanyIdentifier_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dummy_company" />
+                </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingTop="1.5dp"
-                android:paddingBottom="1.5dp">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/round_house_white_48"
-                    android:tint="@color/secondaryColor" />
-
-                <TextView
-                    android:id="@+id/CompanyIdentifier_TextView"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/dummy_company" />
-            </LinearLayout>
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="1.5dp"
+                    android:paddingBottom="1.5dp">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingTop="1.5dp"
-                android:paddingBottom="1.5dp">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/round_power_off_white_48"
+                        android:tint="@color/secondaryColor" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/round_power_off_white_48"
-                    android:tint="@color/secondaryColor" />
+                    <TextView
+                        android:id="@+id/Connectability_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dummy_not_connectable" />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/Connectability_TextView"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/dummy_not_connectable" />
-            </LinearLayout>
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="1.5dp"
+                    android:paddingBottom="1.5dp">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingTop="1.5dp"
-                android:paddingBottom="1.5dp">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/round_import_export_white_48"
+                        android:tint="@color/secondaryColor" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/round_import_export_white_48"
-                    android:tint="@color/secondaryColor" />
-
-                <TextView
-                    android:id="@+id/Services_TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dummy_services" />
+                    <TextView
+                        android:id="@+id/Services_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dummy_services" />
+                </LinearLayout>
+                <include
+                    android:id="@+id/hr_divider"
+                    layout="@layout/horizontal_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
-
-        <include
-            android:id="@+id/hr_divider"
-            layout="@layout/horizontal_divider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <ListView
-            android:id="@+id/lv_services"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="invisible"/>
 
         <ProgressBar
             android:id="@+id/loading_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminateTintMode="src_atop"
-            android:indeterminateTint="@color/secondaryColor"
             android:layout_gravity="center"
-            android:paddingTop="25dp"/>
+            android:indeterminateTint="@color/secondaryColor"
+            android:indeterminateTintMode="src_atop"
+            android:paddingTop="25dp" />
+        <ListView
+            android:id="@+id/lv_services"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
