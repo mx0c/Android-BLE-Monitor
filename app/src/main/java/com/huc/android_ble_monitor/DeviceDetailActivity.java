@@ -42,6 +42,32 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
         setObservers();
     }
 
+    @Override
+    protected void onServiceBinded() {
+        mBluetoothLeService.requestRssi(true);
+        mBluetoothLeService.getBluetoothDevice().observe(DeviceDetailActivity.this, new Observer<BleDevice>() {
+            @Override
+            public void onChanged(BleDevice bleDevice) {
+                mViewModel.updateBleDevie(bleDevice);
+            }
+        });
+        mBluetoothLeService.getCurrentRssi().observe(DeviceDetailActivity.this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer rssi) {
+                updateRSSI(rssi);
+            }
+        });
+        mListViewOfServices.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ServicesOverviewActivity.staticGattService = (BluetoothGattService)parent.getAdapter().getItem(position);
+                ServicesOverviewActivity.staticBleDevice = DeviceDetailActivity.staticBleDevice;
+                Intent intent = new Intent(DeviceDetailActivity.this, ServicesOverviewActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
     public void setObservers(){
         mViewModel.getmBleDevice().observe(this, new Observer<BleDevice>() {
             @Override
@@ -49,40 +75,6 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
                 Log.d(TAG, "onChanged: BleDevice value changed");
                 if(device == null) return;
                 initializeViews(device);
-            }
-        });
-        mViewModel.getmBinder().observe(this, new Observer<BluetoothLeService.LocalBinder>() {
-            @Override
-            public void onChanged(BluetoothLeService.LocalBinder localBinder) {
-                if(localBinder == null){
-                    mBluetoothLeService.disconnect();
-                    mBluetoothLeService = null;
-                }else{
-                    //bound to service
-                    mBluetoothLeService = localBinder.getService();
-                    mBluetoothLeService.requestRssi(true);
-                    mBluetoothLeService.getBluetoothDevice().observe(DeviceDetailActivity.this, new Observer<BleDevice>() {
-                        @Override
-                        public void onChanged(BleDevice bleDevice) {
-                            mViewModel.updateBleDevie(bleDevice);
-                        }
-                    });
-                    mBluetoothLeService.getCurrentRssi().observe(DeviceDetailActivity.this, new Observer<Integer>() {
-                        @Override
-                        public void onChanged(Integer rssi) {
-                            updateRSSI(rssi);
-                        }
-                    });
-                    mListViewOfServices.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            ServicesOverviewActivity.staticGattService = (BluetoothGattService)parent.getAdapter().getItem(position);
-                            ServicesOverviewActivity.staticBleDevice = DeviceDetailActivity.staticBleDevice;
-                            Intent intent = new Intent(DeviceDetailActivity.this, ServicesOverviewActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                }
             }
         });
     }

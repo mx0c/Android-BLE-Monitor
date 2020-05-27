@@ -4,6 +4,7 @@ import android.bluetooth.le.ScanResult;
 import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
 import com.huc.android_ble_monitor.util.BleUtil;
@@ -14,14 +15,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivityViewModel extends BaseViewModel {
+public class MainActivityViewModel extends ViewModel {
     private static final String TAG = "BLEM_MAViewModel";
     private MutableLiveData<List<BleDevice>> mBleDevices = new MutableLiveData<>();
     private MutableLiveData<ToastModel> mToastBroadcast = new MutableLiveData<>();
 
     private boolean isBluetoothEnabled;
 
-    @Override
     public void init() {
         mBleDevices.setValue(new ArrayList<BleDevice>());
         isBluetoothEnabled = true;

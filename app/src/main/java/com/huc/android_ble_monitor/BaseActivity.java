@@ -1,20 +1,40 @@
 package com.huc.android_ble_monitor;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
+
 import com.huc.android_ble_monitor.services.BluetoothLeService;
-import com.huc.android_ble_monitor.viewmodels.BaseViewModel;
 
 /**
  * Base ActivityClass which sets Theme and binds to the BluetoothLeService
  */
-public abstract class BaseActivity<T extends BaseViewModel> extends AppCompatActivity {
+public abstract class BaseActivity<T extends ViewModel> extends AppCompatActivity {
     protected static final String TAG = "";
     protected T mViewModel;
     protected BluetoothLeService mBluetoothLeService;
+
+    ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            //bound to service
+            mBluetoothLeService = ((BluetoothLeService.LocalBinder)service).getService();
+            onServiceBinded();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            //not bounded to service
+            mBluetoothLeService.disconnect();
+            mBluetoothLeService = null;
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -23,11 +43,12 @@ public abstract class BaseActivity<T extends BaseViewModel> extends AppCompatAct
 
         //Bind to BluetoothLeService
         Intent serviceIntent = new Intent(getApplicationContext(), BluetoothLeService.class);
-        boolean success = getApplicationContext().bindService(serviceIntent, mViewModel.getServiceConnection(), BIND_AUTO_CREATE);
+        boolean success = getApplicationContext().bindService(serviceIntent, mServiceConnection, BIND_AUTO_CREATE);
         Log.d(TAG,"bindService returned: " + Boolean.toString(success));
 
         super.onCreate(savedInstanceState);
     }
 
+    protected abstract void onServiceBinded();
     protected abstract void initializeViewModel();
 }
