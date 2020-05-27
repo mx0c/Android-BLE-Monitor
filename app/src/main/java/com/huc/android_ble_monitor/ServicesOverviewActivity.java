@@ -3,6 +3,7 @@ package com.huc.android_ble_monitor;
 import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -75,8 +76,24 @@ public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActiv
     }
 
     @Override
-    public void onCharacteristicNotify(BluetoothGattCharacteristic characteristic) {
-
+    public void onCharacteristicNotify(final BluetoothGattCharacteristic characteristic) {
+        ServicesOverviewActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new MaterialAlertDialogBuilder(ServicesOverviewActivity.this)
+                        .setTitle("Received Notification from Characteristic")
+                        .setMessage(characteristic.getValue().toString())
+                        .setNeutralButton("Ok", null)
+                        .setNegativeButton("Disable Notification", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //disable notification
+                                mBluetoothLeService.setCharacteristicNotification(characteristic, false);
+                            }
+                        })
+                        .show();
+            }
+        });
     }
 
     private void setObservers(){

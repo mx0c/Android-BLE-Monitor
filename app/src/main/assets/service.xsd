@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2011 Bluetooth SIG, Inc. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="formats.xsd" />
+    <xs:include schemaLocation="description.xsd" />
+    <xs:include schemaLocation="bitfield.xsd" />
+    <xs:include schemaLocation="requirement.xsd" />
+    <xs:include schemaLocation="field.xsd" />
+    <xs:include schemaLocation="enumeration.xsd" />
+    <xs:include schemaLocation="name.xsd" />
+    <xs:include schemaLocation="examples.xsd" />
+    <xs:include schemaLocation="uuid.xsd" />
+    <xs:include schemaLocation="type.xsd" />
+    <xs:element name="Service">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="InformativeText" type="informativeText" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="Examples" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Example" type="xs:string" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Dependencies" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Dependency" type="xs:string" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="GATTRequirements" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Requirement" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute name="subProcedure" type="xs:string" use="required" />
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Note" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="Transports" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Classic" type="xs:boolean" minOccurs="0" default="false" />
+                            <xs:element name="LowEnergy" type="xs:boolean" minOccurs="0" default="false" />
+                            <xs:element name="HighSpeed" type="xs:boolean" minOccurs="0" default="false" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="ErrorCodes" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="ErrorCode" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:simpleContent>
+                                        <xs:extension base="xs:string">
+                                            <xs:attribute name="name" type="xs:string" />
+                                            <xs:attribute name="code" type="xs:string" />
+                                            <xs:attribute name="Description" type="xs:string" />
+                                        </xs:extension>
+                                    </xs:simpleContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="References" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Reference">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Requirement" type="requirement" />
+                                    </xs:sequence>
+                                    <xs:attribute name="name" type="name" />
+                                    <xs:attribute name="type" type="type" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Characteristics" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Characteristic" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:complexContent>
+                                        <xs:extension base="service_characteristic">
+                                            <xs:attribute name="type" type="type" />
+                                            <xs:attribute name="name" type="name" />
+                                            <xs:attribute name="multiple_instances" type="name" use="optional" />
+                                        </xs:extension>
+                                    </xs:complexContent>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Configurations" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Configuration" type="service_configuration" minOccurs="0" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="type" type="type" />
+            <xs:attribute name="uuid" type="uuid" />
+            <xs:attribute name="name" type="name" />
+            <xs:attribute name="last-modified" type="name" />
+            <xs:attribute name="approved" type="name" />
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="service_characteristic">
+        <xs:sequence>
+            <xs:element name="InformativeText" type="description" minOccurs="0" />
+            <xs:element name="Requirement" type="requirement" />
+            <xs:element name="Overrides" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Description" type="xs:string" minOccurs="0" />
+                        <xs:element name="Minimum" type="xs:integer" minOccurs="0" />
+                        <xs:element name="Maximum" type="xs:integer" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Properties" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="InformationText" type="xs:string" minOccurs="0" />
+                        <xs:element name="Read" type="PropertyRequirements" />
+                        <xs:element name="Write" type="PropertyRequirements" />
+                        <xs:element name="WriteWithoutResponse" type="PropertyRequirements" />
+                        <xs:element name="SignedWrite" type="PropertyRequirements" />
+                        <xs:element name="ReliableWrite" type="PropertyRequirements" />
+                        <xs:element name="Notify" type="PropertyRequirements" />
+                        <xs:element name="Indicate" type="PropertyRequirements" />
+                        <xs:element name="WritableAuxiliaries" type="PropertyRequirements" minOccurs="0" />
+                        <xs:element name="Broadcast" type="PropertyRequirements" />
+                        <xs:element name="AuthenticatedSignedWrites" type="PropertyRequirements" minOccurs="0" />
+                        <xs:element name="ExtendedProperties" type="PropertyRequirements" minOccurs="0" />
+                        
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="SecuritySettings" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Security" type="characteristic_security" maxOccurs="unbounded" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Descriptors" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Descriptor" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:complexContent>
+                                    <xs:extension base="characteristic_descriptor">
+                                        <xs:attribute name="type" type="xs:string" />
+                                        <xs:attribute name="name" type="xs:string" />
+                                    </xs:extension>
+                                </xs:complexContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="characteristic_descriptor">
+        <xs:sequence>
+            <xs:element name="InformativeText" type="xs:string" minOccurs="0" />
+            <xs:element name="Requirement" type="descriptor_requirements" minOccurs="0" />
+            <xs:element name="Properties">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Read" type="PropertyRequirements" />
+                        <xs:element name="Write" type="PropertyRequirements" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="characteristic_security">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Unauthenticated Read" />
+            <xs:enumeration value="Authentication" />
+            <xs:enumeration value="Writable With Authentication" />
+            <xs:enumeration value="Encryption is mandatory" />
+             <xs:enumeration value="Encryption is mandatory when written" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PropertyRequirements">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Mandatory" />
+            <xs:enumeration value="Optional" />
+            <xs:enumeration value="Excluded" />
+            <xs:enumeration value="C1" />
+            <xs:enumeration value="C2" />
+            <xs:enumeration value="C3" />
+            <xs:enumeration value="C4" />
+            <xs:enumeration value="C5" />
+            <xs:enumeration value="C6" />
+            <xs:enumeration value="C7" />
+            <xs:enumeration value="C8" />
+            <xs:enumeration value="C9" />
+            <xs:enumeration value="C10" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="descriptor_requirements">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="if_multiple_service_instances" />
+            <xs:enumeration value="if_notify_or_indicate_supported" />
+            <xs:enumeration value="if_notify_supported" />
+            <xs:enumeration value="if_indicate_supported" />
+            <xs:enumeration value="if_characteristic_write_supported" />
+            <xs:enumeration value="if_multiple_instances_of_same_characteristic_optional_otherwise" />
+             <xs:enumeration value="if_multiple_instances_of_same_characteristic" />
+            <xs:enumeration value="if_broadcast_supported" />
+            <xs:enumeration value="if_multiple_characteristics_implemented" />
+            <xs:enumeration value="if_characteristic_supported" />
+            <xs:enumeration value="Mandatory" />
+            <xs:enumeration value="Optional" />
+            <xs:enumeration value="Conditional" />
+            <xs:enumeration value="C1" />
+            <xs:enumeration value="C2" />
+            <xs:enumeration value="C3" />
+            <xs:enumeration value="C4" />
+            <xs:enumeration value="C5" />
+            <xs:enumeration value="C6" />
+            <xs:enumeration value="C7" />
+            <xs:enumeration value="C8" />
+            <xs:enumeration value="C9" />
+            <xs:enumeration value="C10" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="characteristic_requirements">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Mandatory" />
+            <xs:enumeration value="Optional" />
+            <xs:enumeration value="Conditional" />
+            <xs:enumeration value="Conditional 1" />
+            <xs:enumeration value="Conditional 2" />
+            <xs:enumeration value="Conditional 3" />
+            <xs:enumeration value="Conditional 4" />
+            <xs:enumeration value="Conditional 5" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="service_configuration">
+        <xs:sequence>
+            <xs:element name="InformativeText" type="xs:string" minOccurs="0" />
+            <xs:element name="CharacteristicType" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="Target" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="option" type="configuration_type" />
+    </xs:complexType>
+    <xs:simpleType name="configuration_type">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="must_support_one_of" />
+            <xs:enumeration value="if_any_supported_all_must_be_supported" />
+            <xs:enumeration value="must_support_target_if_supported" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
