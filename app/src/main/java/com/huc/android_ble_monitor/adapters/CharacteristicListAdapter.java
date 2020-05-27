@@ -19,6 +19,7 @@ import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.util.BleUtil;
+import com.huc.android_ble_monitor.util.IdentifierXmlResolver;
 
 import java.util.List;
 
@@ -48,10 +49,19 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
         TextView characteristicName = convertView.findViewById(R.id.tv_characteristic_item_name);
         TextView characteristicIdentifier = convertView.findViewById(R.id.tv_characteristic_item_identifier);
         TextView characteristicUuid = convertView.findViewById(R.id.tv_characteristic_item_uuid);
+        TextView characteristicIdentifierLink = convertView.findViewById(R.id.tv_identifier_link);
 
-        characteristicName.setText(mPropertyResolver.characteristicNameResolver(characteristic));
-        characteristicIdentifier.setText(mPropertyResolver.characteristicIdentifierResolver(characteristic));
         characteristicUuid.setText(characteristic.getUuid().toString());
+        characteristicName.setText(mPropertyResolver.characteristicNameResolver(characteristic));
+
+        String characteristicIdString = mPropertyResolver.characteristicIdentifierResolver(characteristic);
+        characteristicIdentifier.setText(characteristicIdString);
+
+        if(!characteristicIdString.equals(PropertyResolver.SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER)) {
+            characteristicIdentifierLink.setText(IdentifierXmlResolver.getCharacteristicXmlLink(characteristicIdString));
+        }else{
+            characteristicIdentifierLink.setVisibility(View.GONE);
+        }
 
         Button readBtn = convertView.findViewById(R.id.readBtn);
         Button writeBtn = convertView.findViewById(R.id.writeBtn);

@@ -1,5 +1,6 @@
 package com.huc.android_ble_monitor.services;
 
+import android.app.Activity;
 import android.app.Service;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
@@ -39,9 +40,7 @@ public class BluetoothLeService extends Service {
     private MutableLiveData<List<BleDevice>> mScannedDevices;
     private MutableLiveData<ScanResult> mScanResult;
     private MutableLiveData<Integer> mCurrentRssi = new MutableLiveData<>();
-    private MutableLiveData<BluetoothGattCharacteristic> mReadCharacteristic = new MutableLiveData<>();
-    private MutableLiveData<BluetoothGattCharacteristic> mWriteCharacteristic = new MutableLiveData<>();
-    private MutableLiveData<BluetoothGattCharacteristic> mNotifyCharacteristic = new MutableLiveData<>();
+    public IBLeServiceCallbacks mCallbacks;
 
     @Override
     public void onCreate() {
@@ -69,13 +68,16 @@ public class BluetoothLeService extends Service {
             mRssiRequestScheduler.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
-                    boolean success = mBluetoothGatt.readRemoteRssi();
-                    Log.d(TAG, "requestRssi: " + success);
+                    mBluetoothGatt.readRemoteRssi();
                 }
-            }, 0, 1, TimeUnit.SECONDS);
+            }, 0, 3, TimeUnit.SECONDS);
         }else{
             mRssiRequestScheduler.shutdown();
         }
+    }
+
+    public void registerActivityCallbacks(Activity activity){
+        mCallbacks = (IBLeServiceCallbacks) activity;
     }
 
     void updateBleDeviceGatt(BluetoothGatt gatt){
@@ -140,14 +142,14 @@ public class BluetoothLeService extends Service {
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
             if(status == BluetoothGatt.GATT_SUCCESS) {
-                mReadCharacteristic.postValue(characteristic);
+                mCallbacks.onCharacteristicRead(characteristic);
             }
         }
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             if(status == BluetoothGatt.GATT_SUCCESS) {
-                mWriteCharacteristic.postValue(characteristic);
+                mCallbacks.onCharacteristicWrite(characteristic);
             }
         }
 
@@ -270,10 +272,4 @@ public class BluetoothLeService extends Service {
     public LiveData<BleDevice> getBluetoothDevice() {
         return mBleDevice;
     }
-
-    public LiveData<BluetoothGattCharacteristic> getWriteCharacteristic(){ return mWriteCharacteristic; }
-
-    public LiveData<BluetoothGattCharacteristic> getNotifiedCharacteristic(){ return mNotifyCharacteristic; }
-
-    public LiveData<BluetoothGattCharacteristic> getReadCharacteristic(){ return mReadCharacteristic; }
 }

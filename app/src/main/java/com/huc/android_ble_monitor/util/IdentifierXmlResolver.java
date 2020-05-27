@@ -12,13 +12,13 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 
-public class ServiceIDXmlResolver extends AsyncTask<String, String, String> {
+public class IdentifierXmlResolver extends AsyncTask<String, String, String> {
     private static final String TAG ="BLEM_NetUtil";
-    private static String baseUrl = "https://www.bluetooth.com/wp-content/uploads/Sitecore-Media-Library/Gatt/Xml/Services/";
+    private static String baseUrl = "https://www.bluetooth.com/wp-content/uploads/Sitecore-Media-Library/Gatt/Xml/";
 
-    public IAsyncDownload delegate = null;
+    public IAsyncDownload delegate;
 
-    public ServiceIDXmlResolver(IAsyncDownload delegate) {
+    public IdentifierXmlResolver(IAsyncDownload delegate) {
         this.delegate = delegate;
     }
 
@@ -29,14 +29,30 @@ public class ServiceIDXmlResolver extends AsyncTask<String, String, String> {
      * @param identifier
      * @return URL to xml definition
      */
-    public static String getXmlLink(String identifier){
-        return baseUrl + identifier + ".xml";
+    public static String getServiceXmlLink(String identifier){
+        return baseUrl + "Services/" + identifier + ".xml";
+    }
+
+    /**
+     * This function can be used to retrieve a URL to the xml definition of a
+     * SIG standardized Characteristic.
+     *
+     * @param identifier
+     * @return URL to xml definition
+     */
+    public static String getCharacteristicXmlLink(String identifier){
+        return baseUrl + "Characteristics/" + identifier + ".xml";
     }
 
     @Override
-    protected String doInBackground(String... identifier) {
+    protected String doInBackground(String... args) {
         try {
-            URL url = new URL(getXmlLink(identifier[0]));
+            URL url;
+            if(args[1].equals("characteristic")){
+                url = new URL(getCharacteristicXmlLink(args[0]));
+            }else{
+                url = new URL(getServiceXmlLink(args[0]));
+            }
 
             // download the file
             InputStream input = new BufferedInputStream(url.openStream(),

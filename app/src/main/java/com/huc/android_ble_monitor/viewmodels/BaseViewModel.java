@@ -7,8 +7,10 @@ import android.view.View;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.huc.android_ble_monitor.DeviceDetailActivity;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 
 public abstract class BaseViewModel extends ViewModel {

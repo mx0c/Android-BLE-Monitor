@@ -31,10 +31,7 @@ import com.huc.android_ble_monitor.models.ToastModel;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BleUtil;
-import com.huc.android_ble_monitor.util.ServiceIDXmlResolver;
 import com.huc.android_ble_monitor.util.PermissionsUtil;
-import com.huc.android_ble_monitor.util.IAsyncDownload;
-import com.huc.android_ble_monitor.viewmodels.BaseViewModel;
 import com.huc.android_ble_monitor.viewmodels.MainActivityViewModel;
 
 import java.util.List;
@@ -212,6 +209,9 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
             if (Build.VERSION.SDK_INT >= 26) {
                 if (bleDevice.mScanResult.isConnectable()) {
                     mBluetoothLeService.connect(bleDevice);
+                    DeviceDetailActivity.staticBleDevice = bleDevice;
+                    Intent intent = new Intent(this, DeviceDetailActivity.class);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(this, "Device is not connectable.", Toast.LENGTH_SHORT).show();
                     return;

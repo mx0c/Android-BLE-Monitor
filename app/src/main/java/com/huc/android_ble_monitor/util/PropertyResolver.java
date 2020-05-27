@@ -33,8 +33,8 @@ public class PropertyResolver {
     private final static int CONNECTING_IMG_ID = R.drawable.round_settings_ethernet_white_48dp;
     private final static String SIG_UNKNOWN_SERVICE_NAME = "SIG unknown service";
     private final static String SIG_UNKNOWN_CHARACTERISTIC_NAME = "SIG unknown characteristic";
-    private final static String SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER = "SIG unknown characteristic identifier";
-    private final static String SIG_UNKNOWN_SERVICE_IDENTIFIER = "SIG unknown service identifier";
+    public final static String SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER = "SIG unknown characteristic identifier";
+    public final static String SIG_UNKNOWN_SERVICE_IDENTIFIER = "SIG unknown service identifier";
     private final static String LEGACY_SCAN_RES = "Legacy Scan Result";
     private final static String NOT_AVAIL = "n/a";
     private final static String WHITESPACE = " ";
@@ -142,7 +142,7 @@ public class PropertyResolver {
     }
 
     public String deviceRssiResolver(ScanResult result) {
-        return Integer.toString(result.getRssi()) + " dBm";
+        return result.getRssi() + " dBm";
     }
 
     public String deviceRssiResolver(Integer rssi) {
@@ -182,11 +182,11 @@ public class PropertyResolver {
                 String name;
 
                 if(nameInfo != null)
-                    name = nameInfo.name;
+                    name = " | " + nameInfo.name;
                 else
-                    name = "SIG unknown service";
+                    name = "";
 
-                uuidStrings.add(uuidString + " | " + name);
+                uuidStrings.add(uuidString + name);
             }
         }else if(uuidStrings.size() <= 0){
             uuidStrings.add("- No advertised services found");
