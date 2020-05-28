@@ -15,27 +15,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.huc.android_ble_monitor.adapters.ScanResultRecyclerAdapter;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
-import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BleUtil;
 import com.huc.android_ble_monitor.util.PermissionsUtil;
 import com.huc.android_ble_monitor.viewmodels.MainActivityViewModel;
-
 import java.util.List;
-
 import pub.devrel.easypermissions.EasyPermissions;
 
 
@@ -73,6 +67,16 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
         mViewModel.init();
     }
 
+    @Override
+    protected void onServiceBinded() {
+        mBluetoothLeService.getScanResult().observe(MainActivity.this, new Observer<ScanResult>() {
+            @Override
+            public void onChanged(ScanResult scanResult) {
+                mViewModel.registerScanResult(scanResult);
+            }
+        });
+    }
+
     public void setObservers(){
         mViewModel.getToast().observe(this, new Observer<ToastModel>() {
             @Override
@@ -80,31 +84,10 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
                 Toast.makeText(MainActivity.this, toastModel.getMessage(), toastModel.getDuration()).show();
             }
         });
-
         mViewModel.getmBleDevices().observe(this, new Observer<List<BleDevice>>() {
             @Override
             public void onChanged(List<BleDevice> bleDevices) {
                 mScanResultRecyclerAdapter.notifyDataSetChanged();
-            }
-        });
-
-        mViewModel.getmBinder().observe(this, new Observer<BluetoothLeService.LocalBinder>() {
-            @Override
-            public void onChanged(BluetoothLeService.LocalBinder localBinder) {
-                if(localBinder == null){
-                    //unbinded
-                    mBluetoothLeService.disconnect();
-                    mBluetoothLeService = null;
-                }else{
-                    //binded to service
-                    mBluetoothLeService = localBinder.getService();
-                    mBluetoothLeService.getScanResult().observe(MainActivity.this, new Observer<ScanResult>() {
-                        @Override
-                        public void onChanged(ScanResult scanResult) {
-                            mViewModel.registerScanResult(scanResult);
-                        }
-                    });
-                }
             }
         });
     }
@@ -145,8 +128,6 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mViewModel.getServiceConnection());
-        // unregisterReceiver(mReceiver);
     }
 
     @Override

@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2011 Bluetooth SIG, Inc. All rights reserved. -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="formats.xsd" />
+    <xs:include schemaLocation="description.xsd" />
+    <xs:include schemaLocation="bitfield.xsd" />
+    <xs:include schemaLocation="requirement.xsd" />
+    <xs:include schemaLocation="field.xsd" />
+    <xs:include schemaLocation="enumeration.xsd" />
+    <xs:include schemaLocation="name.xsd" />
+    <xs:include schemaLocation="examples.xsd" />
+    <xs:include schemaLocation="uuid.xsd" />
+    <xs:include schemaLocation="type.xsd" />
+    <xs:element name="Characteristic">
+        <xs:complexType>
+            
+            <xs:sequence>
+                <xs:element name="InformativeText" type="informativeText" minOccurs="0" />
+                <xs:element name="Value">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Field" type="field" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+               
+                <xs:element name="Note" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="p" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+                        </xs:sequence>
+                    </xs:complexType>
+                   </xs:element>        
+                
+               <!-- <xs:element name="Note" type="name" minOccurs="0" maxOccurs="unbounded" /> -->
+                
+            </xs:sequence>
+            <xs:attribute name="type" type="type" />
+            <xs:attribute name="uuid" type="uuid" />
+            <xs:attribute name="name" type="name" />
+            <xs:attribute name="last-modified" type="xs:date" />
+            <xs:attribute name="approved" type="name" />
+            <xs:attribute name="revision" type="name" />
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
