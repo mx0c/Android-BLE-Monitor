@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
@@ -22,6 +23,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.adapters.ScanResultRecyclerAdapter;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
@@ -171,8 +174,14 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Toast.makeText(this, "Item Selected", Toast.LENGTH_SHORT).show();
         switch (item.getItemId()) {
+            case R.id.action_HciSnoopLogging:
+                final boolean isEnabled = BleUtil.getHciSnoopLogEnabled(this);
+                new MaterialAlertDialogBuilder(this)
+                    .setTitle("HCI snoop logging")
+                    .setMessage("HCI snoop logging is " + (isEnabled ? "activated." : "deactivated. If you want to activate this feature, enable it in the developer settings."))
+                    .setNeutralButton("OK",null)
+                    .show();
             default:
                 return super.onOptionsItemSelected(item);
         }
