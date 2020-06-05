@@ -45,11 +45,19 @@
                 android:id="@+id/filterSpinner">
             </Spinner>
         </LinearLayout>
-
-        <ListView
+        <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/logListView">
-        </ListView>
+            android:layout_height="1px"
+            android:background="@color/primaryDarkColor"></View>
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/LogSwipeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/logListView">
+            </ListView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

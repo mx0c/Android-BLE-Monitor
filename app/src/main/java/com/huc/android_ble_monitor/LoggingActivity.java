@@ -1,6 +1,5 @@
 package com.huc.android_ble_monitor;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -9,13 +8,16 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.LogsUtil;
 
-public class LoggingActivity extends AppCompatActivity {
+
+public class LoggingActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener  {
     private ListView mListView;
     private Spinner mTagSpinner;
     private Spinner mFilterSpinner;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private static final String TAG = "BLEM_LogActivity";
 
     @Override
@@ -24,6 +26,9 @@ public class LoggingActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
         setContentView(R.layout.logging_activity);
         ActivityUtil.setToolbar(this, false);
+
+        mSwipeRefreshLayout = findViewById(R.id.LogSwipeContainer);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mListView = findViewById(R.id.logListView);
         mListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, LogsUtil.readLogs("All", "All")));
@@ -54,5 +59,13 @@ public class LoggingActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        String filter = mFilterSpinner.getSelectedItem().toString();
+        String tag = mTagSpinner.getSelectedItem().toString();
+        mListView.setAdapter(new ArrayAdapter<String>(LoggingActivity.this, android.R.layout.simple_list_item_1, LogsUtil.readLogs(filter, tag)));
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 }
