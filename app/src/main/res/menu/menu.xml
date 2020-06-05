@@ -14,4 +14,8 @@
         android:id="@+id/action_HciSnoopLogging"
         android:title="HCI snoop logging"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_logging"
+        android:title="Logs"
+        app:showAsAction="never" />
 </menu>

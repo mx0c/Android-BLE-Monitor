@@ -182,6 +182,11 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
                     .setMessage("HCI snoop logging is " + (isEnabled ? "activated." : "deactivated. If you want to activate this feature, enable it in the developer settings."))
                     .setNeutralButton("OK",null)
                     .show();
+                return true;
+            case R.id.action_logging:
+                Intent i = new Intent(this, LoggingActivity.class);
+                startActivity(i);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

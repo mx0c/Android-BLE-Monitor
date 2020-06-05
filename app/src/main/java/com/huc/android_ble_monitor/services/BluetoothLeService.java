@@ -31,7 +31,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class BluetoothLeService extends Service {
-    public final static String TAG = "BLEM_BLuetoothLeService";
+    public final static String TAG = "BLEM_BluetoothLeService";
 
     private final IBinder mBinder = new LocalBinder();
     private ScheduledExecutorService mRssiRequestScheduler;
