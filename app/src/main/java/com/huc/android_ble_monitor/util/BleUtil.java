@@ -5,14 +5,16 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanResult;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.provider.Settings;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.huc.android_ble_monitor.models.BleDevice;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +35,15 @@ public class BleUtil {
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             ctx.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT_RESULT);
+        }
+    }
+
+    public static boolean getHciSnoopLogEnabled(Context ctx){
+        try {
+            return Settings.Secure.getInt(ctx.getContentResolver(), "bluetooth_hci_log") == 1 ? true : false;
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
