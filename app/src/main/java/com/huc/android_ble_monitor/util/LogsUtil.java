@@ -1,7 +1,6 @@
 package com.huc.android_ble_monitor.util;
 
 import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
