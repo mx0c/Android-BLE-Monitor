@@ -56,39 +56,6 @@ public abstract class BaseActivity<T extends ViewModel> extends AppCompatActivit
         super.onCreate(savedInstanceState);
     }
 
-    public String getHciLogFilePath() {
-        ArrayList<String> liste = new ArrayList<>();
-        try {
-            FileInputStream fis = new FileInputStream("/sdcard/btsnoop_hci.log");
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader bufferedReader = new BufferedReader(isr);
-            String line;
-
-            while ((line = bufferedReader.readLine()) != null) {
-                liste.add(line);
-                if (line.contains("BtSnoopFileName")) {
-                    if (line.indexOf("=") != -1) {
-                        fis.close();
-                        isr.close();
-                        bufferedReader.close();
-                        return line.substring(line.indexOf("=") + 1);
-                    }
-                }
-            }
-
-            fis.close();
-            isr.close();
-            bufferedReader.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return "";
-    }
-
     protected abstract void onServiceBinded();
     protected abstract void initializeViewModel();
 }
