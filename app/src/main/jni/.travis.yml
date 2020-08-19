@@ -1,0 +1,22 @@
+language: cpp
+script: 
+  - $CXX --version
+  - cmake . ; make
+compiler:
+  - gcc
+install:
+- if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - linux-libc-dev
+    - linux-libc-dev:i386
+    - gcc-4.8-multilib
+    - g++-4.8-multilib
+    - gcc-4.8
+    - g++-4.8
+notifications:
+  email: false
+sudo: false
