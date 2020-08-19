@@ -7,16 +7,27 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-public class HciSnoopLog {
+public class HciSnoopLog implements IHciDecoder {
     private String mRawSnoopLog;
     private String BTSTACK_CONFIG_FILE = "bt_stack.conf";
     private String BTSTACK_CONFIG_PATH = "/etc/bluetooth/" + BTSTACK_CONFIG_FILE;
     private String BTSNOOP_FALLBACK_FILE = "btsnoop_hci.log";
     private String BTSNOOP_FALLBACK_PATH = "/sdcard/" + BTSNOOP_FALLBACK_FILE;
+    private IPacketReceptionCallback callback;
+
+    static {
+        System.loadLibrary("btsnoopdecoder");
+    }
 
     public HciSnoopLog(){
         pullSnoopLog();
     }
+
+    @Override
+    public native void startHciLogStream(String filePath, int lastPacketCount);
+
+    @Override
+    public native void stopHciLogStream();
 
     /**
      * tries to read in snoop log from location specified in bt_stack.conf file
@@ -64,5 +75,10 @@ public class HciSnoopLog {
             return null;
         }
         return prop.getProperty("btsnoopfilename");
+    }
+
+    @Override
+    public void setPacketReceptionCb(IPacketReceptionCallback cb) {
+        callback = cb;
     }
 }
