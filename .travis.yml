@@ -13,4 +13,6 @@ script:
     - ./gradlew build --stacktrace
 before_install:
  - chmod +x gradlew
- 
+install:
+ - echo y | sdkmanager "ndk;21.0.6113669"
+ - echo y | sdkmanager "cmake;3.6.4111459"

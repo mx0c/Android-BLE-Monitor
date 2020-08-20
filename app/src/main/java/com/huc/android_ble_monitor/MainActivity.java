@@ -53,6 +53,7 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
         ActivityUtil.setToolbar(this, true);
 
         PermissionsUtil.requestLocationPermission(this);
+        PermissionsUtil.requestReadStoragePermission(this);
         BleUtil.checkIsBluetoothEnabled(this);
         BleUtil.checkBleAvailability(this);
 
