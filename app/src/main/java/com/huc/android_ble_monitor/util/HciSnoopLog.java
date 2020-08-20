@@ -1,5 +1,7 @@
 package com.huc.android_ble_monitor.util;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +11,8 @@ import java.util.Properties;
 
 public class HciSnoopLog implements IHciDecoder {
     private String mRawSnoopLog;
+    private String mLogFilepath;
+    private String TAG = this.getClass().getSimpleName();
     private String BTSTACK_CONFIG_FILE = "bt_stack.conf";
     private String BTSTACK_CONFIG_PATH = "/etc/bluetooth/" + BTSTACK_CONFIG_FILE;
     private String BTSNOOP_FALLBACK_FILE = "btsnoop_hci.log";
@@ -16,11 +20,13 @@ public class HciSnoopLog implements IHciDecoder {
     private IPacketReceptionCallback callback;
 
     static {
-        System.loadLibrary("btsnoopdecoder");
+        System.loadLibrary("hciviewer");
     }
 
     public HciSnoopLog(){
-        pullSnoopLog();
+        readSnoopLog();
+        Log.d(TAG, "HciSnoopLog: Read in snoop Log: " + mRawSnoopLog);
+        startHciLogStream(BTSNOOP_FALLBACK_PATH, 1000);
     }
 
     @Override
@@ -32,7 +38,7 @@ public class HciSnoopLog implements IHciDecoder {
     /**
      * tries to read in snoop log from location specified in bt_stack.conf file
      */
-    public void pullSnoopLog(){
+    public void readSnoopLog(){
         String location = getSnoopLogLocation();
         if(location == null){
             location = BTSNOOP_FALLBACK_PATH;
@@ -74,11 +80,41 @@ public class HciSnoopLog implements IHciDecoder {
             e.printStackTrace();
             return null;
         }
-        return prop.getProperty("btsnoopfilename");
+        mLogFilepath = prop.getProperty("btsnoopfilename");
+        return mLogFilepath;
     }
 
     @Override
     public void setPacketReceptionCb(IPacketReceptionCallback cb) {
         callback = cb;
+    }
+
+    /**
+     * callback called from native function when a HCI pakcet has been decoded
+     *
+     * @param snoopFrame snoop frame part
+     * @param hciFrame   HCI packet part
+     */
+    public void onHciFrameReceived(final String snoopFrame, final String hciFrame) {
+        if (callback != null) {
+            callback.onHciFrameReceived(snoopFrame, hciFrame);
+        }
+    }
+
+    public void onError(int errorCode, String errorMessage) {
+        if (callback != null) {
+            callback.onError(errorCode, errorMessage);
+        }
+    }
+
+    /**
+     * callback called from native function when packet count is finished
+     *
+     * @param packetCount total number of HCI packet available
+     */
+    public void onFinishedPacketCount(int packetCount) {
+        if (callback != null) {
+            callback.onFinishedPacketCount(packetCount);
+        }
     }
 }

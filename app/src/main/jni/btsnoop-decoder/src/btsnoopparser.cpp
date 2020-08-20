@@ -35,7 +35,6 @@
 #include "btsnoop/ibtsnooplistener.h"
 #include <pthread.h>
 #include "btsnoop/btsnooptask.h"
-#include "btsnoopmonitor.h"
 
 using namespace std;
 
@@ -66,9 +65,9 @@ BtSnoopParser::~BtSnoopParser(){
  *      add a listener to monitor streamed packet record
  * @param listener
  */
-void BtSnoopParser::addSnoopListener(BtSnoopMonitor *listener){
+void BtSnoopParser::addSnoopListener(IBtSnoopListener* listener){
 
-	snoopListenerList.push_back(reinterpret_cast<IBtSnoopListener *const>(&listener));
+	snoopListenerList.push_back(listener);
 
 }
 

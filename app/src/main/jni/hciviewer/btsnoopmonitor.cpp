@@ -56,22 +56,22 @@ BtSnoopMonitor::~BtSnoopMonitor(){
  */
 void BtSnoopMonitor::onFinishedCountingPackets(int packet_count,JNIEnv * jni_env){
 
-    if (jni_env!=0){
-        if (jobj!=0 && mid_counting!=0){
+	if (jni_env!=0){
+		if (jobj!=0 && mid_counting!=0){
 
-            jni_env->CallVoidMethod(jobj, mid_counting,packet_count);
+			jni_env->CallVoidMethod(jobj, mid_counting,packet_count);
 
-            if (jni_env->ExceptionCheck()) {
-                jni_env->ExceptionDescribe();
-            }
-        }
-        else{
-            __android_log_print(ANDROID_LOG_ERROR,"hci-debugger","class or method if not defined\n");
-        }
-    }
-    else{
-        __android_log_print(ANDROID_LOG_ERROR,"hci-debugger","jni_env is not defined\n");
-    }
+			if (jni_env->ExceptionCheck()) {
+				jni_env->ExceptionDescribe();
+			}
+		}
+		else{
+			__android_log_print(ANDROID_LOG_ERROR,"hci-debugger","class or method if not defined\n");
+		}
+	}
+	else{
+		__android_log_print(ANDROID_LOG_ERROR,"hci-debugger","jni_env is not defined\n");
+	}
 }
 
 /**
@@ -86,36 +86,36 @@ void BtSnoopMonitor::onFinishedCountingPackets(int packet_count,JNIEnv * jni_env
  */
 void BtSnoopMonitor::onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacket packet,JNIEnv * jni_env){
 
-    IHciFrame * frame = hci_decoder.decode(packet.getPacketData());
+	IHciFrame * frame = hci_decoder.decode(packet.getPacketData());
 
-    if (frame!=0){
+	if (frame!=0){
 
-        if (jni_env!=0){
-            if (jobj!=0 && mid!=0){
+		if (jni_env!=0){
+			if (jobj!=0 && mid!=0){
 
-                jstring hci_frame = jni_env->NewStringUTF(frame->toJson(false).data());
+				jstring hci_frame = jni_env->NewStringUTF(frame->toJson(false).data());
 
-                jstring snoop_frame = jni_env->NewStringUTF(packet.toJson(false).data());
+				jstring snoop_frame = jni_env->NewStringUTF(packet.toJson(false).data());
 
-                jni_env->CallVoidMethod(jobj, mid, snoop_frame,hci_frame);
+				jni_env->CallVoidMethod(jobj, mid, snoop_frame,hci_frame);
 
-                jni_env->DeleteLocalRef(hci_frame);
-                jni_env->DeleteLocalRef(snoop_frame);
+				jni_env->DeleteLocalRef(hci_frame);
+				jni_env->DeleteLocalRef(snoop_frame);
 
-                if (jni_env->ExceptionCheck()) {
-                    jni_env->ExceptionDescribe();
-                }
-            }
-            else{
-                __android_log_print(ANDROID_LOG_ERROR,"hci-debugger","class or method if not defined\n");
-            }
-        }
-        else{
-            __android_log_print(ANDROID_LOG_ERROR,"hci-debugger","jni_env is not defined\n");
-        }
-    }else{
-        __android_log_print(ANDROID_LOG_INFO,"hci-debugger","frame not treated");
-    }
+				if (jni_env->ExceptionCheck()) {
+					jni_env->ExceptionDescribe();
+				}
+			}
+			else{
+				__android_log_print(ANDROID_LOG_ERROR,"hci-debugger","class or method if not defined\n");
+			}
+		}
+		else{
+			__android_log_print(ANDROID_LOG_ERROR,"hci-debugger","jni_env is not defined\n");
+		}
+	}else{
+		__android_log_print(ANDROID_LOG_INFO,"hci-debugger","frame not treated");
+	}
 }
 
 /**
@@ -130,24 +130,24 @@ void BtSnoopMonitor::onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacke
  */
 void BtSnoopMonitor::onError(int error_code,std::string error_message, JNIEnv * jni_env){
 
-    if (jni_env!=0){
-        if (jobj!=0 && mid_counting!=0){
+	if (jni_env!=0){
+		if (jobj!=0 && mid_counting!=0){
 
-            jstring error_jmessage = jni_env->NewStringUTF(error_message.data());
+			jstring error_jmessage = jni_env->NewStringUTF(error_message.data());
 
-            jni_env->CallVoidMethod(jobj, mid_error,error_code,error_jmessage);
+			jni_env->CallVoidMethod(jobj, mid_error,error_code,error_jmessage);
 
-            jni_env->DeleteLocalRef(error_jmessage);
+			jni_env->DeleteLocalRef(error_jmessage);
 
-            if (jni_env->ExceptionCheck()) {
-                jni_env->ExceptionDescribe();
-            }
-        }
-        else{
-            __android_log_print(ANDROID_LOG_ERROR,"hci-debugger","class or method if not defined\n");
-        }
-    }
-    else{
-        __android_log_print(ANDROID_LOG_ERROR,"hci-debugger","jni_env is not defined\n");
-    }
+			if (jni_env->ExceptionCheck()) {
+				jni_env->ExceptionDescribe();
+			}
+		}
+		else{
+			__android_log_print(ANDROID_LOG_ERROR,"hci-debugger","class or method if not defined\n");
+		}
+	}
+	else{
+		__android_log_print(ANDROID_LOG_ERROR,"hci-debugger","jni_env is not defined\n");
+	}
 }

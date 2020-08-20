@@ -44,49 +44,49 @@ class BtSnoopMonitor : public IBtSnoopListener
 
 public:
 
-    BtSnoopMonitor();
+	BtSnoopMonitor();
 
-    ~BtSnoopMonitor();
+	~BtSnoopMonitor();
 
 
-    /**
-     * @brief onSnoopPacketReceived
-     *      called when a new packet record has been received
-     * @param fileInfo
-     *      file info object
-     * @param packet
-     *      snoop packet record object
-     */
-    void onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacket packet,JNIEnv * jni_env);
+	/**
+	 * @brief onSnoopPacketReceived
+	 *      called when a new packet record has been received
+	 * @param fileInfo
+	 *      file info object
+	 * @param packet
+	 *      snoop packet record object
+	 */
+	void onSnoopPacketReceived(BtSnoopFileInfo fileInfo,BtSnoopPacket packet,JNIEnv * jni_env);
 
-    /**
-     * @brief
-     * 		called when packet counting is completed
-     * @param
-     *		total packet number
-     */
-    void onFinishedCountingPackets(int packet_count,JNIEnv * jni_env);
+	/**
+	 * @brief
+	 * 		called when packet counting is completed
+	 * @param
+	 *		total packet number
+	 */
+	void onFinishedCountingPackets(int packet_count,JNIEnv * jni_env);
 
-    /**
-     * @brief
-     * 		called when and error occured
-     * @param error_code
-     *      error code
-     * @param error_message
-     *      error message
-     * @param jni_env
-     *      JNI env object
-     */
-    void onError(int error_code,std::string error_message, JNIEnv * jni_env);
+	/**
+	 * @brief
+	 * 		called when and error occured
+	 * @param error_code
+	 *      error code
+	 * @param error_message
+	 *      error message
+	 * @param jni_env
+	 *      JNI env object
+	 */
+	void onError(int error_code,std::string error_message, JNIEnv * jni_env);
 
-    jobject jobj;
-    jmethodID mid;
-    jmethodID mid_counting;
-    jmethodID mid_error;
+	jobject jobj;
+	jmethodID mid;
+	jmethodID mid_counting;
+	jmethodID mid_error;
 
 private:
 
-    HciDecoder hci_decoder;
+	HciDecoder hci_decoder;
 };
 
 #endif // BTSNOOPMONITOR_H

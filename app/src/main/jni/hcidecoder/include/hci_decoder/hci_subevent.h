@@ -22,113 +22,21 @@
  * THE SOFTWARE.                                                                    * 
  ************************************************************************************/
 /**
-	btsnoopparsert.h
-
-	Parse and manage task for streaming bt snoop file
+	hci_ogf.h
+	list of HCI LE SubEvent
 
 	@author Bertrand Martel
-	@version 0.1
+	@version 1.0
 */
-
-#ifndef BTSNOOPPARSER_H
-#define BTSNOOPPARSER_H
-
-#include <src/btsnoopmonitor.h>
-#include "btsnoopstate.h"
-#include "fstream"
-#include "vector"
-#include "ibtsnooplistener.h"
-#include "btsnoopfileinfo.h"
-#include "pthread.h"
-#include "btsnoop/btsnooptask.h"
-
-class BtSnoopParser
-{
-
-public:
-
-	/**
-	 * @brief
-	 *      initialize bt snoop file parser
-	 */
-	BtSnoopParser();
-
-	/**
-	 * stop and join thread
-	 **/
-	~BtSnoopParser();
-
-	/**
-	 * @brief
-	 *      add a listener to monitor streamed packet record
-	 * @param listener
-	 */
-	void addSnoopListener(BtSnoopMonitor *listener);
-
-	/**
-	 * @brief
-	 *      remove all listeners in snoop listener list
-	 */
-	 void clearListeners();
-
-	/**
-	 * @brief
-	 *      decode streaming file
-	 * @param file_path
-	 * @return
-	 *      success status
-	 */
-	bool decode_streaming_file(std::string file_path);
-
-	/**
-	 * @brief
-	 *      decode streaming file with a fixed number of decoded packet (from the end of the files to the beginning)
-	 * @param file_path
-	 *      btsnoop file path
-	 * @param packetNumber
-	 *      number of packet to decoded (from the end to the beginning)
-	 * @return
-	 *      success status
-	 */
-	bool decode_streaming_file(std::string file_path, int packetNumber);
-
-	/**
-	 * @brief
-	 *      wait for thread to finish (blocking method)
-	 */
-	void join();
-
-	/**
-	 * @brief
-	 *      stop and join current thread
-	 */
-	void stop();
-
-private:
-
-	/**
-	 * @brief
-	 *      decode thread task
-	 */
-	pthread_t decode_task;
-
-	/**
-	 * @brief
-	 *      parser object manager
-	 */
-	BtSnoopTask snoop_task;
-
-	/**
-	 * @brief
-	 *      list of listener registered
-	 */
-	std::vector<IBtSnoopListener*> snoopListenerList;
-
-	/**
-	 * @brief
-	 *      define if a thread has already been created before
-	 */
-	bool thread_started;
-};
-
-#endif // BTSNOOPPARSER_H
+E(HCI_EVENT_LE_CONNECTION_COMPLETE                 , 0x01)
+E(HCI_EVENT_LE_ADVERTISING_REPORT                  , 0x02)
+E(HCI_EVENT_LE_CONNECTION_UPDATE_COMPLETE          , 0x03)
+E(HCI_EVENT_LE_READ_REMOTE_USED_FEATURES_COMPLETE  , 0x04)
+E(HCI_EVENT_LE_LONG_TERM_KEY_REQUEST               , 0x05)
+E(HCI_EVENT_LE_REMOTE_CONNECTION_PARAMETER_REQUEST , 0x06)
+E(HCI_EVENT_LE_DATA_LENGTH_CHANGE                  , 0x07)
+E(HCI_EVENT_LE_READ_LOCAL_P256_PUBLIC_KEY_COMPLETE , 0x08)
+E(HCI_EVENT_LE_GENERATE_DHKEY_COMPLETE             , 0x09)
+E(HCI_EVENT_LE_ENHANCED_CONNECTION_COMPLETE        , 0x0A)
+E(HCI_EVENT_LE_DIRECT_ADVERTISING_REPORT           , 0x0B)
+#undef E
