@@ -22,18 +22,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.adapters.ScanResultRecyclerAdapter;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BleUtil;
-import com.huc.android_ble_monitor.util.HciSnoopLog;
 import com.huc.android_ble_monitor.util.PermissionsUtil;
 import com.huc.android_ble_monitor.viewmodels.MainActivityViewModel;
 import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
-
 
 public class MainActivity extends BaseActivity<MainActivityViewModel> implements ScanResultRecyclerAdapter.OnDeviceConnectListener, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "BLEM_MainActivity";
@@ -62,8 +59,6 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
 
         setObservers();
         initRecyclerView();
-
-        HciSnoopLog log = new HciSnoopLog();
     }
 
     @Override
@@ -77,7 +72,7 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
         mBluetoothLeService.getScanResult().observe(MainActivity.this, new Observer<ScanResult>() {
             @Override
             public void onChanged(ScanResult scanResult) {
-                mViewModel.registerScanResult(scanResult);
+            mViewModel.registerScanResult(scanResult);
             }
         });
     }
@@ -86,13 +81,13 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
         mViewModel.getToast().observe(this, new Observer<ToastModel>() {
             @Override
             public void onChanged(ToastModel toastModel) {
-                Toast.makeText(MainActivity.this, toastModel.getMessage(), toastModel.getDuration()).show();
+            Toast.makeText(MainActivity.this, toastModel.getMessage(), toastModel.getDuration()).show();
             }
         });
         mViewModel.getmBleDevices().observe(this, new Observer<List<BleDevice>>() {
             @Override
             public void onChanged(List<BleDevice> bleDevices) {
-                mScanResultRecyclerAdapter.notifyDataSetChanged();
+            mScanResultRecyclerAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -102,7 +97,7 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
         mSwipeRefreshLayout = findViewById(R.id.swipe_container_scan_result);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        mScanResultRecyclerAdapter = new ScanResultRecyclerAdapter(this, ((MainActivityViewModel)mViewModel).getmBleDevices().getValue(), this);
+        mScanResultRecyclerAdapter = new ScanResultRecyclerAdapter(this, mViewModel.getmBleDevices().getValue(), this);
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mScanResultRecyclerView.setLayoutManager(linearLayoutManager);
         mScanResultRecyclerView.setAdapter(mScanResultRecyclerAdapter);
@@ -177,17 +172,13 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_HciSnoopLogging:
-                final boolean isEnabled = BleUtil.getHciSnoopLogEnabled(this);
-                new MaterialAlertDialogBuilder(this)
-                    .setTitle("HCI snoop logging")
-                    .setMessage("HCI snoop logging is " + (isEnabled ? "activated." : "deactivated. If you want to activate this feature, enable it in the developer settings."))
-                    .setNeutralButton("OK",null)
-                    .show();
+            case R.id.action_hci_snoop:
+                Intent i = new Intent(this, HciLogActivity.class);
+                startActivity(i);
                 return true;
             case R.id.action_logging:
-                Intent i = new Intent(this, LoggingActivity.class);
-                startActivity(i);
+                Intent j = new Intent(this, LoggingActivity.class);
+                startActivity(j);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

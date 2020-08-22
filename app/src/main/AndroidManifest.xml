@@ -48,6 +48,10 @@
             android:parentActivityName=".MainActivity"
             android:launchMode="singleInstance">
         </activity>
+        <activity android:name=".HciLogActivity"
+            android:parentActivityName=".MainActivity"
+            android:launchMode="singleInstance">
+        </activity>
     </application>
 
 </manifest>

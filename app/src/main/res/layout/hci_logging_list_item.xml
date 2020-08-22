@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/packet_num"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:text="1000"
+        android:textColor="#1a1a1a" />
+
+    <TextView
+        android:id="@+id/packet_timestamp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.7"
+        android:paddingLeft="5dp"
+        android:text="2016-03-01 14:58:04.919"
+        android:textColor="#1a1a1a" />
+
+    <TextView
+        android:id="@+id/packet_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:text="EVENT"
+        android:textColor="#1a1a1a" />
+
+    <TextView
+        android:id="@+id/packet_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:text="COMMAND_COMPLETE"
+        android:textColor="#1a1a1a" />
+</LinearLayout>

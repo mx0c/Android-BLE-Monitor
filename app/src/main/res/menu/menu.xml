@@ -11,11 +11,15 @@
 
     <!-- Settings, should always be in the overflow -->
     <item
-        android:id="@+id/action_HciSnoopLogging"
-        android:title="HCI snoop logging"
+        android:id="@+id/action_hci_snoop"
+        android:title="HCI snoop logs"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_logging"
-        android:title="Logs"
+        android:title="application logs"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/update_assigned_numbers"
+        android:title="update BT assigned numbers"
         app:showAsAction="never" />
 </menu>

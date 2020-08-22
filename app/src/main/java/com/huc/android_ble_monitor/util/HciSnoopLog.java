@@ -1,7 +1,5 @@
 package com.huc.android_ble_monitor.util;
 
-import android.util.Log;
-
 import androidx.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,16 +15,16 @@ public class HciSnoopLog implements IHciDecoder {
     private String BTSTACK_CONFIG_PATH = "/etc/bluetooth/" + BTSTACK_CONFIG_FILE;
     private String BTSNOOP_FALLBACK_FILE = "btsnoop_hci.log";
     private String BTSNOOP_FALLBACK_PATH = "/sdcard/" + BTSNOOP_FALLBACK_FILE;
-    private IPacketReceptionCallback callback;
+    private IPacketReceptionCallback mCallback;
 
     static {
         System.loadLibrary("hciviewer");
     }
 
-    public HciSnoopLog(){
+    public HciSnoopLog(IPacketReceptionCallback cb){
+        setPacketReceptionCb(cb);
         readSnoopLog();
-        Log.d(TAG, "HciSnoopLog: Read in snoop Log: " + mRawSnoopLog);
-        startHciLogStream(BTSNOOP_FALLBACK_PATH, 1000);
+        startHciLogStream(BTSNOOP_FALLBACK_PATH, 100);
     }
 
     @Override
@@ -86,7 +84,7 @@ public class HciSnoopLog implements IHciDecoder {
 
     @Override
     public void setPacketReceptionCb(IPacketReceptionCallback cb) {
-        callback = cb;
+        mCallback = cb;
     }
 
     /**
@@ -96,14 +94,14 @@ public class HciSnoopLog implements IHciDecoder {
      * @param hciFrame   HCI packet part
      */
     public void onHciFrameReceived(final String snoopFrame, final String hciFrame) {
-        if (callback != null) {
-            callback.onHciFrameReceived(snoopFrame, hciFrame);
+        if (mCallback != null) {
+            mCallback.onHciFrameReceived(snoopFrame, hciFrame);
         }
     }
 
     public void onError(int errorCode, String errorMessage) {
-        if (callback != null) {
-            callback.onError(errorCode, errorMessage);
+        if (mCallback != null) {
+            mCallback.onError(errorCode, errorMessage);
         }
     }
 
@@ -113,8 +111,8 @@ public class HciSnoopLog implements IHciDecoder {
      * @param packetCount total number of HCI packet available
      */
     public void onFinishedPacketCount(int packetCount) {
-        if (callback != null) {
-            callback.onFinishedPacketCount(packetCount);
+        if (mCallback != null) {
+            mCallback.onFinishedPacketCount(packetCount);
         }
     }
 }
