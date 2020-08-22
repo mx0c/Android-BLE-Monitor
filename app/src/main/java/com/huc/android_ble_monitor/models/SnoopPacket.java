@@ -41,6 +41,30 @@ public class SnoopPacket {
         try {
             JSONObject jsonHciFrame = new JSONObject(json);
             this.packet_type = jsonHciFrame.getJSONObject("packet_type").getString("value").replace("HCI_TYPE_", "");
+            int typeCode = jsonHciFrame.getJSONObject("packet_type").getInt("code");
+
+            switch(typeCode){
+                //Command
+                case 1:
+                    if(jsonHciFrame.has("ocf")){
+                        JSONObject ocf_obj = jsonHciFrame.getJSONObject("ocf");
+                        packet_info = ocf_obj.getString("value");
+                    }
+                    break;
+                //ACL
+                case 2:
+                    packet_info = "";
+                    break;
+                //Sco_Data
+                case 3:
+                    packet_info = "";
+                    break;
+                //Event
+                case 4:
+                    JSONObject event_code = jsonHciFrame.getJSONObject("event_code");
+                    packet_info = event_code.getString("value").replace("HCI_EVENT_", "");
+                    break;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -115,4 +139,6 @@ public class SnoopPacket {
      * @return
      */
     public String packet_type;
+
+    public String packet_info;
 }

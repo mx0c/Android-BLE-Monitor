@@ -38,7 +38,7 @@ public class HciPacketListAdapter extends ArrayAdapter<SnoopPacket> {
         mPacket_type.setText(packet.packet_type);
         mPacket_timestamp.setText(mTimestampFormat.format(packet.timestamp));
         mPacket_num.setText(String.valueOf(packet.packet_number));
-        mPacket_info.setText("");
+        mPacket_info.setText(packet.packet_info);
 
         return convertView;
     }

@@ -14,8 +14,6 @@ import com.huc.android_ble_monitor.util.HciSnoopLog;
 import com.huc.android_ble_monitor.util.IPacketReceptionCallback;
 import com.huc.android_ble_monitor.viewmodels.HciLogViewModel;
 
-import java.util.List;
-
 public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPacketReceptionCallback {
     private static final String TAG = "BLEM_HciLogAct";
     private HciSnoopLog mSnoopLog;
@@ -42,18 +40,17 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
     protected void initializeViewModel() {
         mViewModel = new ViewModelProvider(this).get(HciLogViewModel.class);
         mViewModel.init();
-
-        mViewModel.getSnoopPackets().observe(this, new Observer<List<SnoopPacket>>() {
-            @Override
-            public void onChanged(List<SnoopPacket> packets) {
-                mAdapter.notifyDataSetChanged();
-            }
-        });
     }
 
     @Override
-    public void onHciFrameReceived(String snoopFrame, String hciFrame) {
-        this.mViewModel.addSnoopPacket(new SnoopPacket(snoopFrame, hciFrame));
+    public void onHciFrameReceived(final String snoopFrame, final String hciFrame) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mViewModel.addSnoopPacket(new SnoopPacket(snoopFrame, hciFrame));
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
