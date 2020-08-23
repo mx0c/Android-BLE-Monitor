@@ -18,7 +18,8 @@ public class HciPacketListAdapter extends ArrayAdapter<SnoopPacket> {
     private TextView mPacket_timestamp;
     private TextView mPacket_type;
     private TextView mPacket_info;
-    private SimpleDateFormat mTimestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private TextView mPacket_len;
+    private SimpleDateFormat mTimestampFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss.SSS");
 
     public HciPacketListAdapter(@NonNull Context context, @NonNull List<SnoopPacket> objects) {
         super(context, 0, objects);
@@ -39,6 +40,7 @@ public class HciPacketListAdapter extends ArrayAdapter<SnoopPacket> {
         mPacket_timestamp.setText(mTimestampFormat.format(packet.timestamp));
         mPacket_num.setText(String.valueOf(packet.packet_number));
         mPacket_info.setText(packet.packet_info);
+        mPacket_len.setText(packet.original_length + " Byte");
 
         return convertView;
     }
@@ -48,5 +50,6 @@ public class HciPacketListAdapter extends ArrayAdapter<SnoopPacket> {
         mPacket_num = view.findViewById(R.id.packet_num);
         mPacket_timestamp = view.findViewById(R.id.packet_timestamp);
         mPacket_type = view.findViewById(R.id.packet_type);
+        mPacket_len = view.findViewById(R.id.packet_length);
     }
 }

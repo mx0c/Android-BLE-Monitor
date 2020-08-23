@@ -48,7 +48,9 @@ public class SnoopPacket {
                 case 1:
                     if(jsonHciFrame.has("ocf")){
                         JSONObject ocf_obj = jsonHciFrame.getJSONObject("ocf");
-                        packet_info = ocf_obj.getString("value");
+                        packet_info = ocf_obj.getString("value").replace("HCI_CMD_OCF_", "")
+                                .replace("_COMMAND", "").replace("CTRL_BSB_", "")
+                                .replace("INFORMATIONAL_", "").replace("HCI_CMD_OGF_", "");
                     }
                     break;
                 //ACL
