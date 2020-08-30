@@ -3,14 +3,28 @@ package com.huc.android_ble_monitor.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Date;
 
-public class SnoopPacket {
-    public SnoopPacket(String snoopJson, String hciJson){
+public class HciPacket {
+    public HciPacket(String snoopJson, String hciJson){
         parseSnoopJson(snoopJson);
         parseHciJson(hciJson);
+    }
+
+    public enum boundary {
+        CONTINUING_PACKET(1),
+        FIRST_PACKET(2);
+
+        private int value;
+
+        private boundary(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 
     private void parseSnoopJson(String json){
@@ -21,9 +35,9 @@ public class SnoopPacket {
             this.original_length = jsonSnoopFrame.getInt("original_length");
 
             JSONArray arr = jsonSnoopFrame.getJSONArray("packet_data");
-            ArrayList<Integer> cList = new ArrayList(arr.length());
+            ArrayList<Byte> cList = new ArrayList(arr.length());
             for(int i = 0; i < arr.length();i++){
-                cList.add((int)arr.get(i));
+                cList.add((Byte)arr.get(i));
             }
             this.packet_data = cList;
 
@@ -38,6 +52,7 @@ public class SnoopPacket {
     }
 
     private void parseHciJson(String json){
+        this.packet_hci_json = json;
         try {
             JSONObject jsonHciFrame = new JSONObject(json);
             this.packet_type = jsonHciFrame.getJSONObject("packet_type").getString("value").replace("HCI_TYPE_", "");
@@ -55,11 +70,10 @@ public class SnoopPacket {
                     break;
                 //ACL
                 case 2:
-                    packet_info = "";
-                    break;
-                //Sco_Data
+                    packet_boundary_flag = boundary.values()[jsonHciFrame.getInt("packet_boundary_flag")];
+                //SCO
                 case 3:
-                    packet_info = "";
+                    packet_info = "DATA";
                     break;
                 //Event
                 case 4:
@@ -71,6 +85,11 @@ public class SnoopPacket {
             e.printStackTrace();
         }
     }
+
+    /**
+     * raw json of hci Packet
+     */
+    public String packet_hci_json;
 
     /**
      * packet sequential number
@@ -105,7 +124,7 @@ public class SnoopPacket {
      * @brief
      *      packet data
      */
-    public ArrayList<Integer> packet_data;
+    public ArrayList<Byte> packet_data;
 
     /**
      * @brief
@@ -142,5 +161,17 @@ public class SnoopPacket {
      */
     public String packet_type;
 
+    /**
+     * @brief
+     *      defines additional packet info
+     * @return
+     */
     public String packet_info;
+
+    /**
+     * @brief
+     *      defines if packet is first or a continuing packet
+     * @return
+     */
+    public boundary packet_boundary_flag;
 }

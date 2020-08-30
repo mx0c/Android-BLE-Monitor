@@ -1,4 +1,4 @@
-package com.huc.android_ble_monitor;
+package com.huc.android_ble_monitor.activities;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +9,8 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.LogsUtil;
 
@@ -26,6 +28,7 @@ public class LoggingActivity extends AppCompatActivity implements SwipeRefreshLa
         setTheme(R.style.AppTheme);
         setContentView(R.layout.logging_activity);
         ActivityUtil.setToolbar(this, false);
+        ActivityUtil.setToolbarTitle(this, "Application logs");
 
         mSwipeRefreshLayout = findViewById(R.id.LogSwipeContainer);
         mSwipeRefreshLayout.setOnRefreshListener(this);

@@ -1,10 +1,17 @@
 package com.huc.android_ble_monitor.util;
 
 import androidx.annotation.Nullable;
+
+import com.huc.android_ble_monitor.models.AttPacket;
+import com.huc.android_ble_monitor.models.HciPacket;
+import com.huc.android_ble_monitor.models.L2capPacket;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class HciSnoopLog implements IHciDecoder {
@@ -24,7 +31,7 @@ public class HciSnoopLog implements IHciDecoder {
     public HciSnoopLog(IPacketReceptionCallback cb){
         setPacketReceptionCb(cb);
         readSnoopLog();
-        startHciLogStream(BTSNOOP_FALLBACK_PATH, 100);
+        startHciLogStream(BTSNOOP_FALLBACK_PATH, 1000);
     }
 
     @Override
@@ -114,5 +121,23 @@ public class HciSnoopLog implements IHciDecoder {
         if (mCallback != null) {
             mCallback.onFinishedPacketCount(packetCount);
         }
+    }
+
+    public static ArrayList<L2capPacket> convertHciToL2cap(ArrayList<HciPacket> hciPackets){
+        ArrayList<L2capPacket> result = new ArrayList<>();
+        for (HciPacket p: hciPackets) {
+            if(p.packet_type.equals("ACL_DATA")){
+                if(p.packet_boundary_flag == HciPacket.boundary.FIRST_PACKET){
+                    result.add(new L2capPacket(p.packet_data, result.size()+1));
+                }else{
+                    //TODO: add continuing packets to already existing packets
+                }
+            }
+        }
+        return result;
+    }
+
+    public static ArrayList<AttPacket> convertL2capToAtt(ArrayList<L2capPacket> l2capPackets){
+        return null;
     }
 }

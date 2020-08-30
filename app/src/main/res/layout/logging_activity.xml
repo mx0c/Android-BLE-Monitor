@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="1.2"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:text="Tag:"></TextView>
@@ -34,7 +34,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="1.2"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:text="Filter:"></TextView>
@@ -45,6 +45,8 @@
                 android:id="@+id/filterSpinner">
             </Spinner>
         </LinearLayout>
+
+        <!-- Horizontal Divider -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
