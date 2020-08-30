@@ -37,7 +37,7 @@ public class HciPacket {
             JSONArray arr = jsonSnoopFrame.getJSONArray("packet_data");
             ArrayList<Byte> cList = new ArrayList(arr.length());
             for(int i = 0; i < arr.length();i++){
-                cList.add((Byte)arr.get(i));
+                cList.add((byte)arr.getInt(i));
             }
             this.packet_data = cList;
 
@@ -66,11 +66,14 @@ public class HciPacket {
                         packet_info = ocf_obj.getString("value").replace("HCI_CMD_OCF_", "")
                                 .replace("_COMMAND", "").replace("CTRL_BSB_", "")
                                 .replace("INFORMATIONAL_", "").replace("HCI_CMD_OGF_", "");
+                    } else if(jsonHciFrame.has("ogf")){
+                        JSONObject ocf_obj = jsonHciFrame.getJSONObject("ogf");
+                        packet_info = ocf_obj.getString("value").replace("HCI_CMD_OGF_","");
                     }
                     break;
                 //ACL
                 case 2:
-                    packet_boundary_flag = boundary.values()[jsonHciFrame.getInt("packet_boundary_flag")];
+                    packet_boundary_flag = boundary.values()[jsonHciFrame.getInt("packet_boundary_flag")-1];
                 //SCO
                 case 3:
                     packet_info = "DATA";
