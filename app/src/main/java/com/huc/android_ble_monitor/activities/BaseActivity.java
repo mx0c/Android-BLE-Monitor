@@ -1,4 +1,4 @@
-package com.huc.android_ble_monitor;
+package com.huc.android_ble_monitor.activities;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 
+import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 
 import java.io.BufferedReader;

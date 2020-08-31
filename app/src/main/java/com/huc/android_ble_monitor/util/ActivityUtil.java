@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.huc.android_ble_monitor.R;
@@ -57,5 +58,15 @@ public class ActivityUtil {
         } else {
             Objects.requireNonNull(activity.getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    /**
+     * sets the appbar title
+     * @param activity
+     * @param title
+     */
+    public static void setToolbarTitle(AppCompatActivity activity, String title){
+        Toolbar tb = (Toolbar)activity.findViewById(R.id.toolbar);
+        tb.setTitle(title);
     }
 }

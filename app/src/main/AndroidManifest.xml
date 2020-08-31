@@ -25,7 +25,7 @@
             android:enabled="true">
         </service>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,19 +33,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DeviceDetailActivity"
+            android:name=".activities.DeviceDetailActivity"
             android:launchMode="singleInstance"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".activities.MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.huc.android_ble_monitor.MainActivity" />
+                android:value="com.huc.android_ble_monitor.activities.MainActivity" />
         </activity>
-        <activity android:name=".ServicesOverviewActivity"
+        <activity android:name=".activities.ServicesOverviewActivity"
             android:launchMode="singleInstance"
-            android:parentActivityName=".DeviceDetailActivity"></activity>
-        <activity android:name=".LoggingActivity"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.DeviceDetailActivity"></activity>
+        <activity android:name=".activities.LoggingActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:launchMode="singleInstance">
+        </activity>
+        <activity android:name=".activities.HciLogActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:launchMode="singleInstance">
         </activity>
     </application>

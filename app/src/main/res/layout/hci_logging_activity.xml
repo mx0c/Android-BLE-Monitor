@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -12,7 +14,6 @@
             layout="@layout/appbar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"/>
-
         <LinearLayout
             android:layout_marginVertical="10dp"
             android:layout_width="match_parent"
@@ -24,12 +25,12 @@
                 android:layout_weight="1.2"
                 android:gravity="center"
                 android:textStyle="bold"
-                android:text="Tag:"></TextView>
+                android:text="Protocol:"></TextView>
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:id="@+id/tagSpinner">
+                android:id="@+id/protocolSpinner">
             </Spinner>
             <TextView
                 android:layout_width="match_parent"
@@ -37,12 +38,12 @@
                 android:layout_weight="1.2"
                 android:gravity="center"
                 android:textStyle="bold"
-                android:text="Filter:"></TextView>
+                android:text="Type:"></TextView>
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:id="@+id/filterSpinner">
+                android:id="@+id/typeSpinner">
             </Spinner>
         </LinearLayout>
 
@@ -51,15 +52,11 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/primaryDarkColor"></View>
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/LogSwipeContainer"
+
+        <ListView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/logListView">
-            </ListView>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent"
+            android:id="@+id/hci_log_listView">
+        </ListView>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,12 +1,17 @@
 package com.huc.android_ble_monitor.util;
 
-import android.util.Log;
-
 import androidx.annotation.Nullable;
+
+import com.huc.android_ble_monitor.models.AttPacket;
+import com.huc.android_ble_monitor.models.HciPacket;
+import com.huc.android_ble_monitor.models.L2capPacket;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class HciSnoopLog implements IHciDecoder {
@@ -17,15 +22,15 @@ public class HciSnoopLog implements IHciDecoder {
     private String BTSTACK_CONFIG_PATH = "/etc/bluetooth/" + BTSTACK_CONFIG_FILE;
     private String BTSNOOP_FALLBACK_FILE = "btsnoop_hci.log";
     private String BTSNOOP_FALLBACK_PATH = "/sdcard/" + BTSNOOP_FALLBACK_FILE;
-    private IPacketReceptionCallback callback;
+    private IPacketReceptionCallback mCallback;
 
     static {
         System.loadLibrary("hciviewer");
     }
 
-    public HciSnoopLog(){
+    public HciSnoopLog(IPacketReceptionCallback cb){
+        setPacketReceptionCb(cb);
         readSnoopLog();
-        Log.d(TAG, "HciSnoopLog: Read in snoop Log: " + mRawSnoopLog);
         startHciLogStream(BTSNOOP_FALLBACK_PATH, 1000);
     }
 
@@ -86,7 +91,7 @@ public class HciSnoopLog implements IHciDecoder {
 
     @Override
     public void setPacketReceptionCb(IPacketReceptionCallback cb) {
-        callback = cb;
+        mCallback = cb;
     }
 
     /**
@@ -96,14 +101,14 @@ public class HciSnoopLog implements IHciDecoder {
      * @param hciFrame   HCI packet part
      */
     public void onHciFrameReceived(final String snoopFrame, final String hciFrame) {
-        if (callback != null) {
-            callback.onHciFrameReceived(snoopFrame, hciFrame);
+        if (mCallback != null) {
+            mCallback.onHciFrameReceived(snoopFrame, hciFrame);
         }
     }
 
     public void onError(int errorCode, String errorMessage) {
-        if (callback != null) {
-            callback.onError(errorCode, errorMessage);
+        if (mCallback != null) {
+            mCallback.onError(errorCode, errorMessage);
         }
     }
 
@@ -113,8 +118,28 @@ public class HciSnoopLog implements IHciDecoder {
      * @param packetCount total number of HCI packet available
      */
     public void onFinishedPacketCount(int packetCount) {
-        if (callback != null) {
-            callback.onFinishedPacketCount(packetCount);
+        if (mCallback != null) {
+            mCallback.onFinishedPacketCount(packetCount);
         }
+    }
+
+    public static ArrayList<L2capPacket> convertHciToL2cap(ArrayList<HciPacket> hciPackets){
+        ArrayList<L2capPacket> result = new ArrayList<>();
+        for (HciPacket p: hciPackets) {
+            if(p.packet_type.equals("ACL_DATA")){
+                if(p.packet_boundary_flag == HciPacket.boundary.COMPLETE_PACKET ||
+                   p.packet_boundary_flag == HciPacket.boundary.FIRST_PACKET_FLUSHABLE ||
+                   p.packet_boundary_flag == HciPacket.boundary.FIRST_PACKET_NON_FLUSHABLE){
+                    result.add(new L2capPacket(p, result.size()+1));
+                }else{
+                    //TODO: add continuing packets to already existing packets
+                }
+            }
+        }
+        return result;
+    }
+
+    public static ArrayList<AttPacket> convertL2capToAtt(ArrayList<L2capPacket> l2capPackets){
+        return null;
     }
 }

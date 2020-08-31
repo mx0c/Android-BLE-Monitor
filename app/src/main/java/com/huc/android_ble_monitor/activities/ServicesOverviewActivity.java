@@ -1,4 +1,4 @@
-package com.huc.android_ble_monitor;
+package com.huc.android_ble_monitor.activities;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.CharacteristicListAdapter;
 import com.huc.android_ble_monitor.models.BleDevice;
 import com.huc.android_ble_monitor.services.IBLeServiceCallbacks;
