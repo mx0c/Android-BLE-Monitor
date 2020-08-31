@@ -127,8 +127,10 @@ public class HciSnoopLog implements IHciDecoder {
         ArrayList<L2capPacket> result = new ArrayList<>();
         for (HciPacket p: hciPackets) {
             if(p.packet_type.equals("ACL_DATA")){
-                if(p.packet_boundary_flag == HciPacket.boundary.FIRST_PACKET){
-                    result.add(new L2capPacket(p.packet_data, result.size()+1));
+                if(p.packet_boundary_flag == HciPacket.boundary.COMPLETE_PACKET ||
+                   p.packet_boundary_flag == HciPacket.boundary.FIRST_PACKET_FLUSHABLE ||
+                   p.packet_boundary_flag == HciPacket.boundary.FIRST_PACKET_NON_FLUSHABLE){
+                    result.add(new L2capPacket(p, result.size()+1));
                 }else{
                     //TODO: add continuing packets to already existing packets
                 }

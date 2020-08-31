@@ -1,8 +1,13 @@
 package com.huc.android_ble_monitor.viewmodels;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.huc.android_ble_monitor.activities.HciLogActivity;
+import com.huc.android_ble_monitor.adapters.L2capPacketListAdapter;
 import com.huc.android_ble_monitor.models.AttPacket;
 import com.huc.android_ble_monitor.models.HciPacket;
 import com.huc.android_ble_monitor.models.L2capPacket;
@@ -25,12 +30,33 @@ public class HciLogViewModel extends ViewModel {
         packet.packet_number = hciPackets.size() + 1;
         hciPackets.add(packet);
         mHciPackets.postValue(hciPackets);
+    }
 
-        //re-decode l2cap packets
-        ArrayList l2capPackets = mL2capPackets.getValue();
-        l2capPackets.clear();
-        l2capPackets.addAll(HciSnoopLog.convertHciToL2cap(hciPackets));
-        mL2capPackets.postValue(l2capPackets);
+    public void changeProtocol(String protocol, HciLogActivity ctx){
+        //disable type spinner when hci isn't selected
+        if(!protocol.equals("HCI")){
+            ctx.mTypeSpinner.setEnabled(false);
+            ctx.mTypeSpinner.setClickable(false);
+        }else {
+            ctx.mTypeSpinner.setEnabled(true);
+        }
+
+        switch (protocol){
+            case "HCI":
+                ctx.mListView.setAdapter(ctx.mAdapter);
+                break;
+            case "L2CAP":
+                //decode l2cap packets
+                ArrayList l2capPackets = mL2capPackets.getValue();
+                l2capPackets.clear();
+                l2capPackets.addAll(HciSnoopLog.convertHciToL2cap(mHciPackets.getValue()));
+                mL2capPackets.postValue(l2capPackets);
+                ctx.mListView.setAdapter(new L2capPacketListAdapter(ctx, mL2capPackets.getValue()));
+                break;
+            case "ATT":
+
+                break;
+        }
     }
 
     public LiveData<ArrayList<HciPacket>> getSnoopPackets(){

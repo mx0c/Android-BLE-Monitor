@@ -13,8 +13,10 @@ public class HciPacket {
     }
 
     public enum boundary {
+        FIRST_PACKET_FLUSHABLE(0),
         CONTINUING_PACKET(1),
-        FIRST_PACKET(2);
+        FIRST_PACKET_NON_FLUSHABLE(2),
+        COMPLETE_PACKET(3);
 
         private int value;
 
@@ -73,7 +75,7 @@ public class HciPacket {
                     break;
                 //ACL
                 case 2:
-                    packet_boundary_flag = boundary.values()[jsonHciFrame.getInt("packet_boundary_flag")-1];
+                    packet_boundary_flag = boundary.values()[jsonHciFrame.getInt("packet_boundary_flag")];
                 //SCO
                 case 3:
                     packet_info = "DATA";

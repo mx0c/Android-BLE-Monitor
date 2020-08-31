@@ -21,9 +21,9 @@ import com.huc.android_ble_monitor.viewmodels.HciLogViewModel;
 public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPacketReceptionCallback {
     private static final String TAG = "BLEM_HciLogAct";
     private Spinner mProtocolSpinner;
-    private Spinner mTypeSpinner;
-    private ListView mListView;
-    private HciPacketListAdapter mAdapter;
+    public Spinner mTypeSpinner;
+    public ListView mListView;
+    public HciPacketListAdapter mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
         mListView = findViewById(R.id.hci_log_listView);
         mAdapter = new HciPacketListAdapter(this, mViewModel.getSnoopPackets().getValue());
         mListView.setAdapter(mAdapter);
-        HciSnoopLog mSnoopLog = new HciSnoopLog(this);
+        HciSnoopLog snoopLog = new HciSnoopLog(this);
 
         mProtocolSpinner = findViewById(R.id.protocolSpinner);
         mProtocolSpinner.setAdapter(ArrayAdapter.createFromResource(this, R.array.ProtocolArray, android.R.layout.simple_spinner_item));
@@ -43,12 +43,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String protocol = parent.getItemAtPosition(position).toString();
-                if(!protocol.equals("HCI")){
-                    mTypeSpinner.setEnabled(false);
-                    mTypeSpinner.setClickable(false);
-                }else {
-                    mTypeSpinner.setEnabled(true);
-                }
+                mViewModel.changeProtocol(protocol, HciLogActivity.this);
             }
 
             @Override
