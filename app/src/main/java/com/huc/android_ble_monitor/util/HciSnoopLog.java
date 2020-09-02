@@ -140,6 +140,10 @@ public class HciSnoopLog implements IHciDecoder {
     }
 
     public static ArrayList<AttPacket> convertL2capToAtt(ArrayList<L2capPacket> l2capPackets){
-        return null;
+        ArrayList<AttPacket> result = new ArrayList<>();
+        for(L2capPacket p: l2capPackets){
+            result.add(new AttPacket(p.packet_data, result.size()+1));
+        }
+        return result;
     }
 }

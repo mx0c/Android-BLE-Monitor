@@ -44,11 +44,11 @@ typedef struct hci_acl : IHciFrame{
 	std::vector<uint8_t> acl_data;
 
 	hci_acl(const std::vector<char> &data){
-		connection_handle = (((data[0] & 0x0F) << 8) + (data[1] & 0xF0)) >> 4;
-		packet_boundary_flag = data[1] & 0x0C;
-		broadcast_flag = data[1] & 0x03;
-		data_total_length = (data[2]<<8) + data[3];
-		for (unsigned int i = 4; i  < data.size(); i++){
+		connection_handle = data[ACL_FRAME_OFFSET + 0];
+		packet_boundary_flag = data[ACL_FRAME_OFFSET + 1] & 0x0C;
+		broadcast_flag = data[ACL_FRAME_OFFSET + 1] & 0x03;
+		data_total_length = data[ACL_FRAME_OFFSET + 2] + (data[ACL_FRAME_OFFSET + 3] << 8);
+		for (unsigned int i = ACL_FRAME_OFFSET + 4; i  < data.size(); i++){
 			acl_data.push_back(data[i]);
 		}
 	}

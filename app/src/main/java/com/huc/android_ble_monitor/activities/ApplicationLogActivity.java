@@ -15,7 +15,7 @@ import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.LogsUtil;
 
 
-public class LoggingActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener  {
+public class ApplicationLogActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener  {
     private ListView mListView;
     private Spinner mTagSpinner;
     private Spinner mFilterSpinner;
@@ -43,7 +43,7 @@ public class LoggingActivity extends AppCompatActivity implements SwipeRefreshLa
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String tag = parent.getItemAtPosition(position).toString();
                 String filter = mFilterSpinner.getSelectedItem().toString();
-                mListView.setAdapter(new ArrayAdapter<String>(LoggingActivity.this, android.R.layout.simple_list_item_1, LogsUtil.readLogs(filter, tag)));
+                mListView.setAdapter(new ArrayAdapter<String>(ApplicationLogActivity.this, android.R.layout.simple_list_item_1, LogsUtil.readLogs(filter, tag)));
             }
 
             @Override
@@ -57,7 +57,7 @@ public class LoggingActivity extends AppCompatActivity implements SwipeRefreshLa
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String filter = parent.getItemAtPosition(position).toString();
                 String tag = mTagSpinner.getSelectedItem().toString();
-                mListView.setAdapter(new ArrayAdapter<String>(LoggingActivity.this, android.R.layout.simple_list_item_1, LogsUtil.readLogs(filter, tag)));
+                mListView.setAdapter(new ArrayAdapter<String>(ApplicationLogActivity.this, android.R.layout.simple_list_item_1, LogsUtil.readLogs(filter, tag)));
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
@@ -68,7 +68,7 @@ public class LoggingActivity extends AppCompatActivity implements SwipeRefreshLa
     public void onRefresh() {
         String filter = mFilterSpinner.getSelectedItem().toString();
         String tag = mTagSpinner.getSelectedItem().toString();
-        mListView.setAdapter(new ArrayAdapter<String>(LoggingActivity.this, android.R.layout.simple_list_item_1, LogsUtil.readLogs(filter, tag)));
+        mListView.setAdapter(new ArrayAdapter<String>(ApplicationLogActivity.this, android.R.layout.simple_list_item_1, LogsUtil.readLogs(filter, tag)));
         mSwipeRefreshLayout.setRefreshing(false);
     }
 }

@@ -3,6 +3,8 @@ package com.huc.android_ble_monitor.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -41,7 +43,7 @@ public class HciPacket {
             for(int i = 0; i < arr.length();i++){
                 cList.add((byte)arr.getInt(i));
             }
-            this.packet_data = cList;
+            this.packet_data_raw = cList;
 
             this.packet_destination = jsonSnoopFrame.getBoolean("packet_received") ? "PACKET_RECEIVED" : "PACKET_SENT";
             this.packet_sent = jsonSnoopFrame.getBoolean("packet_sent");
@@ -79,6 +81,11 @@ public class HciPacket {
                 //SCO
                 case 3:
                     packet_info = "DATA";
+                    packet_data = new ArrayList<Byte>();
+                    JSONArray data = jsonHciFrame.getJSONArray("data");
+                    for(int i = 0; i < data.length(); i++){
+                        packet_data.add((byte)data.getInt(i));
+                    }
                     break;
                 //Event
                 case 4:
@@ -130,6 +137,12 @@ public class HciPacket {
      *      packet data
      */
     public ArrayList<Byte> packet_data;
+
+    /**
+     * @brief
+     *      raw packet data
+     */
+    public ArrayList<Byte> packet_data_raw;
 
     /**
      * @brief

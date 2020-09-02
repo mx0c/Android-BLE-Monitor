@@ -179,7 +179,7 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
                 startActivity(i);
                 return true;
             case R.id.action_logging:
-                Intent j = new Intent(this, LoggingActivity.class);
+                Intent j = new Intent(this, ApplicationLogActivity.class);
                 startActivity(j);
                 return true;
             default:

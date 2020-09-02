@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.huc.android_ble_monitor.activities.HciLogActivity;
+import com.huc.android_ble_monitor.adapters.AttPacketListAdapter;
 import com.huc.android_ble_monitor.adapters.L2capPacketListAdapter;
 import com.huc.android_ble_monitor.models.AttPacket;
 import com.huc.android_ble_monitor.models.HciPacket;
@@ -45,16 +46,15 @@ public class HciLogViewModel extends ViewModel {
             case "HCI":
                 ctx.mListView.setAdapter(ctx.mAdapter);
                 break;
-            case "L2CAP":
-                //decode l2cap packets
-                ArrayList l2capPackets = mL2capPackets.getValue();
-                l2capPackets.clear();
-                l2capPackets.addAll(HciSnoopLog.convertHciToL2cap(mHciPackets.getValue()));
-                mL2capPackets.postValue(l2capPackets);
-                ctx.mListView.setAdapter(new L2capPacketListAdapter(ctx, mL2capPackets.getValue()));
-                break;
             case "ATT":
-
+                //re-decode L2CAP + ATT packets
+                mAttPackets.postValue(HciSnoopLog.convertL2capToAtt(mL2capPackets.getValue()));
+                ctx.mListView.setAdapter(new AttPacketListAdapter(ctx, mAttPackets.getValue()));
+                break;
+            case "L2CAP":
+                //re-decode l2CAP packets
+                mL2capPackets.postValue(HciSnoopLog.convertHciToL2cap(mHciPackets.getValue()));
+                ctx.mListView.setAdapter(new L2capPacketListAdapter(ctx, mL2capPackets.getValue()));
                 break;
         }
     }

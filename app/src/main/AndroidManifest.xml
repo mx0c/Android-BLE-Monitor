@@ -44,7 +44,7 @@
         <activity android:name=".activities.ServicesOverviewActivity"
             android:launchMode="singleInstance"
             android:parentActivityName=".activities.DeviceDetailActivity"></activity>
-        <activity android:name=".activities.LoggingActivity"
+        <activity android:name=".activities.ApplicationLogActivity"
             android:parentActivityName=".activities.MainActivity"
             android:launchMode="singleInstance">
         </activity>
