@@ -23,7 +23,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
     private Spinner mProtocolSpinner;
     public Spinner mTypeSpinner;
     public ListView mListView;
-    public HciPacketListAdapter mAdapter;
+    public ArrayAdapter mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,17 +51,6 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
         });
 
         mTypeSpinner = findViewById(R.id.typeSpinner);
-        mTypeSpinner.setAdapter(ArrayAdapter.createFromResource(this, R.array.HciTypeArray, android.R.layout.simple_spinner_item));
-        mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String type = parent.getItemAtPosition(position).toString();
-                mAdapter = new HciPacketListAdapter(HciLogActivity.this, mViewModel.getFilteredHciPackets(type));
-                mListView.setAdapter(mAdapter);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
     }
 
     @Override

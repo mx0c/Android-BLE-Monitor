@@ -1,24 +1,25 @@
 package com.huc.android_ble_monitor.viewmodels;
 
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.activities.HciLogActivity;
 import com.huc.android_ble_monitor.adapters.AttPacketListAdapter;
+import com.huc.android_ble_monitor.adapters.HciPacketListAdapter;
 import com.huc.android_ble_monitor.adapters.L2capPacketListAdapter;
 import com.huc.android_ble_monitor.models.AttPacket;
 import com.huc.android_ble_monitor.models.HciPacket;
 import com.huc.android_ble_monitor.models.L2capPacket;
-import com.huc.android_ble_monitor.util.HciSnoopLogUtil;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class HciLogViewModel extends ViewModel {
     private MutableLiveData<ArrayList<HciPacket>> mHciPackets = new MutableLiveData<>();
     private MutableLiveData<ArrayList<L2capPacket>> mL2capPackets = new MutableLiveData<>();
     private MutableLiveData<ArrayList<AttPacket>> mAttPackets = new MutableLiveData<>();
-    private boolean mProtocolsInitialized = false;
 
     public void init(){
         mHciPackets.setValue(new ArrayList<HciPacket>());
@@ -53,9 +54,9 @@ public class HciLogViewModel extends ViewModel {
 
     }
 
-    public void changeProtocol(String protocol, HciLogActivity ctx){
-        //disable type spinner when hci isn't selected
-        if(!protocol.equals("HCI")){
+    public void changeProtocol(String protocol, final HciLogActivity ctx){
+        //disable type spinner when L2CAP is selected
+        if(protocol.equals("L2CAP")){
             ctx.mTypeSpinner.setEnabled(false);
             ctx.mTypeSpinner.setClickable(false);
         }else {
@@ -64,13 +65,40 @@ public class HciLogViewModel extends ViewModel {
 
         switch (protocol){
             case "HCI":
+                ctx.mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String type = parent.getItemAtPosition(position).toString();
+                        ctx.mAdapter = new HciPacketListAdapter(ctx, getFilteredHciPackets(type));
+                        ctx.mListView.setAdapter(ctx.mAdapter);
+                        ctx.mAdapter.notifyDataSetChanged();
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {}
+                });
+                ctx.mTypeSpinner.setAdapter(ArrayAdapter.createFromResource(ctx, R.array.HciTypeArray, android.R.layout.simple_spinner_item));
+                ctx.mAdapter = new HciPacketListAdapter(ctx, mHciPackets.getValue());
                 ctx.mListView.setAdapter(ctx.mAdapter);
                 break;
             case "ATT":
-                ctx.mListView.setAdapter(new AttPacketListAdapter(ctx, mAttPackets.getValue()));
+                ctx.mTypeSpinner.setAdapter(ArrayAdapter.createFromResource(ctx, R.array.AttTypeArray, android.R.layout.simple_spinner_item));
+                ctx.mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String type = parent.getItemAtPosition(position).toString();
+                        ctx.mAdapter = new AttPacketListAdapter(ctx, getFilteredAttPackets(type));
+                        ctx.mListView.setAdapter(ctx.mAdapter);
+                        ctx.mAdapter.notifyDataSetChanged();
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {}
+                });
+                ctx.mAdapter = new AttPacketListAdapter(ctx, mAttPackets.getValue());
+                ctx.mListView.setAdapter(ctx.mAdapter);
                 break;
             case "L2CAP":
-                ctx.mListView.setAdapter(new L2capPacketListAdapter(ctx, mL2capPackets.getValue()));
+                ctx.mAdapter = new L2capPacketListAdapter(ctx, mL2capPackets.getValue());
+                ctx.mListView.setAdapter(ctx.mAdapter);
                 break;
         }
     }
@@ -80,16 +108,31 @@ public class HciLogViewModel extends ViewModel {
     }
 
     public ArrayList<HciPacket> getFilteredHciPackets(String type){
-        ArrayList<HciPacket> filteredList = new ArrayList<>();
-
         //return unfiltered HCI Packets
         if(type.equals("All")){
             return mHciPackets.getValue();
         }
 
         //filter packets by provided type
+        ArrayList<HciPacket> filteredList = new ArrayList<>();
         for (HciPacket p: mHciPackets.getValue()) {
             if(p.packet_type.equals(type.toUpperCase())){
+                filteredList.add(p);
+            }
+        }
+        return filteredList;
+    }
+
+    public ArrayList<AttPacket> getFilteredAttPackets(String type){
+        //return unfiltered ATT Packets
+        if(type.equals("All")){
+            return mAttPackets.getValue();
+        }
+
+        //filter packets by provided type
+        ArrayList<AttPacket> filteredList = new ArrayList<>();
+        for (AttPacket p: mAttPackets.getValue()) {
+            if(p.packet_type.equals(type)){
                 filteredList.add(p);
             }
         }
