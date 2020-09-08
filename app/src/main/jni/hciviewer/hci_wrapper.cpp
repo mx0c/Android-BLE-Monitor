@@ -43,7 +43,7 @@ static BtSnoopMonitor monitor;
 
 extern "C" {
 
-JNIEXPORT void JNICALL Java_com_huc_android_1ble_1monitor_util_HciSnoopLog_startHciLogStream(JNIEnv* env, jobject obj,jstring filePath,jint lastPacketCount)
+JNIEXPORT void JNICALL Java_com_huc_android_1ble_1monitor_util_HciSnoopLogUtil_startHciLogStream(JNIEnv* env, jobject obj, jstring filePath, jint lastPacketCount)
 {
 	monitor.jobj = env->NewGlobalRef(obj);
 
@@ -94,7 +94,7 @@ JNIEXPORT void JNICALL Java_com_huc_android_1ble_1monitor_util_HciSnoopLog_start
 
 extern "C" {
 
-JNIEXPORT void JNICALL Java_com_huc_android_1ble_1monitor_util_HciSnoopLog_stopHciLogStream(JNIEnv* env, jobject obj)
+JNIEXPORT void JNICALL Java_com_huc_android_1ble_1monitor_util_HciSnoopLogUtil_stopHciLogStream(JNIEnv* env, jobject obj)
 {
 	__android_log_print(ANDROID_LOG_VERBOSE,"stopHciLogStream","stopping thread\n");
 	parser.stop();
