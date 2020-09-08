@@ -24,7 +24,6 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     private static final String TAG = "BLEM_ScanResultRecyclerAdapt";
 
     private OnDeviceConnectListener mOnDeviceConnectListener;
-
     private List<BleDevice> mBleDevices;
     private Context mContext;
     private PropertyResolver propertyResolver;

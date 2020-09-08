@@ -43,4 +43,20 @@
         <item>BLEM_BluetoothLeService</item>
         <item>BLEM_LogActivity</item>
     </string-array>
+
+    <!-- Protocol Entries -->
+    <string-array name="ProtocolArray">
+        <item>HCI</item>
+        <item>L2CAP</item>
+        <item>ATT</item>
+    </string-array>
+
+    <!-- HCI Type Entries -->
+    <string-array name="HciTypeArray">
+        <item>All</item>
+        <item>Command</item>
+        <item>Event</item>
+        <item>ACL_Data</item>
+        <item>SCO_Data</item>
+    </string-array>
 </resources>
