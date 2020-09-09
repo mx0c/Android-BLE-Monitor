@@ -1,4 +1,4 @@
-package com.huc.android_ble_monitor.models;
+package com.huc.android_ble_monitor.models.AttProtocol;
 
 public enum AttOpCodeMethod {
     NOT_DEFINED(0x00),
@@ -36,7 +36,7 @@ public enum AttOpCodeMethod {
 
     private int opcode;
 
-    private AttOpCodeMethod(int opcode) {
+    AttOpCodeMethod(int opcode) {
         this.opcode = opcode;
     }
 

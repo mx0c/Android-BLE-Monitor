@@ -1,12 +1,11 @@
-package com.huc.android_ble_monitor.models;
-
+package com.huc.android_ble_monitor.models.AttProtocol;
 import java.util.ArrayList;
 
-public class AttPacket {
-    public AttPacket(ArrayList<Byte> data, int number){
+public class BaseAttPacket {
+    public BaseAttPacket(ArrayList<Byte> data, int number){
         this.packet_number = number;
-        Byte opcode = data.get(0);
         //decode opcode
+        Byte opcode = data.get(0);
         this.packet_method = AttOpCodeMethod.getAttOpCodeMethod(opcode & 0x3f);
         this.packet_command_flag = ((opcode & 0x40) >> 6) == 1;
         this.packet_authentication_signature_flag = ((opcode & 0x80) >> 7) == 1;
@@ -24,10 +23,6 @@ public class AttPacket {
     public int packet_number;
 
     private String resolvePacketType(){
-        //return empty string if method is unknown
-        if(this.packet_method.getValue() == 0){
-            return "";
-        }
         String[] parts = this.packet_method.name().split("_");
         switch(parts[parts.length-1]){
             case "CMD":

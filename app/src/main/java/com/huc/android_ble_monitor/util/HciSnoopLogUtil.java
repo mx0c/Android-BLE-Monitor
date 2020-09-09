@@ -1,14 +1,11 @@
 package com.huc.android_ble_monitor.util;
 
 import androidx.annotation.Nullable;
-import com.huc.android_ble_monitor.models.AttPacket;
-import com.huc.android_ble_monitor.models.HciPacket;
-import com.huc.android_ble_monitor.models.L2capPacket;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Properties;
 
 public class HciSnoopLogUtil implements IHciDecoder {

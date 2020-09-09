@@ -11,7 +11,7 @@ import com.huc.android_ble_monitor.activities.HciLogActivity;
 import com.huc.android_ble_monitor.adapters.AttPacketListAdapter;
 import com.huc.android_ble_monitor.adapters.HciPacketListAdapter;
 import com.huc.android_ble_monitor.adapters.L2capPacketListAdapter;
-import com.huc.android_ble_monitor.models.AttPacket;
+import com.huc.android_ble_monitor.models.AttProtocol.BaseAttPacket;
 import com.huc.android_ble_monitor.models.HciPacket;
 import com.huc.android_ble_monitor.models.L2capPacket;
 import java.util.ArrayList;
@@ -19,12 +19,12 @@ import java.util.ArrayList;
 public class HciLogViewModel extends ViewModel {
     private MutableLiveData<ArrayList<HciPacket>> mHciPackets = new MutableLiveData<>();
     private MutableLiveData<ArrayList<L2capPacket>> mL2capPackets = new MutableLiveData<>();
-    private MutableLiveData<ArrayList<AttPacket>> mAttPackets = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<BaseAttPacket>> mAttPackets = new MutableLiveData<>();
 
     public void init(){
         mHciPackets.setValue(new ArrayList<HciPacket>());
         mL2capPackets.setValue(new ArrayList<L2capPacket>());
-        mAttPackets.setValue(new ArrayList<AttPacket>());
+        mAttPackets.setValue(new ArrayList<BaseAttPacket>());
     }
 
     public void addSnoopPacket(HciPacket packet){
@@ -44,8 +44,8 @@ public class HciLogViewModel extends ViewModel {
                 mL2capPackets.postValue(L2capPackets);
                 //convert to ATT
                 ArrayList AttPackets = mAttPackets.getValue();
-                AttPacket attPacket = new AttPacket(l2capPacket.packet_data, AttPackets.size() + 1);
-                AttPackets.add(attPacket);
+                BaseAttPacket baseAttPacket = new BaseAttPacket(l2capPacket.packet_data, AttPackets.size() + 1);
+                AttPackets.add(baseAttPacket);
                 mAttPackets.postValue(AttPackets);
             }else{
                 //TODO: add continuing ACL packets to already existing L2CAP packets
@@ -123,15 +123,15 @@ public class HciLogViewModel extends ViewModel {
         return filteredList;
     }
 
-    public ArrayList<AttPacket> getFilteredAttPackets(String type){
+    public ArrayList<BaseAttPacket> getFilteredAttPackets(String type){
         //return unfiltered ATT Packets
         if(type.equals("All")){
             return mAttPackets.getValue();
         }
 
         //filter packets by provided type
-        ArrayList<AttPacket> filteredList = new ArrayList<>();
-        for (AttPacket p: mAttPackets.getValue()) {
+        ArrayList<BaseAttPacket> filteredList = new ArrayList<>();
+        for (BaseAttPacket p: mAttPackets.getValue()) {
             if(p.packet_type.equals(type)){
                 filteredList.add(p);
             }
