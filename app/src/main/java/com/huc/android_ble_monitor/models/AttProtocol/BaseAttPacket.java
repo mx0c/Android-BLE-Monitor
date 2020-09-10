@@ -14,6 +14,9 @@ public class BaseAttPacket {
         this.packet_data = data;
     }
 
+    public static int DEFAULT_MTU_SIZE = 23;
+    public static int MTU_SIZE = DEFAULT_MTU_SIZE;
+
     public boolean packet_authentication_signature_flag;
     public boolean packet_command_flag;
     public AttOpCodeMethod packet_method;
