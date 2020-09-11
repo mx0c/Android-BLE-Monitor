@@ -3,7 +3,6 @@ package com.huc.android_ble_monitor.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class HciPacket {
@@ -19,11 +18,9 @@ public class HciPacket {
         COMPLETE_PACKET(3);
 
         private int value;
-
-        private boundary(int value) {
+        boundary(int value) {
             this.value = value;
         }
-
         public int getValue() {
             return value;
         }
