@@ -1,15 +1,14 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
-import java.util.ArrayList;
 
 public class BaseAttPacket {
-    public BaseAttPacket(ArrayList<Byte> data, int number){
+    public BaseAttPacket(Byte[] data, int number){
         this.packet_number = number;
         //decode opcode
-        Byte opcode = data.get(0);
+        Byte opcode = data[0];
         this.packet_method = AttOpCodeMethod.getAttOpCodeMethod(opcode & 0x3f);
         this.packet_command_flag = ((opcode & 0x40) >> 6) == 1;
         this.packet_authentication_signature_flag = ((opcode & 0x80) >> 7) == 1;
-        this.packet_length = data.size();
+        this.packet_length = data.length;
         this.packet_type = resolvePacketType();
         this.packet_data = data;
     }
@@ -22,7 +21,7 @@ public class BaseAttPacket {
     public AttOpCodeMethod packet_method;
     public String packet_type;
     public int packet_length;
-    public ArrayList<Byte> packet_data;
+    public Byte[] packet_data;
     public int packet_number;
 
     private String resolvePacketType(){

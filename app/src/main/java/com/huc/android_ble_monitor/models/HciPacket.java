@@ -3,8 +3,6 @@ package com.huc.android_ble_monitor.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -39,9 +37,9 @@ public class HciPacket {
             this.original_length = jsonSnoopFrame.getInt("original_length");
 
             JSONArray arr = jsonSnoopFrame.getJSONArray("packet_data");
-            ArrayList<Byte> cList = new ArrayList(arr.length());
+            Byte[] cList = new Byte[arr.length()];
             for(int i = 0; i < arr.length();i++){
-                cList.add((byte)arr.getInt(i));
+                cList[i] = (byte)arr.getInt(i);
             }
             this.packet_data_raw = cList;
 
@@ -81,10 +79,10 @@ public class HciPacket {
                 //SCO
                 case 3:
                     packet_info = "DATA";
-                    packet_data = new ArrayList<Byte>();
                     JSONArray data = jsonHciFrame.getJSONArray("data");
+                    packet_data = new Byte[data.length()];
                     for(int i = 0; i < data.length(); i++){
-                        packet_data.add((byte)data.getInt(i));
+                        packet_data[i] = (byte) data.getInt(i);
                     }
                     break;
                 //Event
@@ -136,13 +134,13 @@ public class HciPacket {
      * @brief
      *      packet data
      */
-    public ArrayList<Byte> packet_data;
+    public Byte[] packet_data;
 
     /**
      * @brief
      *      raw packet data
      */
-    public ArrayList<Byte> packet_data_raw;
+    public Byte[] packet_data_raw;
 
     /**
      * @brief

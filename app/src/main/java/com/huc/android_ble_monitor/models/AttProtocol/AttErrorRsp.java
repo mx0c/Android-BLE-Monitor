@@ -1,18 +1,17 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
-import java.util.ArrayList;
 
 class AttErrorRsp extends BaseAttPacket {
-    public AttErrorRsp(ArrayList<Byte> data, int number) {
+    public AttErrorRsp(Byte[] data, int number) {
         super(data, number);
-        this.requested_opcode_error = AttOpCodeMethod.getAttOpCodeMethod(data.get(1));
+        this.requested_opcode_error = AttOpCodeMethod.getAttOpCodeMethod(data[1]);
         this.error_attribute_handle = extractErrorAttHandle(data);
-        this.error_code = AttErrorCode.getAttErrorCode(data.get(4));
+        this.error_code = AttErrorCode.getAttErrorCode(data[4]);
     }
 
-    private int extractErrorAttHandle(ArrayList<Byte> data){
-        Byte LSB = data.get(2);
-        Byte MSB = data.get(3);
+    private int extractErrorAttHandle(Byte[] data){
+        Byte LSB = data[2];
+        Byte MSB = data[3];
         return (MSB << 8) + LSB;
     }
 

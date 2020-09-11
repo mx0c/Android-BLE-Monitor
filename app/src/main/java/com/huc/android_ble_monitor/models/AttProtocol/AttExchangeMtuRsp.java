@@ -1,10 +1,9 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
-import java.util.ArrayList;
 
 class AttExchangeMtuRsp extends BaseAttPacket{
     private short mReceivedAttMTU;
 
-    public AttExchangeMtuRsp(ArrayList<Byte> data, int number) {
+    public AttExchangeMtuRsp(Byte[] data, int number) {
         super(data, number);
         mReceivedAttMTU = extractMtu(data);
 
@@ -12,9 +11,9 @@ class AttExchangeMtuRsp extends BaseAttPacket{
         BaseAttPacket.MTU_SIZE = mReceivedAttMTU;
     }
 
-    private short extractMtu(ArrayList<Byte> data){
-        byte LSB = data.get(1);
-        byte MSB = data.get(2);
+    private short extractMtu(Byte[] data){
+        byte LSB = data[1];
+        byte MSB = data[2];
         return (short)((MSB << 8) + LSB);
     }
 }

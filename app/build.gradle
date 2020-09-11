@@ -61,4 +61,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc01"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    // Apache commons
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 }
