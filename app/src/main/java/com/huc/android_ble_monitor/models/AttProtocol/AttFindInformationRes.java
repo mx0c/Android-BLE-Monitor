@@ -1,6 +1,8 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
 import android.util.Pair;
+
+import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
@@ -57,12 +59,16 @@ class AttFindInformationRes extends BaseAttPacket{
         while(length >= getTupleSize()) {
             // decode handle
             Short handle = (short) ((data[i + 1] << 8) + data[i]);
+
             // convert arraylist<Byte> to byte[] and decode 128 bit UUID
             byte[] byteArray = new byte[16];
             int j = 0;
             for (Byte b : Arrays.copyOfRange(data, i + 2, i + 16)) {
                 byteArray[j++] = b.byteValue();
             }
+            //Reverse Array because of Little Endian formatting
+            ArrayUtils.reverse(byteArray);
+
             UUID uuid = UUID.nameUUIDFromBytes(byteArray);
             result.add(new Pair(handle, uuid));
             i += getTupleSize();
@@ -84,6 +90,7 @@ class AttFindInformationRes extends BaseAttPacket{
         while(length >= getTupleSize()) {
             // decode handle
             Short handle = (short) ((data[i + 1] << 8) + data[i]);
+
             // decode 16 bit UUID and insert into base UUID mnemonic
             String LSBHex = String.format("%02X ", data[i + 2]);
             String MSBHex = String.format("%02X ", data[i + 3]);
