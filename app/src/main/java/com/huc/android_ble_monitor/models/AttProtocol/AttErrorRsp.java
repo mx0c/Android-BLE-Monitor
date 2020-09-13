@@ -1,18 +1,18 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
 
-class AttErrorRsp extends BaseAttPacket {
-    public AttErrorRsp(Byte[] data, int number) {
-        super(data, number);
+public class AttErrorRsp extends BaseAttPacket {
+    public AttErrorRsp(Byte[] data) {
+        super(data);
         this.requested_opcode_error = AttOpCodeMethod.getAttOpCodeMethod(data[1]);
         this.error_attribute_handle = decodeErrorAttHandle(data);
         this.error_code = AttErrorCode.getAttErrorCode(data[4]);
     }
 
-    private int decodeErrorAttHandle(Byte[] data){
+    private short decodeErrorAttHandle(Byte[] data){
         Byte LSB = data[2];
         Byte MSB = data[3];
-        return (MSB << 8) + LSB;
+        return (short)((MSB << 8) + LSB);
     }
 
     /**
@@ -23,10 +23,19 @@ class AttErrorRsp extends BaseAttPacket {
     /**
      * The attribute handle that generated this ATT_ERROR_RSP PDU.
      */
-    public int error_attribute_handle;
+    public short error_attribute_handle;
 
     /**
      * The reason why the request has generated an ATT_ERROR_RSP PDU.
      */
     public AttErrorCode error_code;
+
+    @Override
+    public String toString(){
+        String res = super.toString() + "\n";
+        res += "Error caused by: " + this.requested_opcode_error.name() + "\n";
+        res += "Error Attribute Handle: " + this.error_attribute_handle + "\n";
+        res += "Error: " + this.error_code.name() + "\n";
+        return res;
+    }
 }

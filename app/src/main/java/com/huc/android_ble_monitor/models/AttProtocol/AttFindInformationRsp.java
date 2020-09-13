@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
-class AttFindInformationRes extends BaseAttPacket{
+public class AttFindInformationRsp extends BaseAttPacket{
     public enum UuidFormat {
         UUID_16_BIT(0x01),
         UUID_128_BIT(0x02),
@@ -35,8 +35,8 @@ class AttFindInformationRes extends BaseAttPacket{
     public ArrayList<Pair<Short, UUID>> mHandleUuidList;
     private final String BLE_BASE_UUID_16_BIT_MNEMONIC = "0000xxxx-0000-1000-8000-00805F9B34FB";
 
-    public AttFindInformationRes(Byte[] data, int number) {
-        super(data, number);
+    public AttFindInformationRsp(Byte[] data) {
+        super(data);
         mFormat = UuidFormat.getUuidFormat(data[1]);
 
         if(mFormat == UuidFormat.UUID_128_BIT){
@@ -92,8 +92,8 @@ class AttFindInformationRes extends BaseAttPacket{
             Short handle = (short) ((data[i + 1] << 8) + data[i]);
 
             // decode 16 bit UUID and insert into base UUID mnemonic
-            String LSBHex = String.format("%02X ", data[i + 2]);
-            String MSBHex = String.format("%02X ", data[i + 3]);
+            String LSBHex = String.format("%02X", data[i + 2]);
+            String MSBHex = String.format("%02X", data[i + 3]);
             String uuid16Bit = MSBHex + LSBHex;
 
             // convert 16 Bit UUID to 128 Bit UUID
@@ -112,5 +112,20 @@ class AttFindInformationRes extends BaseAttPacket{
      */
     private int getTupleSize() {
         return  mFormat == UuidFormat.UUID_128_BIT ? 2 + (128/8) : 2 + (16/2);
+    }
+
+    @Override
+    public String toString(){
+        String listString = "";
+        for(Pair<Short, UUID> p : mHandleUuidList){
+            listString += "Handle: " + p.first + ", " + "UUID: " + p.second.toString() + "\n";
+        }
+
+        String res = super.toString() + "\n";
+        res += "UUID Format: " + mFormat.name() + "\n";
+        res += "List of Handle + UUID tuples: \n";
+        res += listString;
+
+        return res;
     }
 }

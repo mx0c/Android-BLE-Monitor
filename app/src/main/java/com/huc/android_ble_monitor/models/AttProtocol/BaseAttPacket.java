@@ -1,8 +1,7 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
 public class BaseAttPacket {
-    public BaseAttPacket(Byte[] data, int number){
-        this.packet_number = number;
+    public BaseAttPacket(Byte[] data){
         //decode opcode
         Byte opcode = data[0];
         this.packet_method = AttOpCodeMethod.getAttOpCodeMethod(opcode & 0x3f);
@@ -42,5 +41,18 @@ public class BaseAttPacket {
             default:
                 return "";
         }
+    }
+
+    @Override
+    public String toString(){
+        String res = "";
+        res += "Packet Type: " + this.packet_method.name() + "\n";
+        res += "Auth Signature flag: " + (this.packet_authentication_signature_flag ? "1" : "0") + "\n";
+        res += "Command Flag: " + (this.packet_command_flag ? "1" : "0") + "\n";
+        res += "Raw Data as Hex: ";
+        for(Byte b : this.packet_data){
+            res += String.format("%02X ", b);
+        }
+        return res;
     }
 }

@@ -48,13 +48,12 @@ public class AttPacketListAdapter extends ArrayAdapter<BaseAttPacket> {
             @Override
             public void onClick(View v) {
                 new MaterialAlertDialogBuilder(mCtx)
-                        .setTitle("Raw Data:")
-                        .setMessage(packet.packet_data.toString())
+                        .setTitle("Packet Informations:")
+                        .setMessage(packet.toString())
                         .setNeutralButton("OK", null)
                         .show();
             }
         });
-
         return convertView;
     }
 
