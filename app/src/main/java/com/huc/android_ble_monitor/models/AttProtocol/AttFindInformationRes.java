@@ -31,8 +31,8 @@ class AttFindInformationRes extends BaseAttPacket{
         }
     }
 
-    private UuidFormat mFormat;
-    private ArrayList<Pair<Short, UUID>> mHandleUuidList;
+    public UuidFormat mFormat;
+    public ArrayList<Pair<Short, UUID>> mHandleUuidList;
     private final String BLE_BASE_UUID_16_BIT_MNEMONIC = "0000xxxx-0000-1000-8000-00805F9B34FB";
 
     public AttFindInformationRes(Byte[] data, int number) {

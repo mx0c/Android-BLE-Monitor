@@ -5,11 +5,11 @@ class AttErrorRsp extends BaseAttPacket {
     public AttErrorRsp(Byte[] data, int number) {
         super(data, number);
         this.requested_opcode_error = AttOpCodeMethod.getAttOpCodeMethod(data[1]);
-        this.error_attribute_handle = extractErrorAttHandle(data);
+        this.error_attribute_handle = decodeErrorAttHandle(data);
         this.error_code = AttErrorCode.getAttErrorCode(data[4]);
     }
 
-    private int extractErrorAttHandle(Byte[] data){
+    private int decodeErrorAttHandle(Byte[] data){
         Byte LSB = data[2];
         Byte MSB = data[3];
         return (MSB << 8) + LSB;

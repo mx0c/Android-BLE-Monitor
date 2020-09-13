@@ -5,22 +5,22 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.Arrays;
 
 class AttWriteReq extends BaseAttPacket {
-    private short mHandle;
-    private Byte[] mValue;
+    public short mHandle;
+    public Byte[] mValue;
 
     public AttWriteReq(Byte[] data, int number) {
         super(data, number);
-        mHandle = extractHandle(data);
-        mValue = extractValue(data);
+        mHandle = decodeHandle(data);
+        mValue = decodeValue(data);
     }
 
-    private Byte[] extractValue(Byte[] data){
-        Byte[] temp = Arrays.copyOfRange(data, 3, this.packet_length - 3);
+    private Byte[] decodeValue(Byte[] data){
+        Byte[] temp = Arrays.copyOfRange(data, 3, this.packet_length - 4);
         ArrayUtils.reverse(temp);
         return temp;
     }
 
-    private short extractHandle(Byte[] data){
+    private short decodeHandle(Byte[] data){
         byte LSB = data[1];
         byte MSB = data[2];
         return (short)((MSB << 8) + LSB);
