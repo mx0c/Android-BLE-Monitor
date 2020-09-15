@@ -1,5 +1,7 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
+import com.huc.android_ble_monitor.util.BinaryUtil;
+
 import org.apache.commons.lang3.ArrayUtils;
 import java.util.Arrays;
 
@@ -14,7 +16,7 @@ public class AttWriteReq extends BaseAttPacket {
     }
 
     private Byte[] decodeValue(Byte[] data){
-        Byte[] temp = Arrays.copyOfRange(data, 3, this.packet_length - 4);
+        Byte[] temp = Arrays.copyOfRange(data, 3, this.packet_length);
         ArrayUtils.reverse(temp);
         return temp;
     }
@@ -28,7 +30,7 @@ public class AttWriteReq extends BaseAttPacket {
     @Override
     public String toString(){
         String res = super.toString() + "\n";
-        res += "Handle to write: " + this.mHandle + "\n";
+        res += "Handle to write: " + BinaryUtil.shortToHexString(this.mHandle) + "\n";
         res += "Value to write: ";
         for(byte b : this.mValue){
             res += String.format("%02x ", b);

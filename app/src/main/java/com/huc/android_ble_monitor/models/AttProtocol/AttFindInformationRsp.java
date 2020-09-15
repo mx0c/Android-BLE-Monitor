@@ -2,38 +2,17 @@ package com.huc.android_ble_monitor.models.AttProtocol;
 
 import android.util.Pair;
 
+import com.huc.android_ble_monitor.models.UuidFormat;
+import com.huc.android_ble_monitor.util.BinaryUtil;
+
 import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
 public class AttFindInformationRsp extends BaseAttPacket{
-    public enum UuidFormat {
-        UUID_16_BIT(0x01),
-        UUID_128_BIT(0x02),
-        UUID_FORMAT_UNKNOWN(0x00);
-        private int format;
-
-        UuidFormat(int format) {
-            this.format = format;
-        }
-        public int getValue(){
-            return this.format;
-        }
-
-        private static UuidFormat[] values = UuidFormat.values();
-        public static UuidFormat getUuidFormat(int i) {
-            for (UuidFormat e: UuidFormat.values()) {
-                if(e.getValue() == i)
-                    return e;
-            }
-            return UuidFormat.UUID_FORMAT_UNKNOWN;
-        }
-    }
-
     public UuidFormat mFormat;
     public ArrayList<Pair<Short, UUID>> mHandleUuidList;
-    private final String BLE_BASE_UUID_16_BIT_MNEMONIC = "0000xxxx-0000-1000-8000-00805F9B34FB";
 
     public AttFindInformationRsp(Byte[] data) {
         super(data);
@@ -111,14 +90,14 @@ public class AttFindInformationRsp extends BaseAttPacket{
      * @return element-size in Byte
      */
     private int getTupleSize() {
-        return  mFormat == UuidFormat.UUID_128_BIT ? 2 + (128/8) : 2 + (16/2);
+        return  mFormat == UuidFormat.UUID_128_BIT ? 2 + (128/8) : 2 + (16/8);
     }
 
     @Override
     public String toString(){
         String listString = "";
         for(Pair<Short, UUID> p : mHandleUuidList){
-            listString += "Handle: " + p.first + ", " + "UUID: " + p.second.toString() + "\n";
+            listString += "Handle: " + BinaryUtil.shortToHexString(p.first) + ", " + "UUID: " + p.second.toString() + "\n";
         }
 
         String res = super.toString() + "\n";

@@ -2,7 +2,6 @@ package com.huc.android_ble_monitor.models.AttProtocol;
 
 public class BaseAttPacket {
     public BaseAttPacket(Byte[] data){
-        //decode opcode
         Byte opcode = data[0];
         this.packet_method = AttOpCodeMethod.getAttOpCodeMethod(opcode & 0x3f);
         this.packet_command_flag = ((opcode & 0x40) >> 6) == 1;
@@ -14,6 +13,7 @@ public class BaseAttPacket {
 
     public static int DEFAULT_MTU_SIZE = 23;
     public static int MTU_SIZE = DEFAULT_MTU_SIZE;
+    public static String BLE_BASE_UUID_16_BIT_MNEMONIC = "0000xxxx-0000-1000-8000-00805F9B34FB";
 
     public boolean packet_authentication_signature_flag;
     public boolean packet_command_flag;
@@ -53,6 +53,7 @@ public class BaseAttPacket {
         for(Byte b : this.packet_data){
             res += String.format("%02X ", b);
         }
+        res += "\n";
         return res;
     }
 }
