@@ -4,7 +4,6 @@ import android.util.Pair;
 
 import com.huc.android_ble_monitor.models.UuidFormat;
 import com.huc.android_ble_monitor.util.BinaryUtil;
-
 import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -45,7 +45,7 @@ public class AttReadByTypeRsp extends BaseAttPacket {
         for(Pair<Short, Byte[]> p : mHandleValuePairs){
             list += BinaryUtil.shortToHexString(p.first) + ", ";
             for(Byte b : p.second){
-                list += String.format("%02X", b);
+                list += String.format("%02X ", b);
             }
             list += "\n";
         }

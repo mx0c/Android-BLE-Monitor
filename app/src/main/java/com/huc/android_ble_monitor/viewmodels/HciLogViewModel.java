@@ -16,6 +16,8 @@ import com.huc.android_ble_monitor.models.AttProtocol.AttExchangeMtuReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttExchangeMtuRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttFindInformationReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttFindInformationRsp;
+import com.huc.android_ble_monitor.models.AttProtocol.AttReadByGroupTypeReq;
+import com.huc.android_ble_monitor.models.AttProtocol.AttReadByGroupTypeRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadByTypeReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadByTypeRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadReq;
@@ -67,6 +69,8 @@ public class HciLogViewModel extends ViewModel {
                     case ATT_READ_REQ: decodedAttPacket = new AttReadReq(l2capPacket.packet_data); break;
                     case ATT_READ_BY_TYPE_REQ: decodedAttPacket = new AttReadByTypeReq(l2capPacket.packet_data); break;
                     case ATT_READ_BY_TYPE_RSP: decodedAttPacket = new AttReadByTypeRsp(l2capPacket.packet_data); break;
+                    case ATT_READ_BY_GROUP_TYPE_REQ: decodedAttPacket = new AttReadByGroupTypeReq(l2capPacket.packet_data); break;
+                    case ATT_READ_BY_GROUP_TYPE_RSP: decodedAttPacket = new AttReadByGroupTypeRsp(l2capPacket.packet_data); break;
                 }
                 AttPackets.add(decodedAttPacket);
                 mAttPackets.postValue(AttPackets);
