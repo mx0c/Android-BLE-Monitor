@@ -18,6 +18,8 @@ import com.huc.android_ble_monitor.models.AttProtocol.AttFindByTypeValueReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttFindByTypeValueRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttFindInformationReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttFindInformationRsp;
+import com.huc.android_ble_monitor.models.AttProtocol.AttHandleValueInd;
+import com.huc.android_ble_monitor.models.AttProtocol.AttHandleValueNtf;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadByGroupTypeReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadByGroupTypeRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadByTypeReq;
@@ -75,6 +77,8 @@ public class HciLogViewModel extends ViewModel {
                     case ATT_READ_BY_GROUP_TYPE_RSP: decodedAttPacket = new AttReadByGroupTypeRsp(l2capPacket.packet_data); break;
                     case ATT_FIND_BY_TYPE_VALUE_REQ: decodedAttPacket = new AttFindByTypeValueReq(l2capPacket.packet_data); break;
                     case ATT_FIND_BY_TYPE_VALUE_RSP: decodedAttPacket = new AttFindByTypeValueRsp(l2capPacket.packet_data); break;
+                    case ATT_HANDLE_VALUE_IND: decodedAttPacket = new AttHandleValueInd(l2capPacket.packet_data); break;
+                    case ATT_HANDLE_VALUE_NTF: decodedAttPacket = new AttHandleValueNtf(l2capPacket.packet_data); break;
                 }
                 AttPackets.add(decodedAttPacket);
                 mAttPackets.postValue(AttPackets);
