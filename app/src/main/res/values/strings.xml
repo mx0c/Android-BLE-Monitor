@@ -59,4 +59,15 @@
         <item>ACL_Data</item>
         <item>SCO_Data</item>
     </string-array>
+
+    <!-- ATT Type Entries -->
+    <string-array name="AttTypeArray">
+        <item>All</item>
+        <item>Command</item>
+        <item>Request</item>
+        <item>Response</item>
+        <item>Notification</item>
+        <item>Indication</item>
+        <item>Confirmation</item>
+    </string-array>
 </resources>

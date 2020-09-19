@@ -51,17 +51,6 @@ public class ApplicationLogActivity extends AppCompatActivity implements SwipeRe
         });
 
         mFilterSpinner = findViewById(R.id.filterSpinner);
-        mFilterSpinner.setAdapter(ArrayAdapter.createFromResource(this, R.array.FilterArray, android.R.layout.simple_spinner_item));
-        mFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String filter = parent.getItemAtPosition(position).toString();
-                String tag = mTagSpinner.getSelectedItem().toString();
-                mListView.setAdapter(new ArrayAdapter<String>(ApplicationLogActivity.this, android.R.layout.simple_list_item_1, LogsUtil.readLogs(filter, tag)));
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
     }
 
     @Override

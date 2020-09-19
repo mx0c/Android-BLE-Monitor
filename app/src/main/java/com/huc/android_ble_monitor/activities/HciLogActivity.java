@@ -14,7 +14,7 @@ import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.HciPacketListAdapter;
 import com.huc.android_ble_monitor.models.HciPacket;
 import com.huc.android_ble_monitor.util.ActivityUtil;
-import com.huc.android_ble_monitor.util.HciSnoopLog;
+import com.huc.android_ble_monitor.util.HciSnoopLogUtil;
 import com.huc.android_ble_monitor.util.IPacketReceptionCallback;
 import com.huc.android_ble_monitor.viewmodels.HciLogViewModel;
 
@@ -23,7 +23,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
     private Spinner mProtocolSpinner;
     public Spinner mTypeSpinner;
     public ListView mListView;
-    public HciPacketListAdapter mAdapter;
+    public ArrayAdapter mAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
         mListView = findViewById(R.id.hci_log_listView);
         mAdapter = new HciPacketListAdapter(this, mViewModel.getSnoopPackets().getValue());
         mListView.setAdapter(mAdapter);
-        HciSnoopLog snoopLog = new HciSnoopLog(this);
+        HciSnoopLogUtil snoopLog = new HciSnoopLogUtil(this);
 
         mProtocolSpinner = findViewById(R.id.protocolSpinner);
         mProtocolSpinner.setAdapter(ArrayAdapter.createFromResource(this, R.array.ProtocolArray, android.R.layout.simple_spinner_item));
@@ -51,17 +51,6 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
         });
 
         mTypeSpinner = findViewById(R.id.typeSpinner);
-        mTypeSpinner.setAdapter(ArrayAdapter.createFromResource(this, R.array.HciTypeArray, android.R.layout.simple_spinner_item));
-        mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String type = parent.getItemAtPosition(position).toString();
-                mAdapter = new HciPacketListAdapter(HciLogActivity.this, mViewModel.getFilteredHciPackets(type));
-                mListView.setAdapter(mAdapter);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
     }
 
     @Override
@@ -86,7 +75,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
 
     @Override
     public void onFinishedPacketCount(int packetCount) {
-
+        Log.d(TAG, "onFinishedPacketCount: " + packetCount);
     }
 
     @Override
