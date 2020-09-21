@@ -8,8 +8,8 @@ public class AttFindInformationReq extends BaseAttPacket {
 
     public AttFindInformationReq(Byte[] data) {
         super(data);
-        mStartingHandle = (short) ((data[2] << 8) + data[1]);
-        mEndingHandle = (short) ((data[4] << 8) + data[3]);
+        mStartingHandle = decode16BitValue(data[1], data[2]);
+        mEndingHandle = decode16BitValue(data[3], data[4]);
     }
 
     @Override

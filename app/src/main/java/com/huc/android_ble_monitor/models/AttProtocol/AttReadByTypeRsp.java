@@ -22,7 +22,7 @@ public class AttReadByTypeRsp extends BaseAttPacket {
         int i = 2;
 
         while(packet_length >= mLength){
-            short handle = decodeHandle(data[i], data[i + 1]);
+            short handle = decode16BitValue(data[i], data[i + 1]);
             Byte[] value = Arrays.copyOfRange(data, i + 2, i + mLength);
             ArrayUtils.reverse(value);
             result.add(new Pair(handle, value));
@@ -30,10 +30,6 @@ public class AttReadByTypeRsp extends BaseAttPacket {
             packet_length -= mLength;
         }
         return result;
-    }
-
-    private Short decodeHandle(Byte LSB, Byte MSB){
-        return (short)((MSB << 8) + LSB);
     }
 
     @Override

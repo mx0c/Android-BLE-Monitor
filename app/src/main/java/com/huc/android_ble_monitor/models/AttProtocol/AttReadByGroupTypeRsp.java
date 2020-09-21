@@ -22,8 +22,8 @@ public class AttReadByGroupTypeRsp extends BaseAttPacket {
         int i = 2;
 
         while(packet_length >= mLength){
-            short attHandle = decodeHandle(data[i], data[i + 1]);
-            short endGroupHandle = decodeHandle(data[i + 2], data[i + 3]);
+            short attHandle = decode16BitValue(data[i], data[i + 1]);
+            short endGroupHandle = decode16BitValue(data[i + 2], data[i + 3]);
 
             Byte[] value = Arrays.copyOfRange(data, i + 4, i + mLength);
             ArrayUtils.reverse(value);
@@ -32,10 +32,6 @@ public class AttReadByGroupTypeRsp extends BaseAttPacket {
             packet_length -= mLength;
         }
         return result;
-    }
-
-    private Short decodeHandle(Byte LSB, Byte MSB){
-        return (short)((MSB << 8) + LSB);
     }
 
     @Override

@@ -7,13 +7,7 @@ public class AttReadReq extends BaseAttPacket {
 
     public AttReadReq(Byte[] data) {
         super(data);
-        mHandle = decodeHandle(data);
-    }
-
-    private short decodeHandle(Byte[] data){
-        byte LSB = data[1];
-        byte MSB = data[2];
-        return (short)((MSB << 8) + LSB);
+        mHandle = decode16BitValue(data[1], data[2]);
     }
 
     @Override

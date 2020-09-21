@@ -10,9 +10,8 @@ public class AttHandleValueNtf extends BaseAttPacket{
 
     public AttHandleValueNtf(Byte[] data) {
         super(data);
-        mHandle = (short) ((data[2] << 8) + data[1]);
-        mValue = Arrays.copyOfRange(data, 3, this.packet_length - 1);
-        ArrayUtils.reverse(mValue);
+        mHandle = decode16BitValue(data[1], data[2]);
+        mValue = decodeValue(data, 3, this.packet_length - 1);
     }
 
     @Override
