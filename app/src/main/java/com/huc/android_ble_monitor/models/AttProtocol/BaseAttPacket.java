@@ -1,24 +1,28 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
+import com.huc.android_ble_monitor.models.L2capPacket;
+
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
 
 public class BaseAttPacket {
-    public BaseAttPacket(Byte[] data){
-        Byte opcode = data[0];
+    public BaseAttPacket(L2capPacket p){
+        Byte opcode = p.packet_data[0];
         this.packet_method = AttOpCodeMethod.getAttOpCodeMethod(opcode & 0x3f);
         this.packet_command_flag = ((opcode & 0x40) >> 6) == 1;
         this.packet_authentication_signature_flag = ((opcode & 0x80) >> 7) == 1;
-        this.packet_length = data.length;
+        this.packet_length = p.packet_data.length;
         this.packet_type = resolvePacketType();
-        this.packet_data = data;
+        this.packet_data = p.packet_data;
+        this.l2capPacket = p;
     }
 
     public static int DEFAULT_MTU_SIZE = 23;
     public static int MTU_SIZE = DEFAULT_MTU_SIZE;
     public static String BLE_BASE_UUID_16_BIT_MNEMONIC = "0000xxxx-0000-1000-8000-00805F9B34FB";
 
+    public L2capPacket l2capPacket;
     public boolean packet_authentication_signature_flag;
     public boolean packet_command_flag;
     public AttOpCodeMethod packet_method;

@@ -1,15 +1,16 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
+import com.huc.android_ble_monitor.models.L2capPacket;
 import com.huc.android_ble_monitor.util.BinaryUtil;
 
 public class AttWriteCmd extends BaseAttPacket {
     public short mHandle;
     public Byte[] mValue;
 
-    public AttWriteCmd(Byte[] data) {
-        super(data);
-        mHandle = decode16BitValue(data[1], data[2]);
-        mValue = decodeValue(data, 3, packet_length - 1);
+    public AttWriteCmd(L2capPacket p) {
+        super(p);
+        mHandle = decode16BitValue(packet_data[1], packet_data[2]);
+        mValue = decodeValue(packet_data, 3, packet_length - 1);
     }
 
     @Override

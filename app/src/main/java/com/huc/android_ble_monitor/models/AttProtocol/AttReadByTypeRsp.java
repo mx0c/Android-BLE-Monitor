@@ -1,6 +1,8 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
 import android.util.Pair;
+
+import com.huc.android_ble_monitor.models.L2capPacket;
 import com.huc.android_ble_monitor.util.BinaryUtil;
 import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
@@ -10,10 +12,10 @@ public class AttReadByTypeRsp extends BaseAttPacket {
     public byte mLength;
     public ArrayList<Pair<Short, Byte[]>> mHandleValuePairs;
 
-    public AttReadByTypeRsp(Byte[] data) {
-        super(data);
-        mLength = data[1];
-        mHandleValuePairs = decodeHandleValuePairs(data);
+    public AttReadByTypeRsp(L2capPacket p) {
+        super(p);
+        mLength = packet_data[1];
+        mHandleValuePairs = decodeHandleValuePairs(packet_data);
     }
 
     private ArrayList<Pair<Short, Byte[]>> decodeHandleValuePairs(Byte[] data){

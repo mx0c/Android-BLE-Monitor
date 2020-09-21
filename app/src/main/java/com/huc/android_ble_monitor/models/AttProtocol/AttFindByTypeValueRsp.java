@@ -1,6 +1,8 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
 import android.util.Pair;
+
+import com.huc.android_ble_monitor.models.L2capPacket;
 import com.huc.android_ble_monitor.util.BinaryUtil;
 
 import java.util.ArrayList;
@@ -8,9 +10,9 @@ import java.util.ArrayList;
 public class AttFindByTypeValueRsp extends BaseAttPacket {
     public ArrayList<Pair<Short, Short>> mHandleInformationList;
 
-    public AttFindByTypeValueRsp(Byte[] data) {
-        super(data);
-        mHandleInformationList = decodeHandleInformationList(data);
+    public AttFindByTypeValueRsp(L2capPacket p) {
+        super(p);
+        mHandleInformationList = decodeHandleInformationList(packet_data);
     }
 
     private ArrayList<Pair<Short, Short>> decodeHandleInformationList(Byte[] data){

@@ -1,12 +1,14 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
+import com.huc.android_ble_monitor.models.L2capPacket;
+
 public class AttExecuteWriteReq extends BaseAttPacket {
     private String mFlagInfo;
     private byte mFlag;
 
-    public AttExecuteWriteReq(Byte[] data) {
-        super(data);
-        mFlag = data[1];
+    public AttExecuteWriteReq(L2capPacket p) {
+        super(p);
+        mFlag = packet_data[1];
         if(mFlag == 0x00){
             mFlagInfo = "Cancel all prepared writes";
         }else if(mFlag == 0x01){

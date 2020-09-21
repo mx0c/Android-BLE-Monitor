@@ -1,14 +1,17 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
 import android.util.Pair;
+
+import com.huc.android_ble_monitor.models.L2capPacket;
+
 import java.util.ArrayList;
 
 public class AttReadMultipleVariableRsp extends BaseAttPacket {
     public ArrayList<Pair<Short, Byte[]>> mLengthValueList;
 
-    public AttReadMultipleVariableRsp(Byte[] data) {
-        super(data);
-        mLengthValueList = decodeLengthValueList(data);
+    public AttReadMultipleVariableRsp(L2capPacket p) {
+        super(p);
+        mLengthValueList = decodeLengthValueList(packet_data);
     }
 
     private ArrayList<Pair<Short, Byte[]>> decodeLengthValueList(Byte[] data){

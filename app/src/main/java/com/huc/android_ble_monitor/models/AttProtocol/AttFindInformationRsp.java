@@ -2,6 +2,7 @@ package com.huc.android_ble_monitor.models.AttProtocol;
 
 import android.util.Pair;
 
+import com.huc.android_ble_monitor.models.L2capPacket;
 import com.huc.android_ble_monitor.models.UuidFormat;
 import com.huc.android_ble_monitor.util.BinaryUtil;
 import org.apache.commons.lang3.ArrayUtils;
@@ -13,14 +14,14 @@ public class AttFindInformationRsp extends BaseAttPacket{
     public UuidFormat mFormat;
     public ArrayList<Pair<Short, UUID>> mHandleUuidList;
 
-    public AttFindInformationRsp(Byte[] data) {
-        super(data);
-        mFormat = UuidFormat.getUuidFormat(data[1]);
+    public AttFindInformationRsp(L2capPacket p) {
+        super(p);
+        mFormat = UuidFormat.getUuidFormat(packet_data[1]);
 
         if(mFormat == UuidFormat.UUID_128_BIT){
-            this.mHandleUuidList = decode128BitUuidTuples(data);
+            this.mHandleUuidList = decode128BitUuidTuples(packet_data);
         }else if(mFormat == UuidFormat.UUID_16_BIT){
-            mHandleUuidList = decode16BitTuples(data);
+            mHandleUuidList = decode16BitTuples(packet_data);
         }
     }
 

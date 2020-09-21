@@ -40,7 +40,7 @@ public class AttPacketListAdapter extends ArrayAdapter<BaseAttPacket> {
         initializeViews(convertView);
 
         mPacket_type.setText(packet.packet_type);
-        mPacket_num.setText(String.valueOf(position + 1));
+        mPacket_num.setText(String.valueOf(packet.l2capPacket.packet_number));
         mPacket_info.setText(packet.packet_method.name());
         mPacket_length.setText(packet.packet_length + " Byte");
 

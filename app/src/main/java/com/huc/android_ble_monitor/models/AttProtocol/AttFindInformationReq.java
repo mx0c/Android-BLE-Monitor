@@ -1,15 +1,16 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
+import com.huc.android_ble_monitor.models.L2capPacket;
 import com.huc.android_ble_monitor.util.BinaryUtil;
 
 public class AttFindInformationReq extends BaseAttPacket {
     public short mStartingHandle;
     public short mEndingHandle;
 
-    public AttFindInformationReq(Byte[] data) {
-        super(data);
-        mStartingHandle = decode16BitValue(data[1], data[2]);
-        mEndingHandle = decode16BitValue(data[3], data[4]);
+    public AttFindInformationReq(L2capPacket p) {
+        super(p);
+        mStartingHandle = decode16BitValue(packet_data[1], packet_data[2]);
+        mEndingHandle = decode16BitValue(packet_data[3], packet_data[4]);
     }
 
     @Override

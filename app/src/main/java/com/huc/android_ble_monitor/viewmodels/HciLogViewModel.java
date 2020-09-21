@@ -65,41 +65,41 @@ public class HciLogViewModel extends ViewModel {
                     packet.packet_boundary_flag == HciPacket.boundary.FIRST_PACKET_FLUSHABLE ||
                     packet.packet_boundary_flag == HciPacket.boundary.FIRST_PACKET_NON_FLUSHABLE){
                 ArrayList L2capPackets = mL2capPackets.getValue();
-                L2capPacket l2capPack = new L2capPacket(packet, L2capPackets.size() + 1);
-                L2capPackets.add(l2capPack);
+                L2capPacket l2capPacket = new L2capPacket(packet, L2capPackets.size() + 1);
+                L2capPackets.add(l2capPacket);
                 mL2capPackets.postValue(L2capPackets);
                 //convert to Base ATT Packet
                 ArrayList AttPackets = mAttPackets.getValue();
-                BaseAttPacket decodedAttPacket = new BaseAttPacket(l2capPack.packet_data);
+                BaseAttPacket decodedAttPacket = new BaseAttPacket(l2capPacket);
                 //convert to specific ATT Packet
                 switch (decodedAttPacket.packet_method){
-                    case ATT_ERROR_RSP: decodedAttPacket = new AttErrorRsp(l2capPack.packet_data); break;
-                    case ATT_EXCHANGE_MTU_REQ: decodedAttPacket = new AttExchangeMtuReq(l2capPack.packet_data); break;
-                    case ATT_EXCHANGE_MTU_RSP: decodedAttPacket = new AttExchangeMtuRsp(l2capPack.packet_data); break;
-                    case ATT_FIND_INFORMATION_REQ: decodedAttPacket = new AttFindInformationReq(l2capPack.packet_data); break;
-                    case ATT_FIND_INFORMATION_RSP: decodedAttPacket = new AttFindInformationRsp(l2capPack.packet_data); break;
-                    case ATT_READ_RSP: decodedAttPacket = new AttReadRsp(l2capPack.packet_data); break;
-                    case ATT_WRITE_REQ: decodedAttPacket = new AttWriteReq(l2capPack.packet_data); break;
-                    case ATT_READ_REQ: decodedAttPacket = new AttReadReq(l2capPack.packet_data); break;
-                    case ATT_READ_BY_TYPE_REQ: decodedAttPacket = new AttReadByTypeReq(l2capPack.packet_data); break;
-                    case ATT_READ_BY_TYPE_RSP: decodedAttPacket = new AttReadByTypeRsp(l2capPack.packet_data); break;
-                    case ATT_READ_BY_GROUP_TYPE_REQ: decodedAttPacket = new AttReadByGroupTypeReq(l2capPack.packet_data); break;
-                    case ATT_READ_BY_GROUP_TYPE_RSP: decodedAttPacket = new AttReadByGroupTypeRsp(l2capPack.packet_data); break;
-                    case ATT_FIND_BY_TYPE_VALUE_REQ: decodedAttPacket = new AttFindByTypeValueReq(l2capPack.packet_data); break;
-                    case ATT_FIND_BY_TYPE_VALUE_RSP: decodedAttPacket = new AttFindByTypeValueRsp(l2capPack.packet_data); break;
-                    case ATT_HANDLE_VALUE_IND: decodedAttPacket = new AttHandleValueInd(l2capPack.packet_data); break;
-                    case ATT_HANDLE_VALUE_NTF: decodedAttPacket = new AttHandleValueNtf(l2capPack.packet_data); break;
-                    case ATT_SIGNED_WRITE_CMD: decodedAttPacket = new AttSignedWriteCmd(l2capPack.packet_data); break;
-                    case ATT_READ_BLOB_REQ: decodedAttPacket = new AttReadBlobReq(l2capPack.packet_data); break;
-                    case ATT_READ_BLOB_RSP: decodedAttPacket = new AttReadBlobRsp(l2capPack.packet_data); break;
-                    case ATT_READ_MULTIPLE_REQ: decodedAttPacket = new AttReadMultipleReq(l2capPack.packet_data); break;
-                    case ATT_READ_MULTIPLE_RSP: decodedAttPacket = new AttReadMultipleRsp(l2capPack.packet_data); break;
-                    case ATT_READ_MULTIPLE_VARIABLE_REQ: decodedAttPacket = new AttReadMultipleVariableReq(l2capPack.packet_data); break;
-                    case ATT_READ_MULTIPLE_VARIABLE_RSP: decodedAttPacket = new AttReadMultipleVariableRsp(l2capPack.packet_data); break;
-                    case ATT_WRITE_CMD: decodedAttPacket = new AttWriteCmd(l2capPack.packet_data); break;
-                    case ATT_EXECUTE_WRITE_REQ: decodedAttPacket = new AttExecuteWriteReq(l2capPack.packet_data); break;
-                    case ATT_PREPARE_WRITE_REQ: decodedAttPacket = new AttPrepareWriteReqRsp(l2capPack.packet_data); break;
-                    case ATT_PREPARE_WRITE_RSP: decodedAttPacket = new AttPrepareWriteReqRsp(l2capPack.packet_data); break;
+                    case ATT_ERROR_RSP: decodedAttPacket = new AttErrorRsp(l2capPacket); break;
+                    case ATT_EXCHANGE_MTU_REQ: decodedAttPacket = new AttExchangeMtuReq(l2capPacket); break;
+                    case ATT_EXCHANGE_MTU_RSP: decodedAttPacket = new AttExchangeMtuRsp(l2capPacket); break;
+                    case ATT_FIND_INFORMATION_REQ: decodedAttPacket = new AttFindInformationReq(l2capPacket); break;
+                    case ATT_FIND_INFORMATION_RSP: decodedAttPacket = new AttFindInformationRsp(l2capPacket); break;
+                    case ATT_READ_RSP: decodedAttPacket = new AttReadRsp(l2capPacket); break;
+                    case ATT_WRITE_REQ: decodedAttPacket = new AttWriteReq(l2capPacket); break;
+                    case ATT_READ_REQ: decodedAttPacket = new AttReadReq(l2capPacket); break;
+                    case ATT_READ_BY_TYPE_REQ: decodedAttPacket = new AttReadByTypeReq(l2capPacket); break;
+                    case ATT_READ_BY_TYPE_RSP: decodedAttPacket = new AttReadByTypeRsp(l2capPacket); break;
+                    case ATT_READ_BY_GROUP_TYPE_REQ: decodedAttPacket = new AttReadByGroupTypeReq(l2capPacket); break;
+                    case ATT_READ_BY_GROUP_TYPE_RSP: decodedAttPacket = new AttReadByGroupTypeRsp(l2capPacket); break;
+                    case ATT_FIND_BY_TYPE_VALUE_REQ: decodedAttPacket = new AttFindByTypeValueReq(l2capPacket); break;
+                    case ATT_FIND_BY_TYPE_VALUE_RSP: decodedAttPacket = new AttFindByTypeValueRsp(l2capPacket); break;
+                    case ATT_HANDLE_VALUE_IND: decodedAttPacket = new AttHandleValueInd(l2capPacket); break;
+                    case ATT_HANDLE_VALUE_NTF: decodedAttPacket = new AttHandleValueNtf(l2capPacket); break;
+                    case ATT_SIGNED_WRITE_CMD: decodedAttPacket = new AttSignedWriteCmd(l2capPacket); break;
+                    case ATT_READ_BLOB_REQ: decodedAttPacket = new AttReadBlobReq(l2capPacket); break;
+                    case ATT_READ_BLOB_RSP: decodedAttPacket = new AttReadBlobRsp(l2capPacket); break;
+                    case ATT_READ_MULTIPLE_REQ: decodedAttPacket = new AttReadMultipleReq(l2capPacket); break;
+                    case ATT_READ_MULTIPLE_RSP: decodedAttPacket = new AttReadMultipleRsp(l2capPacket); break;
+                    case ATT_READ_MULTIPLE_VARIABLE_REQ: decodedAttPacket = new AttReadMultipleVariableReq(l2capPacket); break;
+                    case ATT_READ_MULTIPLE_VARIABLE_RSP: decodedAttPacket = new AttReadMultipleVariableRsp(l2capPacket); break;
+                    case ATT_WRITE_CMD: decodedAttPacket = new AttWriteCmd(l2capPacket); break;
+                    case ATT_EXECUTE_WRITE_REQ: decodedAttPacket = new AttExecuteWriteReq(l2capPacket); break;
+                    case ATT_PREPARE_WRITE_REQ: decodedAttPacket = new AttPrepareWriteReqRsp(l2capPacket); break;
+                    case ATT_PREPARE_WRITE_RSP: decodedAttPacket = new AttPrepareWriteReqRsp(l2capPacket); break;
                 }
                 AttPackets.add(decodedAttPacket);
                 mAttPackets.postValue(AttPackets);

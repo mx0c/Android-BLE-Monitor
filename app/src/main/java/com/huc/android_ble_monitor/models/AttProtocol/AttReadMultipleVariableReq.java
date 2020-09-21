@@ -1,14 +1,15 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
+import com.huc.android_ble_monitor.models.L2capPacket;
 import com.huc.android_ble_monitor.util.BinaryUtil;
 import java.util.ArrayList;
 
 public class AttReadMultipleVariableReq extends BaseAttPacket {
     public ArrayList<Short> mHandles;
 
-    public AttReadMultipleVariableReq(Byte[] data) {
-        super(data);
-        mHandles = decodeHandles(data);
+    public AttReadMultipleVariableReq(L2capPacket p) {
+        super(p);
+        mHandles = decodeHandles(packet_data);
     }
 
     private ArrayList<Short> decodeHandles(Byte[] data){

@@ -1,14 +1,15 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
 
+import com.huc.android_ble_monitor.models.L2capPacket;
 import com.huc.android_ble_monitor.util.BinaryUtil;
 
 public class AttErrorRsp extends BaseAttPacket {
-    public AttErrorRsp(Byte[] data) {
-        super(data);
-        this.requested_opcode_error = AttOpCodeMethod.getAttOpCodeMethod(data[1]);
-        this.error_attribute_handle = decode16BitValue(data[2], data[3]);
-        this.error_code = AttErrorCode.getAttErrorCode(data[4]);
+    public AttErrorRsp(L2capPacket p) {
+        super(p);
+        this.requested_opcode_error = AttOpCodeMethod.getAttOpCodeMethod(packet_data[1]);
+        this.error_attribute_handle = decode16BitValue(packet_data[2], packet_data[3]);
+        this.error_code = AttErrorCode.getAttErrorCode(packet_data[4]);
     }
 
     /**

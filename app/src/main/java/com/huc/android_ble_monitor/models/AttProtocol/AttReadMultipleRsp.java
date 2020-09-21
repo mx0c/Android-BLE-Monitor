@@ -1,11 +1,13 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
+import com.huc.android_ble_monitor.models.L2capPacket;
+
 public class AttReadMultipleRsp extends BaseAttPacket {
     public Byte[] mConcatedValues;
 
-    public AttReadMultipleRsp(Byte[] data) {
-        super(data);
-        mConcatedValues = decodeValue(data, 1, packet_length-1);
+    public AttReadMultipleRsp(L2capPacket p) {
+        super(p);
+        mConcatedValues = decodeValue(packet_data, 1, packet_length-1);
     }
 
     @Override

@@ -1,11 +1,13 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
+import com.huc.android_ble_monitor.models.L2capPacket;
+
 public class AttExchangeMtuReq extends BaseAttPacket{
     public short mReceivedAttMTU;
 
-    public AttExchangeMtuReq(Byte[] data) {
-        super(data);
-        mReceivedAttMTU = decode16BitValue(data[1], data[2]);
+    public AttExchangeMtuReq(L2capPacket p) {
+        super(p);
+        mReceivedAttMTU = decode16BitValue(packet_data[1], packet_data[2]);
     }
 
     @Override

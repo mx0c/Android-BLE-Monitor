@@ -1,5 +1,6 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
+import com.huc.android_ble_monitor.models.L2capPacket;
 import com.huc.android_ble_monitor.util.BinaryUtil;
 import org.apache.commons.lang3.ArrayUtils;
 import java.util.Arrays;
@@ -10,11 +11,11 @@ public class AttReadByTypeReq extends BaseAttPacket {
     public short mEndingHandle;
     public UUID mTypeUuid;
 
-    public AttReadByTypeReq(Byte[] data) {
-        super(data);
-        mStartingHandle = decode16BitValue(data[1], data[2]);
-        mEndingHandle =  decode16BitValue(data[3], data[4]);
-        mTypeUuid = decodeUuid(data);
+    public AttReadByTypeReq(L2capPacket p) {
+        super(p);
+        mStartingHandle = decode16BitValue(packet_data[1], packet_data[2]);
+        mEndingHandle =  decode16BitValue(packet_data[3], packet_data[4]);
+        mTypeUuid = decodeUuid(packet_data);
     }
 
     private UUID decodeUuid(Byte[] data){
