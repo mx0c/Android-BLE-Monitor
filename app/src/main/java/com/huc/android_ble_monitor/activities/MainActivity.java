@@ -15,7 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -31,7 +33,9 @@ import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BleUtil;
 import com.huc.android_ble_monitor.util.PermissionsUtil;
 import com.huc.android_ble_monitor.viewmodels.MainActivityViewModel;
+
 import java.util.List;
+
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends BaseActivity<MainActivityViewModel> implements ScanResultRecyclerAdapter.OnDeviceConnectListener, SwipeRefreshLayout.OnRefreshListener {
@@ -41,6 +45,7 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
     private RecyclerView mScanResultRecyclerView;
     private ScanResultRecyclerAdapter mScanResultRecyclerAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,9 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
         setContentView(R.layout.activity_main);
         mScanResultRecyclerView = findViewById(R.id.scan_result_recycler_view);
         ActivityUtil.setToolbar(this, true);
+
+        this.actionBarDrawerToggle = ActivityUtil.initActionBarDrawerToggle(this);
+        ActivityUtil.initNavigationDrawerItemListeners(this);
 
         PermissionsUtil.requestLocationPermission(this);
         PermissionsUtil.requestReadStoragePermission(this);
@@ -142,7 +150,7 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
     // EventHandlers related to the toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu_appbar, menu);
         MenuItem menuItem = menu.findItem(R.id.app_bar_switch_item);
         View view = menuItem.getActionView();
         mBluetoothSwitch = view.findViewById(R.id.switch_compat_element);
@@ -173,6 +181,10 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         switch (item.getItemId()) {
             case R.id.action_hci_snoop:
                 Intent i = new Intent(this, HciLogActivity.class);

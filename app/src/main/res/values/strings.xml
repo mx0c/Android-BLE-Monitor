@@ -7,6 +7,10 @@
     <string name="action_settings">Settings</string>
     <string name="action_ble_toggle">Bluetooth Switch</string>
 
+    <!-- Navigation Drawer -->
+    <string name="drawer_open">OPEN</string>
+    <string name="drawer_closed">CLOSED</string>
+
     <!-- List View Dummy Values -->
     <string name="dummy_device">Dummy Device</string>
     <string name="_999db">-999db</string>
