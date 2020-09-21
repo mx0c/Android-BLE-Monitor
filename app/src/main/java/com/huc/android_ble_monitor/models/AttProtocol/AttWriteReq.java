@@ -1,7 +1,6 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
 import com.huc.android_ble_monitor.util.BinaryUtil;
-
 import org.apache.commons.lang3.ArrayUtils;
 import java.util.Arrays;
 
@@ -16,7 +15,7 @@ public class AttWriteReq extends BaseAttPacket {
     }
 
     private Byte[] decodeValue(Byte[] data){
-        Byte[] temp = Arrays.copyOfRange(data, 3, this.packet_length);
+        Byte[] temp = Arrays.copyOfRange(data, 3, this.packet_length - 1);
         ArrayUtils.reverse(temp);
         return temp;
     }

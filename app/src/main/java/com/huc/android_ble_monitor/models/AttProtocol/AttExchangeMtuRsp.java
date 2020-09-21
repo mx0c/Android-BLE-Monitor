@@ -5,16 +5,10 @@ public class AttExchangeMtuRsp extends BaseAttPacket{
 
     public AttExchangeMtuRsp(Byte[] data) {
         super(data);
-        mReceivedAttMTU = decodeMtu(data);
+        mReceivedAttMTU = decode16BitValue(data[1], data[2]);
 
         // Set ATT MTU to received Value
         BaseAttPacket.MTU_SIZE = mReceivedAttMTU;
-    }
-
-    private short decodeMtu(Byte[] data){
-        byte LSB = data[1];
-        byte MSB = data[2];
-        return (short)((MSB << 8) + LSB);
     }
 
     @Override

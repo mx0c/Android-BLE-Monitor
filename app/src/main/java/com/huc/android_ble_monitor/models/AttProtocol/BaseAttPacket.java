@@ -1,5 +1,9 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.util.Arrays;
+
 public class BaseAttPacket {
     public BaseAttPacket(Byte[] data){
         Byte opcode = data[0];
@@ -41,6 +45,16 @@ public class BaseAttPacket {
             default:
                 return "";
         }
+    }
+
+    protected Byte[] decodeValue(Byte[] data, int from, int to){
+        Byte[] temp = Arrays.copyOfRange(data, from, to);
+        ArrayUtils.reverse(temp);
+        return temp;
+    }
+
+    protected short decode16BitValue(byte LSB, byte MSB){
+        return (short)((MSB << 8) + LSB);
     }
 
     @Override

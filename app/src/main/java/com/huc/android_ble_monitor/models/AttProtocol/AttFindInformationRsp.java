@@ -36,7 +36,7 @@ public class AttFindInformationRsp extends BaseAttPacket{
 
         while(length >= getTupleSize()) {
             // decode handle
-            Short handle = (short) ((data[i + 1] << 8) + data[i]);
+            Short handle = decode16BitValue(data[i], data[i+1]);
 
             // convert arraylist<Byte> to byte[] and decode 128 bit UUID
             byte[] byteArray = new byte[16];
@@ -67,7 +67,7 @@ public class AttFindInformationRsp extends BaseAttPacket{
 
         while(length >= getTupleSize()) {
             // decode handle
-            Short handle = (short) ((data[i + 1] << 8) + data[i]);
+            Short handle = decode16BitValue(data[i], data[i+1]);
 
             // decode 16 bit UUID and insert into base UUID mnemonic
             String LSBHex = String.format("%02X", data[i + 2]);

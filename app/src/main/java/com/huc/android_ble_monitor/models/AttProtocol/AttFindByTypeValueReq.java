@@ -14,10 +14,10 @@ public class AttFindByTypeValueReq extends BaseAttPacket {
 
     public AttFindByTypeValueReq(Byte[] data) {
         super(data);
-        mStartingHandle = (short) ((data[2] << 8) + data[1]);
-        mEndingHandle = (short) ((data[4] << 8) + data[3]);
+        mStartingHandle = decode16BitValue(data[1], data[2]);
+        mEndingHandle = decode16BitValue(data[3], data[4]);
         mType = decodeTypeUUID(data);
-        mValue = decodeValue(data);
+        mValue = decodeValue(data,7, this.packet_length - 1);
     }
 
     private UUID decodeTypeUUID(Byte[] data){
@@ -27,12 +27,6 @@ public class AttFindByTypeValueReq extends BaseAttPacket {
         // convert 16 Bit UUID to 128 Bit UUID
         String uuid128Bit = BLE_BASE_UUID_16_BIT_MNEMONIC.replace("xxxx", uuid16Bit);
         return UUID.fromString(uuid128Bit);
-    }
-
-    private Byte[] decodeValue(Byte[] data){
-        Byte[] res = Arrays.copyOfRange(data, 7, this.packet_length - 1);
-        ArrayUtils.reverse(res);
-        return res;
     }
 
     @Override

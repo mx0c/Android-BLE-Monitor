@@ -7,14 +7,8 @@ public class AttErrorRsp extends BaseAttPacket {
     public AttErrorRsp(Byte[] data) {
         super(data);
         this.requested_opcode_error = AttOpCodeMethod.getAttOpCodeMethod(data[1]);
-        this.error_attribute_handle = decodeErrorAttHandle(data);
+        this.error_attribute_handle = decode16BitValue(data[2], data[3]);
         this.error_code = AttErrorCode.getAttErrorCode(data[4]);
-    }
-
-    private short decodeErrorAttHandle(Byte[] data){
-        Byte LSB = data[2];
-        Byte MSB = data[3];
-        return (short)((MSB << 8) + LSB);
     }
 
     /**

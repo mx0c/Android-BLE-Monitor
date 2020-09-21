@@ -8,13 +8,7 @@ public class AttReadRsp extends BaseAttPacket {
 
     public AttReadRsp(Byte[] data) {
         super(data);
-        mValue = decodeValue(data);
-    }
-
-    private Byte[] decodeValue(Byte[] data){
-        Byte[] res = Arrays.copyOfRange(data, 1, this.packet_length - 2);
-        ArrayUtils.reverse(res);
-        return res;
+        mValue = decodeValue(data, 1, this.packet_length - 2);
     }
 
     @Override
