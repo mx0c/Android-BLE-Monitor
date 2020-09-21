@@ -1,8 +1,5 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
-import org.apache.commons.lang3.ArrayUtils;
-import java.util.Arrays;
-
 public class AttReadRsp extends BaseAttPacket {
     public Byte[] mValue;
 

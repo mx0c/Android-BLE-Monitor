@@ -14,12 +14,14 @@ import com.huc.android_ble_monitor.adapters.L2capPacketListAdapter;
 import com.huc.android_ble_monitor.models.AttProtocol.AttErrorRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttExchangeMtuReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttExchangeMtuRsp;
+import com.huc.android_ble_monitor.models.AttProtocol.AttExecuteWriteReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttFindByTypeValueReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttFindByTypeValueRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttFindInformationReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttFindInformationRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttHandleValueInd;
 import com.huc.android_ble_monitor.models.AttProtocol.AttHandleValueNtf;
+import com.huc.android_ble_monitor.models.AttProtocol.AttPrepareWriteReqRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadBlobReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadBlobRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadByGroupTypeReq;
@@ -95,6 +97,9 @@ public class HciLogViewModel extends ViewModel {
                     case ATT_READ_MULTIPLE_VARIABLE_REQ: decodedAttPacket = new AttReadMultipleVariableReq(l2capPack.packet_data); break;
                     case ATT_READ_MULTIPLE_VARIABLE_RSP: decodedAttPacket = new AttReadMultipleVariableRsp(l2capPack.packet_data); break;
                     case ATT_WRITE_CMD: decodedAttPacket = new AttWriteCmd(l2capPack.packet_data); break;
+                    case ATT_EXECUTE_WRITE_REQ: decodedAttPacket = new AttExecuteWriteReq(l2capPack.packet_data); break;
+                    case ATT_PREPARE_WRITE_REQ: decodedAttPacket = new AttPrepareWriteReqRsp(l2capPack.packet_data); break;
+                    case ATT_PREPARE_WRITE_RSP: decodedAttPacket = new AttPrepareWriteReqRsp(l2capPack.packet_data); break;
                 }
                 AttPackets.add(decodedAttPacket);
                 mAttPackets.postValue(AttPackets);
