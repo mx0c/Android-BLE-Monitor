@@ -1,7 +1,15 @@
 # Android-BLE-Monitor
 ![alt text](https://travis-ci.org/mx0c/Android-BLE-Monitor.svg?branch=master "TravisCI")
 
-A BLE Monitor for Android
+A Bluetooth Low Energy (BLE) Monitor for Android.
+
+### Features:
+- Scan for BLE Devices and retrieve advertised Informations
+- Connect to discovered GATT Servers
+- Retrieve Services, Characteristics and Descriptors
+- Identify standardized Services and Characteristics
+- Interact with Characteristics and Descriptors
+- HCI, L2CAP & ATT Log utilizing the Android Bluetooth Snoop Log 
 
 ### Dependencies:
 - [Apache commons-lang3](https://github.com/apache/commons-lang)
