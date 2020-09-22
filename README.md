@@ -14,7 +14,7 @@ A Bluetooth Low Energy (BLE) Monitor for Android.
 ### Requirements:
 - Android Phone which supports BLE
 - Android 5.0 (API level 21)
-- _To use the BLE Protocol Log the Android Bluetooth Snoop Log needs to be supported_
+- _To use the BLE Protocols (ATT, L2CAP, HCI) Log the Android Bluetooth Snoop Log needs to be supported_
 
 ### Dependencies:
 - [Apache commons-lang3](https://github.com/apache/commons-lang)
