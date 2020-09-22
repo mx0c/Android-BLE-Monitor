@@ -21,25 +21,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.2"
-                android:gravity="center"
+                android:layout_weight="5"
+                android:gravity="left"
                 android:textStyle="bold"
-                android:text="Tag:"></TextView>
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:id="@+id/tagSpinner">
-            </Spinner>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.2"
-                android:gravity="center"
-                android:textStyle="bold"
+                android:paddingLeft="14dp"
                 android:text="Filter:"></TextView>
             <Spinner
+                android:gravity="left"
                 android:layout_width="match_parent"
+                android:layout_marginRight="20dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/filterSpinner">

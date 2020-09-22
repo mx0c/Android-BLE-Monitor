@@ -9,15 +9,13 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.huc.android_ble_monitor.R;
+import com.huc.android_ble_monitor.adapters.AppLogListAdapter;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.LogsUtil;
 
-
 public class ApplicationLogActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener  {
     private ListView mListView;
-    private Spinner mTagSpinner;
     private Spinner mFilterSpinner;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private static final String TAG = "BLEM_LogActivity";
@@ -34,30 +32,25 @@ public class ApplicationLogActivity extends AppCompatActivity implements SwipeRe
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mListView = findViewById(R.id.logListView);
-        mListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, LogsUtil.readLogs("All", "All")));
+        mListView.setAdapter(new AppLogListAdapter(this, LogsUtil.readLogs("Verbose")));
 
-        mTagSpinner = findViewById(R.id.tagSpinner);
-        mTagSpinner.setAdapter(ArrayAdapter.createFromResource(this, R.array.TagArray, android.R.layout.simple_spinner_item));
-        mTagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mFilterSpinner = findViewById(R.id.filterSpinner);
+        mFilterSpinner.setAdapter(ArrayAdapter.createFromResource(this, R.array.FilterArray, android.R.layout.simple_spinner_item));
+        mFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String tag = parent.getItemAtPosition(position).toString();
-                String filter = mFilterSpinner.getSelectedItem().toString();
-                mListView.setAdapter(new ArrayAdapter<String>(ApplicationLogActivity.this, android.R.layout.simple_list_item_1, LogsUtil.readLogs(filter, tag)));
+                String filter = parent.getItemAtPosition(position).toString();
+                mListView.setAdapter(new AppLogListAdapter(ApplicationLogActivity.this, LogsUtil.readLogs(filter)));
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-
-        mFilterSpinner = findViewById(R.id.filterSpinner);
     }
 
     @Override
     public void onRefresh() {
         String filter = mFilterSpinner.getSelectedItem().toString();
-        String tag = mTagSpinner.getSelectedItem().toString();
-        mListView.setAdapter(new ArrayAdapter<String>(ApplicationLogActivity.this, android.R.layout.simple_list_item_1, LogsUtil.readLogs(filter, tag)));
+        mListView.setAdapter(new AppLogListAdapter(ApplicationLogActivity.this, LogsUtil.readLogs(filter)));
         mSwipeRefreshLayout.setRefreshing(false);
     }
 }

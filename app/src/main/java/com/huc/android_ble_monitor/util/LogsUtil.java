@@ -1,54 +1,35 @@
 package com.huc.android_ble_monitor.util;
 
 import android.util.Log;
+import android.util.Pair;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class LogsUtil {
-    public static ArrayList<String> readLogs(String filter, String tag) {
-        ArrayList<String> res = new ArrayList();
+    public static ArrayList<Pair<String,String>> readLogs(String filter) {
+        ArrayList<Pair<String, String>> res = new ArrayList();
         try {
-            String filterParam = buildFilter(filter, tag);
-            Process process = Runtime.getRuntime().exec("logcat -d -v brief " + filterParam);
-            Log.d("BLEM_Debug", "executed: " + "logcat -d -v brief " + filterParam);
+            String filterParam = "*:" + filter.charAt(0);
+            Process process = Runtime.getRuntime().exec("logcat -d -v time " + filterParam);
+            Log.d("BLEM_Debug", "executed: " + "logcat -d -v time " + filterParam);
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(process.getInputStream()));
-
             String line;
-
             while ((line = bufferedReader.readLine()) != null) {
-                res.add(line + "\n");
+                if(line.contains("-----") || !line.contains("BLEM"))
+                    continue;
+                String[] splitted = line.split(" ");
+                String time = splitted[0] + " " + splitted[1];
+                String log = line.replace(time, "");
+                Pair p = new Pair(time, log);
+                res.add(p);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return res;
-    }
-
-    private static String buildFilter(String filter, String tag){
-        if(filter.equals("All") && tag.equals("All"))
-            return "";
-        if(tag.equals("All"))
-            tag = "*";
-        switch (filter){
-            case "Debug":
-                return tag + ":" + "D *:S";
-            case "All":
-                return tag + ":" + "* *:S";
-            case "Verbose":
-                return tag + ":" + "V *:S";
-            case "Info":
-                return tag + ":" + "I *:S";
-            case "Warning":
-                return tag + ":" + "W *:S";
-            case "Error":
-                return tag + ":" + "E *:S";
-            case "Fatal":
-                return tag + ":" + "F *:S";
-            default:
-                return "";
-        }
     }
 }

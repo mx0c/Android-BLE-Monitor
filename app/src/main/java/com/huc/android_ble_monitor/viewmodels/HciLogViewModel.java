@@ -1,5 +1,6 @@
 package com.huc.android_ble_monitor.viewmodels;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -103,8 +104,6 @@ public class HciLogViewModel extends ViewModel {
                 }
                 AttPackets.add(decodedAttPacket);
                 mAttPackets.postValue(AttPackets);
-            }else{
-                //TODO: add continuing ACL packets to already existing L2CAP packets
             }
         }
 

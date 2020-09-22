@@ -29,23 +29,12 @@
 
     <!-- Filter Entries -->
     <string-array name="FilterArray">
-        <item>All</item>
         <item>Verbose</item>
         <item>Debug</item>
         <item>Info</item>
         <item>Warning</item>
         <item>Error</item>
         <item>Fatal</item>
-    </string-array>
-
-    <!-- Tag Entries -->
-    <string-array name="TagArray">
-        <item>All</item>
-        <item>BLEM_ServicesOverview</item>
-        <item>BLEM_MainActivity</item>
-        <item>BLEM_DeviceDetailAct</item>
-        <item>BLEM_BluetoothLeService</item>
-        <item>BLEM_LogActivity</item>
     </string-array>
 
     <!-- Protocol Entries -->
