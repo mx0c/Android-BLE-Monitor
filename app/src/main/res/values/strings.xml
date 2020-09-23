@@ -10,6 +10,9 @@
     <!-- Navigation Drawer -->
     <string name="drawer_open">OPEN</string>
     <string name="drawer_closed">CLOSED</string>
+    <string name="drawer_header_title">BLE - Monitor</string>
+    <string name="drawer_header_subtitle">© Reutlingen University</string>
+    <string name="drawer_logo_content_desc">BLE Monitor Logo</string>
 
     <!-- List View Dummy Values -->
     <string name="dummy_device">Dummy Device</string>

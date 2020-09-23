@@ -17,7 +17,7 @@
             android:id="@+id/appbarLayout"
             layout="@layout/appbar"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent"/>
+            android:layout_width="match_parent" />
 
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -36,6 +36,7 @@
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        app:headerLayout="@layout/nav_header"
         app:menu="@menu/menu_navigation"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
