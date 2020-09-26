@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
 import com.huc.android_ble_monitor.util.BleUtil;
 import java.util.ArrayList;
@@ -17,13 +17,13 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivityViewModel extends ViewModel {
     private static final String TAG = "BLEM_MAViewModel";
-    private MutableLiveData<List<BleDevice>> mBleDevices = new MutableLiveData<>();
+    private MutableLiveData<List<BluLeDevice>> mBleDevices = new MutableLiveData<>();
     private MutableLiveData<ToastModel> mToastBroadcast = new MutableLiveData<>();
 
     private boolean isBluetoothEnabled;
 
     public void init() {
-        mBleDevices.setValue(new ArrayList<BleDevice>());
+        mBleDevices.setValue(new ArrayList<BluLeDevice>());
         isBluetoothEnabled = true;
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(new Runnable() {
@@ -37,9 +37,9 @@ public class MainActivityViewModel extends ViewModel {
     private void checkTimeStamp(){
         try {
             long currTime = new Date().getTime();
-            List<BleDevice> devices = mBleDevices.getValue();
-            List<BleDevice> toRemove = new ArrayList<>();
-            for (BleDevice dev : devices) {
+            List<BluLeDevice> devices = mBleDevices.getValue();
+            List<BluLeDevice> toRemove = new ArrayList<>();
+            for (BluLeDevice dev : devices) {
                 if (dev.mTimestamp <= currTime) {
                     Log.d(TAG, "checkTimeStamp: removed " + dev.mScanResult.getDevice().getAddress() + " because TTL is exceeded.");
                     toRemove.add(dev);
@@ -63,16 +63,16 @@ public class MainActivityViewModel extends ViewModel {
 
     public void registerScanResult(ScanResult scanResult) {
         if(!BleUtil.containsDevice(mBleDevices.getValue(), scanResult)){
-            List<BleDevice> devices = mBleDevices.getValue();
-            devices.add(new BleDevice(scanResult));
+            List<BluLeDevice> devices = mBleDevices.getValue();
+            devices.add(new BluLeDevice(scanResult));
             mBleDevices.postValue(devices);
         }else{
-            mBleDevices.postValue(BleUtil.updateDevice(mBleDevices.getValue(), new BleDevice(scanResult)));
+            mBleDevices.postValue(BleUtil.updateDevice(mBleDevices.getValue(), new BluLeDevice(scanResult)));
         }
     }
 
     public void clearBleDevices() {
-        List<BleDevice> devices = mBleDevices.getValue();
+        List<BluLeDevice> devices = mBleDevices.getValue();
         devices.clear();
         this.mBleDevices.postValue(devices);
     }
@@ -81,7 +81,7 @@ public class MainActivityViewModel extends ViewModel {
         return mToastBroadcast;
     }
 
-    public LiveData<List<BleDevice>> getmBleDevices() {
+    public LiveData<List<BluLeDevice>> getmBleDevices() {
         return mBleDevices;
     }
 }

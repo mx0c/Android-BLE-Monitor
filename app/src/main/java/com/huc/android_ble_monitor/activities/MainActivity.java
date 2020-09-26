@@ -27,7 +27,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.ScanResultRecyclerAdapter;
-import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BleUtil;
@@ -94,9 +94,9 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
             Toast.makeText(MainActivity.this, toastModel.getMessage(), toastModel.getDuration()).show();
             }
         });
-        mViewModel.getmBleDevices().observe(this, new Observer<List<BleDevice>>() {
+        mViewModel.getmBleDevices().observe(this, new Observer<List<BluLeDevice>>() {
             @Override
-            public void onChanged(List<BleDevice> bleDevices) {
+            public void onChanged(List<BluLeDevice> bleDevices) {
             mScanResultRecyclerAdapter.notifyDataSetChanged();
             }
         });
@@ -206,7 +206,7 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
     @Override
     public void onDeviceClick(int position) {
         try {
-            final BleDevice bleDevice = mViewModel.getmBleDevices().getValue().get(position);
+            final BluLeDevice bleDevice = mViewModel.getmBleDevices().getValue().get(position);
 
             if (Build.VERSION.SDK_INT >= 26) {
                 if (bleDevice.mScanResult.isConnectable()) {

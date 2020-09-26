@@ -11,6 +11,9 @@ public class HciPacket {
         parseHciJson(hciJson);
     }
 
+    /**
+     * Represents the Boundary of a HCI Packet
+     */
     public enum boundary {
         FIRST_PACKET_FLUSHABLE(0),
         CONTINUING_PACKET(1),
@@ -26,6 +29,10 @@ public class HciPacket {
         }
     }
 
+    /**
+     * Parses the provided Snoop JSON and extracts the associated member fields.
+     * @param json as String
+     */
     private void parseSnoopJson(String json){
         try {
             JSONObject jsonSnoopFrame = new JSONObject(json);
@@ -50,6 +57,10 @@ public class HciPacket {
         }
     }
 
+    /**
+     * Parses the provided HCI JSON and extracts the associated member fields.
+     * @param json as String
+     */
     private void parseHciJson(String json){
         this.packet_hci_json = json;
         try {
@@ -104,87 +115,67 @@ public class HciPacket {
     public int packet_number;
 
     /**
-     * @brief
-     *      length of original packet (could be more than this packet's length)
+     * length of original packet (could be more than this packet's length)
      */
     public int original_length;
 
     /**
-     * @brief
-     *      packet data field length
+     * packet data field length
      */
     public int included_length;
 
     /**
-     * @brief
-     *      number of packet lost between the first record and this record for this file
+     * number of packet lost between the first record and this record for this file
      */
     public int cumulative_drops;
 
     /**
-     * @brief
-     *      unix timestamp for this packet record
+     * unix timestamp for this packet record
      */
     public Date timestamp;
 
     /**
-     * @brief
-     *      packet data
+     * packet data
      */
     public Byte[] packet_data;
 
     /**
-     * @brief
-     *      raw packet data
+     * raw packet data
      */
     public Byte[] packet_data_raw;
 
     /**
-     * @brief
-     *      define if packet record is sent
-     * @return
+     * define if packet record is sent
      */
     public boolean packet_sent;
 
     /**
-     * @brief
-     *      define if packet record is Sent or Received
-     * @return
+     * define if packet record is Sent or Received
      */
     public String packet_destination;
 
     /**
-     * @brief
-     *      define if packet record is data record
-     * @return
+     * define if packet record is data record
      */
     public boolean packet_type_data;
 
     /**
-     * @brief
-     *      define if packet record is command or event
-     * @return
+     * define if packet record is command or event
      */
     public boolean packet_type_command_event;
 
     /**
-     * @brief
-     *      defines the type of the packet
-     * @return
+     * defines the type of the packet
      */
     public String packet_type;
 
     /**
-     * @brief
-     *      defines additional packet info
-     * @return
+     * defines additional packet info
      */
     public String packet_info;
 
     /**
-     * @brief
-     *      defines if packet is first or a continuing packet
-     * @return
+     * defines if packet is first or a continuing packet
      */
     public boundary packet_boundary_flag;
 }

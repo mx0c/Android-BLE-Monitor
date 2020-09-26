@@ -16,6 +16,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.activities.ApplicationLogActivity;
 import com.huc.android_ble_monitor.activities.HciLogActivity;
+import com.huc.android_ble_monitor.models.BluLeDevice;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -39,7 +40,7 @@ public class ActivityUtil {
     }
 
     /**
-     * Helper Method to start a new activity passing an object of <code>{@link com.huc.android_ble_monitor.models.BleDevice}</code>
+     * Helper Method to start a new activity passing an object of <code>{@link BluLeDevice}</code>
      * @param ctx
      * @param cls
      * @param extraName

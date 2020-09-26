@@ -15,21 +15,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.ServicesListAdapter;
-import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.viewmodels.DeviceDetailViewModel;
-
 import java.util.ArrayList;
 
 public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
     private static final String TAG = "BLEM_DeviceDetailAct";
 
-    public static BleDevice staticBleDevice;
+    public static BluLeDevice staticBleDevice;
     private ListView mListViewOfServices;
     private PropertyResolver mResolver;
 
@@ -45,9 +43,9 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
     @Override
     protected void onServiceBinded() {
         mBluetoothLeService.requestRssi(true);
-        mBluetoothLeService.getBluetoothDevice().observe(DeviceDetailActivity.this, new Observer<BleDevice>() {
+        mBluetoothLeService.getBluetoothDevice().observe(DeviceDetailActivity.this, new Observer<BluLeDevice>() {
             @Override
-            public void onChanged(BleDevice bleDevice) {
+            public void onChanged(BluLeDevice bleDevice) {
                 mViewModel.updateBleDevie(bleDevice);
             }
         });
@@ -69,9 +67,9 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
     }
 
     public void setObservers(){
-        mViewModel.getmBleDevice().observe(this, new Observer<BleDevice>() {
+        mViewModel.getmBleDevice().observe(this, new Observer<BluLeDevice>() {
             @Override
-            public void onChanged(BleDevice device) {
+            public void onChanged(BluLeDevice device) {
                 Log.d(TAG, "onChanged: BleDevice value changed");
                 if(device == null) return;
                 initializeViews(device);
@@ -84,7 +82,7 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
         tvRssi.setText(mResolver.deviceRssiResolver(newRssi));
     }
 
-    public void initializeViews(BleDevice device) {
+    public void initializeViews(BluLeDevice device) {
         TextView tvName = findViewById(R.id.DeviceName_TextView);
         TextView tvAddress = findViewById(R.id.DeviceUUID_TextView);
         TextView tvBonded = findViewById(R.id.BondState_TextView);
@@ -109,7 +107,10 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
         tvConnectability.setText(mResolver.deviceConnectabilityResolver(bleScanResult));
 
         ArrayList<String> uuids = mResolver.deviceServiceResolver(device, bleScanResult);
-        tvServices.setText("Services (" + device.getServiceCount() + ")");
+        if(device.mBluetoothGatt != null)
+            tvServices.setText("Services (" + device.mBluetoothGatt.getServices().size() + ")");
+        else
+            tvServices.setText("Services (0)");
 
         if (device.mBluetoothGatt != null) {
             adapter.clear();
@@ -133,7 +134,7 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case android.R.id.home:
-                BleDevice bleDevice =  mViewModel.getmBleDevice().getValue();
+                BluLeDevice bleDevice =  mViewModel.getmBleDevice().getValue();
                 if (bleDevice != null) {
                     if (bleDevice.mConnectionState == BluetoothProfile.STATE_CONNECTED) {
                         new MaterialAlertDialogBuilder(DeviceDetailActivity.this)
