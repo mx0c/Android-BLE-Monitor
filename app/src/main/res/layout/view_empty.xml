@@ -16,7 +16,7 @@
             android:id="@+id/empty_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="No Devices found."
+            android:text="No Devices found.\nStart scanning for Devices."
             android:gravity="center"
             android:textSize="20dp"
             />

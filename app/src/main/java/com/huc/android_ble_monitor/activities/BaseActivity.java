@@ -58,6 +58,7 @@ public abstract class BaseActivity<T extends ViewModel> extends AppCompatActivit
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        overridePendingTransition(0, 0);
         setTheme(R.style.AppTheme); // Resets default theme after app was loaded
         initializeViewModel();
 
