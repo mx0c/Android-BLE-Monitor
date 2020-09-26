@@ -23,3 +23,4 @@ A Bluetooth Low Energy (BLE) Monitor for Android.
 - [btsnoop-decoder](https://github.com/bertrandmartel/btsnoop-decoder)
 - [Android Material](https://material.io/develop/android)
 - [Android Arch Lifecycle](https://developer.android.com/reference/android/arch/lifecycle/package-summary)
+- [rv-adapter-states](https://github.com/rockerhieu/rv-adapter-states)
