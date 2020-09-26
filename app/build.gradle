@@ -64,4 +64,7 @@ dependencies {
 
     // Apache commons
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+
+    // rv-adapter-states
+    implementation 'com.rockerhieu:rv-adapter-states:1.2'
 }

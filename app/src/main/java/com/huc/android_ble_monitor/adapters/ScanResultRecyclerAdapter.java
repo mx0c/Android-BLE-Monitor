@@ -14,8 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.huc.android_ble_monitor.R;
+import com.huc.android_ble_monitor.activities.MainActivity;
 import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.util.PropertyResolver;
+import com.rockerhieu.rvadapter.states.StatesRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +27,10 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
     private OnDeviceConnectListener mOnDeviceConnectListener;
     private List<BluLeDevice> mBleDevices;
-    private Context mContext;
+    private MainActivity mContext;
     private PropertyResolver propertyResolver;
 
-    public ScanResultRecyclerAdapter(Context context, List<BluLeDevice> bleDevices, OnDeviceConnectListener onDeviceConnectListener) {
+    public ScanResultRecyclerAdapter(MainActivity context, List<BluLeDevice> bleDevices, OnDeviceConnectListener onDeviceConnectListener) {
         mBleDevices = bleDevices;
         mContext = context;
         mOnDeviceConnectListener = onDeviceConnectListener;

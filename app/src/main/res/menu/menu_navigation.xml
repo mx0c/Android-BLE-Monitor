@@ -4,8 +4,10 @@
     <!-- Settings, should always be in the overflow -->
         <item
             android:id="@+id/action_hci_snoop"
-            android:title="HCI, L2CAP, ATT Snoop Log"/>
+            android:title="HCI, L2CAP, ATT Snoop Log"
+            android:icon="@drawable/baseline_list_alt_black_48dp"/>
         <item
             android:id="@+id/action_logging"
-            android:title="Application Log"/>
+            android:title="Application Log"
+            android:icon="@drawable/baseline_list_alt_black_48dp"/>
 </menu>

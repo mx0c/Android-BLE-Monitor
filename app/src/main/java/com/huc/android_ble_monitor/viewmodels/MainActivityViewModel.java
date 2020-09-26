@@ -19,12 +19,13 @@ public class MainActivityViewModel extends ViewModel {
     private static final String TAG = "BLEM_MAViewModel";
     private MutableLiveData<List<BluLeDevice>> mBleDevices = new MutableLiveData<>();
     private MutableLiveData<ToastModel> mToastBroadcast = new MutableLiveData<>();
-
+    private boolean isScanEnabled;
     private boolean isBluetoothEnabled;
 
     public void init() {
         mBleDevices.setValue(new ArrayList<BluLeDevice>());
         isBluetoothEnabled = true;
+        isScanEnabled = false;
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -59,6 +60,14 @@ public class MainActivityViewModel extends ViewModel {
 
     public boolean isBluetoothEnabled() {
         return isBluetoothEnabled;
+    }
+
+    public boolean isScanEnabled() {
+        return isScanEnabled;
+    }
+
+    public void setScanEnabled(boolean scanEnabled) {
+        isScanEnabled = scanEnabled;
     }
 
     public void registerScanResult(ScanResult scanResult) {
