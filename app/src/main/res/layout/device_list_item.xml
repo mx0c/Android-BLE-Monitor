@@ -67,7 +67,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/dummy_device"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginLeft="5dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -91,7 +92,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/dummy_uuid"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginLeft="5dp"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -202,7 +204,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_company" />
+                        android:text="@string/dummy_company"
+                        android:layout_marginLeft="3dp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -226,7 +229,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_not_connectable" />
+                        android:text="@string/dummy_not_connectable"
+                        android:layout_marginLeft="3dp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -250,7 +254,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_services" />
+                        android:text="@string/dummy_services"
+                        android:layout_marginLeft="3dp"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -281,7 +286,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_timestamp" />
+                        android:text="@string/dummy_timestamp"
+                        android:layout_marginLeft="3dp"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -304,7 +310,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_legacy_scan" />
+                        android:text="@string/dummy_legacy_scan"
+                        android:layout_marginLeft="3dp"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -327,7 +334,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_adv_interval" />
+                        android:text="@string/dummy_adv_interval"
+                        android:layout_marginLeft="3dp"/>
                 </LinearLayout>
 
             </LinearLayout>

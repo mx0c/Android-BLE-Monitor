@@ -41,7 +41,7 @@ public class MainActivityViewModel extends ViewModel {
             List<BluLeDevice> toRemove = new ArrayList<>();
             for (BluLeDevice dev : devices) {
                 if (dev.mTimestamp <= currTime) {
-                    Log.d(TAG, "checkTimeStamp: removed " + dev.mScanResult.getDevice().getAddress() + " because TTL is exceeded.");
+                    Log.d(TAG, "checkTimeStamp: removed " + dev.mScanResult.getDevice().getAddress() + " because TTL was exceeded.");
                     toRemove.add(dev);
                 }
             }

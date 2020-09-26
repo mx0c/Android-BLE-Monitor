@@ -23,9 +23,6 @@ public class BleUtil {
     public static BluetoothAdapter mBluetoothAdapter;
     public static BluetoothLeScanner mBleScanner;
 
-    private static final UUID NAME_CHARACTERISTIC_UUID = UUID.fromString("00002A00-0000-1000-8000-00805F9B34FB");
-    private static final UUID DEVICE_INFO_SERVICE_UUID = UUID.fromString("00001800-0000-1000-8000-00805F9B34FB");
-
     static public void checkIsBluetoothEnabled(AppCompatActivity ctx){
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mBleScanner = mBluetoothAdapter.getBluetoothLeScanner();

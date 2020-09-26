@@ -1,15 +1,26 @@
 package com.huc.android_ble_monitor.activities;
 
+import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.material.navigation.NavigationView;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 
@@ -27,6 +38,7 @@ public abstract class BaseActivity<T extends ViewModel> extends AppCompatActivit
     protected static final String TAG = "";
     protected T mViewModel;
     protected BluetoothLeService mBluetoothLeService;
+    protected ActionBarDrawerToggle mActionBarDrawerToggle;
 
     ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -55,6 +67,43 @@ public abstract class BaseActivity<T extends ViewModel> extends AppCompatActivit
         Log.d(TAG,"bindService returned: " + Boolean.toString(success));
 
         super.onCreate(savedInstanceState);
+    }
+
+    /**
+     * Used to initialize the navigation of the menu items in the navigation drawer menu
+     */
+    protected void initNavigationDrawerItemListeners(){
+        NavigationView navigationView = this.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId()) {
+                    case R.id.action_hci_snoop:
+                        Intent i = new Intent(BaseActivity.this, HciLogActivity.class);
+                        startActivity(i);
+                        return true;
+                    case R.id.action_logging:
+                        Intent j = new Intent(BaseActivity.this, ApplicationLogActivity.class);
+                        startActivity(j);
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Initializes the ActionBarDrawerToggle which is used to retrieve the state of the navigation
+     * drawer / open close it
+     * @return Instance of the ActionBarDrawerToggle
+     */
+    protected void initActionBarDrawerToggle() {
+        DrawerLayout drawerLayout = this.findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_closed);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        mActionBarDrawerToggle = actionBarDrawerToggle;
+        initNavigationDrawerItemListeners();
     }
 
     protected abstract void onServiceBinded();

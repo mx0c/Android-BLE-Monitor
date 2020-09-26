@@ -2,17 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Settings, should always be in the overflow -->
-
-    <item
-        android:id="@+id/action_hci_snoop"
-        android:title="HCI snoop logs"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_logging"
-        android:title="Application logs"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/update_assigned_numbers"
-        android:title="Update BT assigned numbers"
-        app:showAsAction="never" />
+        <item
+            android:id="@+id/action_hci_snoop"
+            android:title="HCI, L2CAP, ATT Snoop Log"/>
+        <item
+            android:id="@+id/action_logging"
+            android:title="Application Log"/>
 </menu>
