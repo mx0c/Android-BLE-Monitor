@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.CharacteristicListAdapter;
-import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.services.IBLeServiceCallbacks;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.PropertyResolver;
@@ -23,7 +23,7 @@ import com.huc.android_ble_monitor.viewmodels.ServicesOverviewActivityViewModel;
 public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActivityViewModel> implements IBLeServiceCallbacks {
     static final String TAG = "BLEM_ServicesOverview";
     public static BluetoothGattService staticGattService;
-    public static BleDevice staticBleDevice;
+    public static BluLeDevice staticBleDevice;
     private PropertyResolver mResolver;
 
     @Override
@@ -117,9 +117,9 @@ public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActiv
     }
 
     private void setObservers(){
-        mViewModel.mDevice.observe(ServicesOverviewActivity.this, new Observer<BleDevice>() {
+        mViewModel.mDevice.observe(ServicesOverviewActivity.this, new Observer<BluLeDevice>() {
             @Override
-            public void onChanged(BleDevice device) {
+            public void onChanged(BluLeDevice device) {
                 //update Device related views when device changed
                 TextView RssiTextView = findViewById(R.id.RSSI_TextView);
                 TextView DeviceNameTextView = findViewById(R.id.DeviceName_TextView);

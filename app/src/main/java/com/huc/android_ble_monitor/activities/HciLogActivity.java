@@ -9,7 +9,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.HciPacketListAdapter;
 import com.huc.android_ble_monitor.models.HciPacket;
@@ -30,7 +29,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hci_logging_activity);
         ActivityUtil.setToolbar(this, false);
-        ActivityUtil.setToolbarTitle(this, "HCI Snoop log");
+        ActivityUtil.setToolbarTitle(this, "HCI, L2CAP, ATT Snoop Log");
 
         mListView = findViewById(R.id.hci_log_listView);
         mAdapter = new HciPacketListAdapter(this, mViewModel.getSnoopPackets().getValue());
