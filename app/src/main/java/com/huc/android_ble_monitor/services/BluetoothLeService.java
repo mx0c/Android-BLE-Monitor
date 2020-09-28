@@ -20,7 +20,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.util.BleUtil;
 
 import java.util.ArrayList;
@@ -36,8 +36,8 @@ public class BluetoothLeService extends Service {
     private final IBinder mBinder = new LocalBinder();
     private ScheduledExecutorService mRssiRequestScheduler;
     private BluetoothGatt mBluetoothGatt;
-    private MutableLiveData<BleDevice> mBleDevice;
-    private MutableLiveData<List<BleDevice>> mScannedDevices;
+    private MutableLiveData<BluLeDevice> mBleDevice;
+    private MutableLiveData<List<BluLeDevice>> mScannedDevices;
     private MutableLiveData<ScanResult> mScanResult;
     private MutableLiveData<Integer> mCurrentRssi = new MutableLiveData<>();
     public IBLeServiceCallbacks mCallbacks;
@@ -81,13 +81,13 @@ public class BluetoothLeService extends Service {
     }
 
     void updateBleDeviceGatt(BluetoothGatt gatt){
-        BleDevice bleDevice = mBleDevice.getValue();
+        BluLeDevice bleDevice = mBleDevice.getValue();
         bleDevice.mBluetoothGatt = gatt;
         mBleDevice.postValue(bleDevice);
     }
 
     void updateBleDeviceState(int state){
-        BleDevice bleDevice = mBleDevice.getValue();
+        BluLeDevice bleDevice = mBleDevice.getValue();
         bleDevice.mConnectionState = state;
         mBleDevice.postValue(bleDevice);
     }
@@ -106,7 +106,7 @@ public class BluetoothLeService extends Service {
                     Log.d(TAG, "onConnectionStateChange: Connected to GATT server.");
                     // Attempts to discover services after successful connection.
                     Log.d(TAG, "onConnectionStateChange: Attempting to start service discovery:" +
-                            mBluetoothGatt.discoverServices());
+                    mBluetoothGatt.discoverServices());
                     break;
                 case BluetoothProfile.STATE_DISCONNECTED:
                     Log.d(TAG, "onConnectionStateChange: Disconnected from GATT server.");
@@ -169,7 +169,7 @@ public class BluetoothLeService extends Service {
     public IBinder onBind(Intent intent) {
         if(mScannedDevices == null) {
             mScannedDevices = new MutableLiveData<>();
-            mScannedDevices.setValue(new ArrayList<BleDevice>());
+            mScannedDevices.setValue(new ArrayList<BluLeDevice>());
         }
 
         if(mBleDevice == null) {
@@ -195,11 +195,10 @@ public class BluetoothLeService extends Service {
             return;
         }
         mBluetoothGatt.disconnect();
-
         mBluetoothGatt = null;
     }
 
-    public boolean connect(final BleDevice device) {
+    public boolean connect(final BluLeDevice device) {
         mBleDevice.postValue(device);
         if (BleUtil.mBluetoothAdapter == null || device == null) {
             return false;
@@ -269,7 +268,7 @@ public class BluetoothLeService extends Service {
 
     public LiveData<Integer> getCurrentRssi(){ return mCurrentRssi; }
 
-    public LiveData<BleDevice> getBluetoothDevice() {
+    public LiveData<BluLeDevice> getBluetoothDevice() {
         return mBleDevice;
     }
 }

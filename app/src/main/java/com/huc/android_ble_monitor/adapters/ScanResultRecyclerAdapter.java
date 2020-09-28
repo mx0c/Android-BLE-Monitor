@@ -1,7 +1,6 @@
 package com.huc.android_ble_monitor.adapters;
 
 import android.bluetooth.le.ScanResult;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.activities.MainActivity;
+import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.util.PropertyResolver;
 
 import java.util.ArrayList;
@@ -24,11 +24,11 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     private static final String TAG = "BLEM_ScanResultRecyclerAdapt";
 
     private OnDeviceConnectListener mOnDeviceConnectListener;
-    private List<BleDevice> mBleDevices;
-    private Context mContext;
+    private List<BluLeDevice> mBleDevices;
+    private MainActivity mContext;
     private PropertyResolver propertyResolver;
 
-    public ScanResultRecyclerAdapter(Context context, List<BleDevice> bleDevices, OnDeviceConnectListener onDeviceConnectListener) {
+    public ScanResultRecyclerAdapter(MainActivity context, List<BluLeDevice> bleDevices, OnDeviceConnectListener onDeviceConnectListener) {
         mBleDevices = bleDevices;
         mContext = context;
         mOnDeviceConnectListener = onDeviceConnectListener;
@@ -45,7 +45,7 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        BleDevice device = mBleDevices.get(position);
+        BluLeDevice device = mBleDevices.get(position);
         ScanResult scanResult = device.mScanResult;
 
         ((ViewHolder)holder).tvBonded.setText(propertyResolver.bondStateTextResolver(scanResult));
@@ -62,8 +62,8 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         ((ViewHolder)holder).tvTimestampNanos.setText(propertyResolver.timestampResolver(scanResult));
 
         ArrayList<String> uuids = propertyResolver.deviceServiceResolver(device, scanResult);
-        ((ViewHolder)holder).tvServices.setText("Advertised Services (" + device.getAdvertisedServiceCount() + ")");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.advertised_service_list_item, uuids);
+        ((ViewHolder)holder).tvServices.setText("Advertised Services (" + device.getAdvServiceCount() + ")");
+        ArrayAdapter<String> adapter = new ArrayAdapter(mContext, R.layout.advertised_service_list_item, uuids);
         ((ViewHolder)holder).servicesListView.setAdapter(adapter);
     }
 

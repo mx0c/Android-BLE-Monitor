@@ -9,13 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.models.BluLeDevice;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,9 +22,6 @@ public class BleUtil {
 
     public static BluetoothAdapter mBluetoothAdapter;
     public static BluetoothLeScanner mBleScanner;
-
-    private static final UUID NAME_CHARACTERISTIC_UUID = UUID.fromString("00002A00-0000-1000-8000-00805F9B34FB");
-    private static final UUID DEVICE_INFO_SERVICE_UUID = UUID.fromString("00001800-0000-1000-8000-00805F9B34FB");
 
     static public void checkIsBluetoothEnabled(AppCompatActivity ctx){
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -54,8 +48,8 @@ public class BleUtil {
         }
     }
 
-    public static boolean containsDevice(List<BleDevice> resList, ScanResult res) {
-        for (BleDevice dev : resList) {
+    public static boolean containsDevice(List<BluLeDevice> resList, ScanResult res) {
+        for (BluLeDevice dev : resList) {
             if (dev.mScanResult.getDevice().getAddress().equals(res.getDevice().getAddress())) {
                 return true;
             }
@@ -63,9 +57,9 @@ public class BleUtil {
         return false;
     }
 
-    public static List<BleDevice> updateDevice(List<BleDevice> resList, BleDevice update){
+    public static List<BluLeDevice> updateDevice(List<BluLeDevice> resList, BluLeDevice update){
         int i = 0;
-        for (BleDevice dev: resList) {
+        for (BluLeDevice dev: resList) {
             if(dev.mScanResult.getDevice().getAddress().equals(update.mScanResult.getDevice().getAddress())){
                 resList.set(i, update);
                 return resList;

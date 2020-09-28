@@ -9,7 +9,7 @@ A Bluetooth Low Energy (BLE) Monitor for Android.
 - Retrieve Services, Characteristics and Descriptors
 - Identify standardized Services and Characteristics
 - Interact with Characteristics and Descriptors
-- HCI, L2CAP & ATT Log utilizing the Android Bluetooth Snoop Log 
+- HCI, L2CAP & ATT Log utilizing the Android Bluetooth [Snoop](https://tools.ietf.org/html/rfc1761) Log 
 
 ### Requirements:
 - Android Phone which supports BLE
@@ -23,3 +23,4 @@ A Bluetooth Low Energy (BLE) Monitor for Android.
 - [btsnoop-decoder](https://github.com/bertrandmartel/btsnoop-decoder)
 - [Android Material](https://material.io/develop/android)
 - [Android Arch Lifecycle](https://developer.android.com/reference/android/arch/lifecycle/package-summary)
+- [rv-adapter-states](https://github.com/rockerhieu/rv-adapter-states)

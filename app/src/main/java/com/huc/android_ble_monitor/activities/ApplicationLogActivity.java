@@ -23,10 +23,11 @@ public class ApplicationLogActivity extends AppCompatActivity implements SwipeRe
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(0, 0);
         setTheme(R.style.AppTheme);
         setContentView(R.layout.logging_activity);
         ActivityUtil.setToolbar(this, false);
-        ActivityUtil.setToolbarTitle(this, "Application logs");
+        ActivityUtil.setToolbarTitle(this, "Application Log");
 
         mSwipeRefreshLayout = findViewById(R.id.LogSwipeContainer);
         mSwipeRefreshLayout.setOnRefreshListener(this);

@@ -76,7 +76,8 @@
                             android:id="@+id/DeviceName_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/dummy_device" />
+                            android:text="@string/dummy_device"
+                            android:layout_marginStart="5dp"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -99,7 +100,8 @@
                             android:id="@+id/DeviceUUID_TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/dummy_uuid" />
+                            android:text="@string/dummy_uuid"
+                            android:layout_marginStart="5dp"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -158,7 +160,8 @@
                         android:id="@+id/CompanyIdentifier_TextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/dummy_company" />
+                        android:text="@string/dummy_company"
+                        android:layout_marginStart="5dp"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -181,13 +184,39 @@
                         android:id="@+id/Connectability_TextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/dummy_not_connectable" />
+                        android:text="@string/dummy_not_connectable"
+                        android:layout_marginStart="5dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="1.5dp"
+                    android:paddingBottom="1.5dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/round_import_export_white_48"
+                        app:tint="@color/secondaryColor" />
+
+                    <TextView
+                        android:id="@+id/Services_TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dummy_services"
+                        android:layout_marginStart="5dp"/>
                 </LinearLayout>
                 <include
                     android:id="@+id/hr_divider"
                     layout="@layout/horizontal_divider"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"/>
             </LinearLayout>
         </LinearLayout>
 

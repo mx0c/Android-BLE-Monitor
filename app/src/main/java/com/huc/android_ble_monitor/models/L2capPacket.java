@@ -2,7 +2,6 @@ package com.huc.android_ble_monitor.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.apache.commons.lang3.*;
 
 public class L2capPacket {
     public L2capPacket(HciPacket p, int number){
@@ -21,17 +20,27 @@ public class L2capPacket {
     }
 
     /**
-     * add subsequent hci frames to this l2cap packet
-     * @param p
+     * Length of the complete L2CAP Packet
      */
-    public void addHciFrame(HciPacket p){
-        this.packet_hci_frames.add(p);
-        this.packet_data = ArrayUtils.addAll(this.packet_data, p.packet_data);
-    }
-
     public int packet_length;
+
+    /**
+     * Channel ID (CID) of this L2CAP Packet
+     */
     public String packet_channel_id;
+
+    /**
+     * subsequent number of this received L2CAP packet
+     */
     public int packet_number;
+
+    /**
+     * HCI Frames that are contained in this L2CAP Packet
+     */
     public ArrayList<HciPacket> packet_hci_frames = new ArrayList<>();
+
+    /**
+     * Data Payload of this L2CAP Packet
+     */
     public Byte[] packet_data;
 }

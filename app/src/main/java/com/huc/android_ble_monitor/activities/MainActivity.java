@@ -15,27 +15,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.ScanResultRecyclerAdapter;
-import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BleUtil;
 import com.huc.android_ble_monitor.util.PermissionsUtil;
 import com.huc.android_ble_monitor.viewmodels.MainActivityViewModel;
+import com.rockerhieu.rvadapter.states.StatesRecyclerViewAdapter;
 
 import java.util.List;
-
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends BaseActivity<MainActivityViewModel> implements ScanResultRecyclerAdapter.OnDeviceConnectListener, SwipeRefreshLayout.OnRefreshListener {
@@ -45,24 +42,22 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
     private RecyclerView mScanResultRecyclerView;
     private ScanResultRecyclerAdapter mScanResultRecyclerAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
+    public StatesRecyclerViewAdapter mStatesRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //BaseActivity onCreate
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         mScanResultRecyclerView = findViewById(R.id.scan_result_recycler_view);
         ActivityUtil.setToolbar(this, true);
-
-        this.actionBarDrawerToggle = ActivityUtil.initActionBarDrawerToggle(this);
-        ActivityUtil.initNavigationDrawerItemListeners(this);
 
         PermissionsUtil.requestLocationPermission(this);
         PermissionsUtil.requestReadStoragePermission(this);
         BleUtil.checkIsBluetoothEnabled(this);
         BleUtil.checkBleAvailability(this);
+
+        // Initializes vertical Actionbar
+        initActionBarDrawerToggle();
 
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
@@ -82,7 +77,7 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
         mBluetoothLeService.getScanResult().observe(MainActivity.this, new Observer<ScanResult>() {
             @Override
             public void onChanged(ScanResult scanResult) {
-            mViewModel.registerScanResult(scanResult);
+                mViewModel.registerScanResult(scanResult);
             }
         });
     }
@@ -94,10 +89,17 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
             Toast.makeText(MainActivity.this, toastModel.getMessage(), toastModel.getDuration()).show();
             }
         });
-        mViewModel.getmBleDevices().observe(this, new Observer<List<BleDevice>>() {
+        mViewModel.getmBleDevices().observe(this, new Observer<List<BluLeDevice>>() {
             @Override
-            public void onChanged(List<BleDevice> bleDevices) {
-            mScanResultRecyclerAdapter.notifyDataSetChanged();
+            public void onChanged(List<BluLeDevice> bleDevices) {
+                mScanResultRecyclerAdapter.notifyDataSetChanged();
+                if(bleDevices.size() > 0){
+                    mStatesRecyclerViewAdapter.setState(StatesRecyclerViewAdapter.STATE_NORMAL);
+                }else if(bleDevices.size() <= 0 && mViewModel.isScanEnabled()){
+                    mStatesRecyclerViewAdapter.setState(StatesRecyclerViewAdapter.STATE_LOADING);
+                }else if(bleDevices.size() <= 0 && !mViewModel.isScanEnabled()){
+                    mStatesRecyclerViewAdapter.setState(StatesRecyclerViewAdapter.STATE_EMPTY);
+                }
             }
         });
     }
@@ -111,6 +113,16 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mScanResultRecyclerView.setLayoutManager(linearLayoutManager);
         mScanResultRecyclerView.setAdapter(mScanResultRecyclerAdapter);
+
+        mScanResultRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mScanResultRecyclerView.setHasFixedSize(true);
+
+        View loadingView = getLayoutInflater().inflate(R.layout.view_loading, mScanResultRecyclerView, false);
+        View emptyView = getLayoutInflater().inflate(R.layout.view_empty, mScanResultRecyclerView, false);
+
+        mStatesRecyclerViewAdapter = new StatesRecyclerViewAdapter(mScanResultRecyclerAdapter, loadingView, emptyView, null);
+        mScanResultRecyclerView.setAdapter(mStatesRecyclerViewAdapter);
+        mStatesRecyclerViewAdapter.setState(StatesRecyclerViewAdapter.STATE_EMPTY);
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -162,12 +174,17 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
                     if(mViewModel.isBluetoothEnabled()) {
                         Log.d(TAG, "BLE Switch checked. Scanning BLE Devices.");
                         mBluetoothLeService.scanForDevices(true);
+                        mViewModel.setScanEnabled(true);
+                        if(mStatesRecyclerViewAdapter.getState() != StatesRecyclerViewAdapter.STATE_NORMAL) {
+                            mStatesRecyclerViewAdapter.setState(StatesRecyclerViewAdapter.STATE_LOADING);
+                        }
                     } else {
                         BleUtil.checkIsBluetoothEnabled(MainActivity.this);
                         buttonView.setChecked(false);
                     }
                 } else {
                     Log.d(TAG, "BLE Switch unchecked. Stopped scanning BLE Devices.");
+                    mViewModel.setScanEnabled(false);
                 }
             }
         });
@@ -181,7 +198,7 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if(mActionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
@@ -206,7 +223,7 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
     @Override
     public void onDeviceClick(int position) {
         try {
-            final BleDevice bleDevice = mViewModel.getmBleDevices().getValue().get(position);
+            final BluLeDevice bleDevice = mViewModel.getmBleDevices().getValue().get(position);
 
             if (Build.VERSION.SDK_INT >= 26) {
                 if (bleDevice.mScanResult.isConnectable()) {

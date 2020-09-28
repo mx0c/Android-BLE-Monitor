@@ -12,7 +12,7 @@ import android.os.SystemClock;
 import android.util.SparseArray;
 
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.models.BleDevice;
+import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.models.NameInformation;
 
 import java.text.SimpleDateFormat;
@@ -171,7 +171,7 @@ public class PropertyResolver {
         return connectabilityText;
     }
 
-    public ArrayList<String> deviceServiceResolver(BleDevice item, ScanResult result) {
+    public ArrayList<String> deviceServiceResolver(BluLeDevice item, ScanResult result) {
         List<ParcelUuid> uuids = result.getScanRecord().getServiceUuids(); // ToDo Remove Logic to viewmodel
         ArrayList<String> uuidStrings = new ArrayList<>();
 
