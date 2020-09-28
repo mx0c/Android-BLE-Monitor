@@ -67,7 +67,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/dummy_device"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:ellipsize="start"/>
             </LinearLayout>
 
             <LinearLayout
@@ -91,7 +93,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/dummy_uuid"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:ellipsize="start"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -99,12 +103,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
             android:gravity="right"
             android:paddingTop="8dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="135dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
@@ -122,7 +125,7 @@
                         android:layout_height="24dp"
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/round_bluetooth_connected_white_48"
+                        android:src="@drawable/round_bluetooth_disabled_white_48"
                         android:tint="@color/secondaryColor" />
 
                     <TextView
@@ -155,7 +158,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="@string/dummy_connected" />
+                        android:text="@string/dummy_disconnected" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -202,7 +205,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_company" />
+                        android:text="@string/dummy_company"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -226,7 +230,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_not_connectable" />
+                        android:text="@string/dummy_not_connectable"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -250,7 +255,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_services" />
+                        android:text="@string/dummy_services"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -281,7 +287,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_timestamp" />
+                        android:text="@string/dummy_timestamp"
+                        android:textSize="12sp" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -304,7 +311,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_legacy_scan" />
+                        android:text="@string/dummy_legacy_scan"
+                        android:textSize="12sp" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -327,7 +335,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_adv_interval" />
+                        android:text="@string/dummy_adv_interval"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
             </LinearLayout>

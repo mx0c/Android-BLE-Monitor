@@ -18,8 +18,8 @@
     <string name="dummy_device">Dummy Device</string>
     <string name="_999db">-999db</string>
     <string name="dummy_uuid">xx:xx:xx:xx:xx:xx</string>
-    <string name="dummy_connected">Connected</string>
-    <string name="dummy_bonded">Bonded</string>
+    <string name="dummy_disconnected">DISCONNECTED</string>
+    <string name="dummy_bonded">NOT BONDED</string>
     <string name="dummy_company">Mocked Inc.</string>
     <string name="dummy_not_connectable">Not Connectable</string>
     <string name="dummy_services">Services (99)</string>

@@ -62,7 +62,7 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         ((ViewHolder)holder).tvTimestampNanos.setText(propertyResolver.timestampResolver(scanResult));
 
         ArrayList<String> uuids = propertyResolver.deviceServiceResolver(device, scanResult);
-        ((ViewHolder)holder).tvServices.setText("Advertised Services (" + device.getServiceCount() + ")");
+        ((ViewHolder)holder).tvServices.setText("Advertised Services (" + device.getAdvertisedServiceCount() + ")");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext, R.layout.advertised_service_list_item, uuids);
         ((ViewHolder)holder).servicesListView.setAdapter(adapter);
     }

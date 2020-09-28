@@ -92,7 +92,6 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
         TextView tvConnectability = findViewById(R.id.Connectability_TextView);
         TextView tvCompanyIdentifier = findViewById(R.id.CompanyIdentifier_TextView);
         ImageView ivBondstate = findViewById(R.id.BondState_ImageView);
-        TextView tvServices = findViewById(R.id.Services_TextView);
         mListViewOfServices = findViewById(R.id.lv_services);
 
         //setting ListView Adapter
@@ -107,9 +106,6 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
         tvRssi.setText(mResolver.deviceRssiResolver(device.mCurrentRssi));
         tvCompanyIdentifier.setText(mResolver.deviceManufacturerResolver(bleScanResult));
         tvConnectability.setText(mResolver.deviceConnectabilityResolver(bleScanResult));
-
-        ArrayList<String> uuids = mResolver.deviceServiceResolver(device, bleScanResult);
-        tvServices.setText("Services (" + device.getServiceCount() + ")");
 
         if (device.mBluetoothGatt != null) {
             adapter.clear();

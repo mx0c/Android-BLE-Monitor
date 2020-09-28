@@ -2,18 +2,21 @@ package com.huc.android_ble_monitor.adapters;
 
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.util.IdentifierXmlResolver;
+import com.huc.android_ble_monitor.util.PropertyResolver;
 
 import java.util.List;
 
@@ -22,7 +25,7 @@ public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
     TextView tvServiceName;
     TextView tvServiceUuid;
     TextView tvServiceIdentifier;
-    TextView tvServiceLink;
+    ImageView tvServiceLink;
 
     public ServicesListAdapter(@NonNull Context context, List<BluetoothGattService> bluetoothGattServices) {
         super(context, 0, bluetoothGattServices);
@@ -57,10 +60,27 @@ public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
         tvServiceIdentifier.setText(this.propertyResolver.serviceIdentifierResolver(bluetoothGattService));
 
         String serviceId = propertyResolver.serviceIdentifierResolver(bluetoothGattService);
+
         if(!serviceId.equals(PropertyResolver.SIG_UNKNOWN_SERVICE_IDENTIFIER)) {
-            tvServiceLink.setText(IdentifierXmlResolver.getServiceXmlLink(serviceId));
+            tvServiceLink.setTag(IdentifierXmlResolver.getServiceXmlLink(serviceId));
         }else{
             tvServiceLink.setVisibility(View.GONE);
         }
+
+
+
+
+        tvServiceLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setData(Uri.parse(tvServiceLink.getTag().toString()));
+                v.getContext().startActivity(intent);
+            }
+        });
+
+
     }
 }
