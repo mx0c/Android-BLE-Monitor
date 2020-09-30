@@ -27,7 +27,7 @@ public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
 
     public ServicesListAdapter(@NonNull Context context, List<BluetoothGattService> bluetoothGattServices) {
         super(context, 0, bluetoothGattServices);
-        propertyResolver = new PropertyResolver(context);
+        propertyResolver = new PropertyResolver();
     }
 
     @NonNull

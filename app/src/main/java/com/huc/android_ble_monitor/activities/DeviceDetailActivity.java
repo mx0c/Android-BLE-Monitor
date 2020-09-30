@@ -36,7 +36,7 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ble_device_overview);
         ActivityUtil.setToolbar(this, false);
-        mResolver = new PropertyResolver(this);
+        mResolver = new PropertyResolver();
         setObservers();
     }
 
@@ -106,7 +106,6 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
         tvCompanyIdentifier.setText(mResolver.deviceManufacturerResolver(bleScanResult));
         tvConnectability.setText(mResolver.deviceConnectabilityResolver(bleScanResult));
 
-        ArrayList<String> uuids = mResolver.deviceServiceResolver(device, bleScanResult);
         if(device.mBluetoothGatt != null)
             tvServices.setText("Services (" + device.mBluetoothGatt.getServices().size() + ")");
         else
