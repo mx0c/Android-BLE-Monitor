@@ -38,15 +38,15 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:tint="@color/secondaryColor"
-                    app:srcCompat="@drawable/round_rss_feed_white_48" />
+                    app:srcCompat="@drawable/round_rss_feed_white_48"
+                    app:tint="@color/secondaryColor" />
 
                 <TextView
                     android:id="@+id/RSSI_TextView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_horizontal"
-                    android:text="-80db" />
+                    android:text="@string/_999db" />
             </LinearLayout>
 
             <LinearLayout
@@ -70,13 +70,13 @@
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
                         android:src="@drawable/round_tap_and_play_white_48"
-                        android:tint="@color/secondaryColor" />
+                        app:tint="@color/secondaryColor" />
 
                     <TextView
                         android:id="@+id/DeviceName_TextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Apple Watch" />
+                        android:text="@string/dummy_device" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -93,13 +93,13 @@
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
                         android:src="@drawable/round_fingerprint_white_48"
-                        android:tint="@color/secondaryColor" />
+                        app:tint="@color/secondaryColor" />
 
                     <TextView
                         android:id="@+id/DeviceUUID_TextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="UUID:" />
+                        android:text="@string/dummy_uuid" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -118,7 +118,7 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
                     android:src="@drawable/round_bluetooth_connected_white_48"
-                    android:tint="@color/secondaryColor" />
+                    app:tint="@color/secondaryColor" />
 
                 <TextView
                     android:id="@+id/BondState_TextView"
@@ -133,7 +133,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginTop="10dp"
-            android:background="@color/primaryColor"></View>
+            android:background="@color/primaryColor"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -144,17 +144,17 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:src="@drawable/round_import_export_white_48"
-                android:tint="@color/secondaryColor"></ImageView>
+                app:tint="@color/secondaryColor"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="2.25"
-                android:text="Service Name:"
-                android:textStyle="bold"></TextView>
+                android:text="@string/service_name"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/service_name_textview"
@@ -162,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="mock"></TextView>
+                android:text="mock"/>
         </LinearLayout>
 
         <LinearLayout
