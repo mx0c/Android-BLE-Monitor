@@ -9,4 +9,12 @@ public class BinaryUtil {
         res += String.format("%02X", lsb);
         return res;
     }
+
+    public static String byteArrToHexString(byte[] data){
+        String hexString = "";
+        for(byte b : data){
+            hexString += String.format("%02 ", b);
+        }
+        return hexString;
+    }
 }

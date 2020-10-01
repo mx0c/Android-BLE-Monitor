@@ -65,9 +65,6 @@ public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
             tvServiceLink.setVisibility(View.GONE);
         }
 
-
-
-
         tvServiceLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +75,5 @@ public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
                 v.getContext().startActivity(intent);
             }
         });
-
-
     }
 }

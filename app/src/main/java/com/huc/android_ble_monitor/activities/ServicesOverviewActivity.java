@@ -16,6 +16,7 @@ import com.huc.android_ble_monitor.adapters.CharacteristicListAdapter;
 import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.services.IBLeServiceCallbacks;
 import com.huc.android_ble_monitor.util.ActivityUtil;
+import com.huc.android_ble_monitor.util.BinaryUtil;
 import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.viewmodels.ServicesOverviewActivityViewModel;
 
@@ -48,7 +49,7 @@ public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActiv
             public void run() {
                 new MaterialAlertDialogBuilder(ServicesOverviewActivity.this)
                 .setTitle("Read from Characteristic returned:")
-                .setMessage("Read Characteristic "+ characteristic.getUuid().toString() + ":\nRaw: " + characteristic.getValue() + "\nString: " + characteristic.getStringValue(0)
+                .setMessage("Read Characteristic "+ characteristic.getUuid().toString() + ":\nRaw (0x): " + BinaryUtil.byteArrToHexString(characteristic.getValue()) + "\nString: " + characteristic.getStringValue(0)
                         + "\nInt32: "+ characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT32,0))
                 .setNeutralButton("Ok", null)
                 .show();
@@ -64,7 +65,7 @@ public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActiv
                 EditText et = new EditText(ServicesOverviewActivity.this);
                 new MaterialAlertDialogBuilder(ServicesOverviewActivity.this)
                         .setTitle("Write from Characteristic returned:")
-                        .setMessage("Successfully wrote: " + characteristic.getValue().toString())
+                        .setMessage("Successfully wrote: " + BinaryUtil.byteArrToHexString(characteristic.getValue()))
                         .setNeutralButton("Ok", null)
                         .show();
             }
@@ -78,7 +79,7 @@ public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActiv
             public void run() {
                 new MaterialAlertDialogBuilder(ServicesOverviewActivity.this)
                         .setTitle("Received Notification from Characteristic")
-                        .setMessage(characteristic.getValue().toString())
+                        .setMessage(BinaryUtil.byteArrToHexString(characteristic.getValue()))
                         .setNeutralButton("Ok", null)
                         .setNegativeButton("Disable Notification", new DialogInterface.OnClickListener() {
                             @Override

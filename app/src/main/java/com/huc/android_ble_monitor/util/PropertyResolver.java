@@ -158,13 +158,14 @@ public class PropertyResolver {
     }
 
     public ArrayList<String> deviceServiceResolver(BluLeDevice item, ScanResult result) {
-        List<ParcelUuid> uuids = result.getScanRecord().getServiceUuids(); // ToDo Remove Logic to viewmodel
+        //TODO: Remove Logic to viewmodel
+        List<ParcelUuid> uuids = result.getScanRecord().getServiceUuids();
         ArrayList<String> uuidStrings = new ArrayList<>();
 
         if(uuids != null) {
             for (ParcelUuid uuid : uuids) {
                 String uuidString = uuid.getUuid().toString();
-                String name = " (" + DataUtil.resolveUuidToNameInformation(uuidString) + ")";
+                String name = " (" + DataUtil.resolveUuidToNameInformation(uuidString).name + ")";
                 uuidStrings.add(name + uuidString);
             }
         }
