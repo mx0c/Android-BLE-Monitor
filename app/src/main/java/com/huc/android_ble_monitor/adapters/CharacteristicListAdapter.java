@@ -33,7 +33,7 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
         super(context, 0, characteristics);
         mContext = context;
         mCharacteristics = characteristics;
-        mPropertyResolver = new PropertyResolver(context);
+        mPropertyResolver = new PropertyResolver();
         mService = service;
     }
 

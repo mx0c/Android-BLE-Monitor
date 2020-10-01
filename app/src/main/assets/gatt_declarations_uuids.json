@@ -1,0 +1,6 @@
+[
+  { "name": "GATT Characteristic Declaration", "identifier": "org.bluetooth.attribute.gatt_.characteristic_declaration", "uuid": "2803", "source": "gss" },
+  { "name": "GATT Include Declaration", "identifier": "org.bluetooth.attribute.gatt_.include_declaration", "uuid": "2802", "source": "gss" },
+  { "name": "GATT Primary Service Declaration", "identifier": "org.bluetooth.attribute.gatt_.primary_service_declaration", "uuid": "2800", "source": "gss" },
+  { "name": "GATT Secondary Service Declaration", "identifier": "org.bluetooth.attribute.gatt_.secondary_service_declaration", "uuid": "2801", "source": "gss" }
+]

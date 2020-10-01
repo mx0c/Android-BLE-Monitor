@@ -32,7 +32,7 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         mBleDevices = bleDevices;
         mContext = context;
         mOnDeviceConnectListener = onDeviceConnectListener;
-        propertyResolver = new PropertyResolver(context);
+        propertyResolver = new PropertyResolver();
     }
 
     @NonNull

@@ -1,12 +1,15 @@
 package com.huc.android_ble_monitor.viewmodels;
 
-import android.util.Log;
+import android.app.Application;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.activities.HciLogActivity;
 import com.huc.android_ble_monitor.adapters.AttPacketListAdapter;

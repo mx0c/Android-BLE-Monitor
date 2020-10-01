@@ -27,7 +27,7 @@ public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
 
     public ServicesListAdapter(@NonNull Context context, List<BluetoothGattService> bluetoothGattServices) {
         super(context, 0, bluetoothGattServices);
-        propertyResolver = new PropertyResolver(context);
+        propertyResolver = new PropertyResolver();
     }
 
     @NonNull
@@ -74,7 +74,7 @@ public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse(tvServiceLink.getTag().toString()));
+                intent.setData(Uri.parse(v.getTag().toString()));
                 v.getContext().startActivity(intent);
             }
         });

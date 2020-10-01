@@ -67,7 +67,7 @@ public class BaseAttPacket {
         res += "Packet Type: " + this.packet_method.name() + "\n";
         res += "Auth Signature flag: " + (this.packet_authentication_signature_flag ? "1" : "0") + "\n";
         res += "Command Flag: " + (this.packet_command_flag ? "1" : "0") + "\n";
-        res += "Raw Data as Hex: ";
+        res += "Raw Data (0x): ";
         for(Byte b : this.packet_data){
             res += String.format("%02X ", b);
         }

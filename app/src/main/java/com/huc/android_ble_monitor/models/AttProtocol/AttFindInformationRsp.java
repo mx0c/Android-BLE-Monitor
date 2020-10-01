@@ -1,10 +1,13 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
+import android.provider.ContactsContract;
 import android.util.Pair;
 
 import com.huc.android_ble_monitor.models.L2capPacket;
 import com.huc.android_ble_monitor.models.UuidFormat;
 import com.huc.android_ble_monitor.util.BinaryUtil;
+import com.huc.android_ble_monitor.util.DataUtil;
+
 import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +15,7 @@ import java.util.UUID;
 
 public class AttFindInformationRsp extends BaseAttPacket{
     public UuidFormat mFormat;
-    public ArrayList<Pair<Short, UUID>> mHandleUuidList;
+    public ArrayList<Pair<Short, String>> mHandleUuidList;
 
     public AttFindInformationRsp(L2capPacket p) {
         super(p);
@@ -30,8 +33,8 @@ public class AttFindInformationRsp extends BaseAttPacket{
      * @param data
      * @return
      */
-    private ArrayList<Pair<Short, UUID>> decode128BitUuidTuples(Byte[] data){
-        ArrayList<Pair<Short, UUID>> result = new ArrayList();
+    private ArrayList<Pair<Short, String>> decode128BitUuidTuples(Byte[] data){
+        ArrayList<Pair<Short, String>> result = new ArrayList();
         int length = this.packet_length;
         int i = 2;
 
@@ -49,7 +52,7 @@ public class AttFindInformationRsp extends BaseAttPacket{
             ArrayUtils.reverse(byteArray);
 
             UUID uuid = UUID.nameUUIDFromBytes(byteArray);
-            result.add(new Pair(handle, uuid));
+            result.add(new Pair(handle, uuid.toString()));
             i += getTupleSize();
             length -= getTupleSize();
         }
@@ -61,8 +64,8 @@ public class AttFindInformationRsp extends BaseAttPacket{
      * @param data
      * @return
      */
-    private ArrayList<Pair<Short, UUID>> decode16BitTuples(Byte[] data){
-        ArrayList<Pair<Short, UUID>> result = new ArrayList();
+    private ArrayList<Pair<Short, String>> decode16BitTuples(Byte[] data){
+        ArrayList<Pair<Short, String>> result = new ArrayList();
         int length = this.packet_length;
         int i = 2;
 
@@ -75,9 +78,7 @@ public class AttFindInformationRsp extends BaseAttPacket{
             String MSBHex = String.format("%02X", data[i + 3]);
             String uuid16Bit = MSBHex + LSBHex;
 
-            // convert 16 Bit UUID to 128 Bit UUID
-            String uuid128Bit = BLE_BASE_UUID_16_BIT_MNEMONIC.replace("xxxx", uuid16Bit);
-            result.add(new Pair(handle, UUID.fromString(uuid128Bit)));
+            result.add(new Pair(handle, uuid16Bit));
             i += getTupleSize();
             length -= getTupleSize();
         }
@@ -96,8 +97,9 @@ public class AttFindInformationRsp extends BaseAttPacket{
     @Override
     public String toString(){
         String listString = "";
-        for(Pair<Short, UUID> p : mHandleUuidList){
-            listString += "Handle: " + BinaryUtil.shortToHexString(p.first) + ", " + "UUID: " + p.second.toString() + "\n";
+        for(Pair<Short, String> p : mHandleUuidList){
+            String uuid = "("+ DataUtil.resolveUuidToNameInformation(p.second).name +") 0x" + p.second;
+            listString += "Handle: " + BinaryUtil.shortToHexString(p.first) + ", " + "UUID: " + uuid + "\n";
         }
 
         String res = super.toString() + "\n";

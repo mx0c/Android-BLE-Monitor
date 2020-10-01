@@ -31,7 +31,7 @@ public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActiv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.services_overview_activity);
         ActivityUtil.setToolbar(this, false);
-        mResolver = new PropertyResolver(this);
+        mResolver = new PropertyResolver();
         setObservers();
     }
 

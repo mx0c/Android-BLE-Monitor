@@ -5,36 +5,32 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanResult;
-import android.content.Context;
 import android.os.Build;
 import android.os.ParcelUuid;
 import android.os.SystemClock;
+import android.provider.ContactsContract;
 import android.util.SparseArray;
-
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.models.NameInformation;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 public class PropertyResolver {
     private static final String TAG = "BLEM_PropertyToViewReso";
-
     private final static int BONDING_IMG_ID = R.drawable.round_bluetooth_searching_white_48;
     private final static int BONDED_IMG_ID = R.drawable.round_bluetooth_connected_white_48;
     private final static int NOT_BONDED_IMG_ID = R.drawable.round_bluetooth_disabled_white_48;
     private final static int NOT_CONNECTED_IMG_ID = R.drawable.round_power_off_white_48;
     private final static int CONNECTED_IMG_ID = R.drawable.round_power_white_48;
     private final static int CONNECTING_IMG_ID = R.drawable.round_settings_ethernet_white_48dp;
-    private final static String SIG_UNKNOWN_SERVICE_NAME = "SIG unknown service";
-    private final static String SIG_UNKNOWN_CHARACTERISTIC_NAME = "SIG unknown characteristic";
-    public final static String SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER = "SIG unknown characteristic identifier";
-    public final static String SIG_UNKNOWN_SERVICE_IDENTIFIER = "SIG unknown service identifier";
+    public final static String SIG_UNKNOWN_SERVICE_NAME = "Unknown Service";
+    public final static String SIG_UNKNOWN_CHARACTERISTIC_NAME = "Unknown Characteristic";
+    public final static String SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER = "Unknown Characteristic Identifier";
+    public final static String SIG_UNKNOWN_SERVICE_IDENTIFIER = "Unknown Service Identifier";
     private final static String LEGACY_SCAN_RES = "Legacy Scan Result";
     private final static String NOT_AVAIL = "n/a";
     private final static String WHITESPACE = " ";
@@ -43,16 +39,6 @@ public class PropertyResolver {
     private final static String MILLISECONDS_SHORT = "ms";
     private final static String TIMESTAMP = "Timestamp";
     private final static String CONNECTABLE = "Connectable";
-
-    private HashMap<Integer, String> mManufacturerIdToStringMap;
-    private HashMap<String, NameInformation> mServiceUUIDtoNameInformationsMap;
-    private HashMap<String, NameInformation> mCharacteristicUUIDNameInformationsMap;
-
-    public PropertyResolver(Context ctx) {
-        mManufacturerIdToStringMap = DataUtil.loadManufacturerIdToStringMap(ctx);
-        mServiceUUIDtoNameInformationsMap = DataUtil.loadServiceData(ctx);
-        mCharacteristicUUIDNameInformationsMap = DataUtil.loadCharacteristicData(ctx);
-    }
 
     public String connectionStateToStringResolver(int connState){
         String res = "";
@@ -155,7 +141,7 @@ public class PropertyResolver {
         for(int i = 0; i < manufacturerData .size(); i++){
             manufacturerId = manufacturerData.keyAt(i);
         }
-        return mManufacturerIdToStringMap.get(manufacturerId) + " (" + manufacturerId + ")";
+        return DataUtil.resolveManufacturerId(manufacturerId) + " (" + manufacturerId + ")";
     }
 
     public String deviceConnectabilityResolver(ScanResult result) {
@@ -178,47 +164,36 @@ public class PropertyResolver {
         if(uuids != null) {
             for (ParcelUuid uuid : uuids) {
                 String uuidString = uuid.getUuid().toString();
-                NameInformation nameInfo = this.mServiceUUIDtoNameInformationsMap.get(uuidString);
-                String name;
-
-                if(nameInfo != null)
-                    name = " | " + nameInfo.name;
-                else
-                    name = "";
-
-                uuidStrings.add(uuidString + name);
+                String name = " (" + DataUtil.resolveUuidToNameInformation(uuidString) + ")";
+                uuidStrings.add(name + uuidString);
             }
-        }else if(uuidStrings.size() <= 0){
-            uuidStrings.add("- No advertised services found");
         }
-
         return uuidStrings;
     }
 
     public String serviceNameResolver(BluetoothGattService bluetoothGattService) {
-        NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid().toString().substring(4,8).toUpperCase());
-        String serviceName;
-
-        if(knownSigService == null) {
-            serviceName =  SIG_UNKNOWN_SERVICE_NAME;
+        String servicename = DataUtil.resolveUuidToNameInformation(bluetoothGattService.getUuid().toString().substring(4,8).toUpperCase()).name;
+        if(servicename == DataUtil.UNKNOWN_UUID) {
+            return SIG_UNKNOWN_SERVICE_NAME;
         } else {
-            serviceName = knownSigService.name;
+            return servicename;
         }
-
-        return serviceName;
     }
 
     public String characteristicNameResolver(BluetoothGattCharacteristic bluetoothGattCharacteristic){
         UUID uuid = bluetoothGattCharacteristic.getUuid();
         String sUuid = uuid.toString();
-        String subsUuid = sUuid.substring(4,8);
-        NameInformation characteristicNi = mCharacteristicUUIDNameInformationsMap.get(bluetoothGattCharacteristic.getUuid().toString().substring(4,8).toUpperCase());
-        return characteristicNi == null ? SIG_UNKNOWN_CHARACTERISTIC_NAME : characteristicNi.name;
+        sUuid = sUuid.substring(4,8).toUpperCase();
+        NameInformation characteristicNi = DataUtil.resolveUuidToNameInformation(sUuid);
+        return characteristicNi.name == DataUtil.UNKNOWN_UUID ? SIG_UNKNOWN_CHARACTERISTIC_NAME : characteristicNi.name;
     }
 
     public String characteristicIdentifierResolver(BluetoothGattCharacteristic bluetoothGattCharacteristic){
-        NameInformation characteristicNi = mCharacteristicUUIDNameInformationsMap.get(bluetoothGattCharacteristic.getUuid().toString().substring(4,8).toUpperCase());
-        return characteristicNi == null ? SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER : characteristicNi.identifier;
+        UUID uuid = bluetoothGattCharacteristic.getUuid();
+        String sUuid = uuid.toString();
+        sUuid = sUuid.substring(4,8).toUpperCase();
+        NameInformation characteristicNi = DataUtil.resolveUuidToNameInformation(sUuid);
+        return characteristicNi.identifier == DataUtil.UNKNOWN_UUID ? SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER : characteristicNi.identifier;
     }
 
     public String serviceUuidResolver(BluetoothGattService bluetoothGattService) {
@@ -226,16 +201,15 @@ public class PropertyResolver {
     }
 
     public String serviceIdentifierResolver(BluetoothGattService bluetoothGattService) {
-        NameInformation knownSigService = mServiceUUIDtoNameInformationsMap.get(bluetoothGattService.getUuid().toString().substring(4,8).toUpperCase());
-        String serviceIdentifier;
+        String sUuid = bluetoothGattService.getUuid().toString();
+        sUuid = sUuid.substring(4,8).toUpperCase();
+        NameInformation knownSigService = DataUtil.resolveUuidToNameInformation(sUuid);
 
-        if(knownSigService == null) {
-            serviceIdentifier =  SIG_UNKNOWN_SERVICE_IDENTIFIER;
+        if(knownSigService.identifier == DataUtil.UNKNOWN_UUID) {
+            return SIG_UNKNOWN_SERVICE_IDENTIFIER;
         } else {
-            serviceIdentifier = knownSigService.identifier;
+            return  knownSigService.identifier;
         }
-
-        return serviceIdentifier;
     }
 
     public String legacyScanResultResolver(ScanResult scanResult) {

@@ -2,6 +2,8 @@ package com.huc.android_ble_monitor.models.AttProtocol;
 
 import com.huc.android_ble_monitor.models.L2capPacket;
 import com.huc.android_ble_monitor.util.BinaryUtil;
+import com.huc.android_ble_monitor.util.DataUtil;
+
 import org.apache.commons.lang3.ArrayUtils;
 import java.util.Arrays;
 import java.util.UUID;
@@ -9,16 +11,18 @@ import java.util.UUID;
 public class AttReadByTypeReq extends BaseAttPacket {
     public short mStartingHandle;
     public short mEndingHandle;
-    public UUID mTypeUuid;
+    public String mTypeUuid;
+    public String mTypeName;
 
     public AttReadByTypeReq(L2capPacket p) {
         super(p);
         mStartingHandle = decode16BitValue(packet_data[1], packet_data[2]);
         mEndingHandle =  decode16BitValue(packet_data[3], packet_data[4]);
         mTypeUuid = decodeUuid(packet_data);
+        mTypeName = DataUtil.resolveUuidToNameInformation(mTypeUuid).name;
     }
 
-    private UUID decodeUuid(Byte[] data){
+    private String decodeUuid(Byte[] data){
         // subtract length of opcode (1 Byte) + both handles (4 Byte) from packet length
         int uuid_length = super.packet_length - 5;
         // 16 Bit UUID
@@ -26,16 +30,13 @@ public class AttReadByTypeReq extends BaseAttPacket {
             // decode 16 bit UUID and insert into base UUID mnemonic
             String LSBHex = String.format("%02X", data[5]);
             String MSBHex = String.format("%02X", data[6]);
-            String uuid16Bit = MSBHex + LSBHex;
-            // convert 16 Bit UUID to 128 Bit UUID
-            String uuid128Bit = BLE_BASE_UUID_16_BIT_MNEMONIC.replace("xxxx", uuid16Bit);
-            return UUID.fromString(uuid128Bit);
+            return MSBHex + LSBHex;
         }
         // 128 Bit UUID
         else if(uuid_length == 16){
             byte[] uuidByteArr =  ArrayUtils.toPrimitive(Arrays.copyOfRange(data, 5, this.packet_length - 1));
             ArrayUtils.reverse(uuidByteArr);
-            return UUID.nameUUIDFromBytes(uuidByteArr);
+            return UUID.nameUUIDFromBytes(uuidByteArr).toString();
         }
         return null;
     }
@@ -45,7 +46,7 @@ public class AttReadByTypeReq extends BaseAttPacket {
         String res = super.toString() + "\n";
         res += "Starting Handle: " + BinaryUtil.shortToHexString(mStartingHandle) + "\n";
         res += "Ending Handle: " + BinaryUtil.shortToHexString(mEndingHandle) + "\n";
-        res += "Type UUID: " + mTypeUuid.toString() + "\n";
+        res += "Type UUID: " + mTypeName + " (0x" + mTypeUuid + ")\n";
         return res;
     }
 }
