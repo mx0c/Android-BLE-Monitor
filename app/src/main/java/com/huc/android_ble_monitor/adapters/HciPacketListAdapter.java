@@ -1,7 +1,6 @@
 package com.huc.android_ble_monitor.adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import androidx.annotation.Nullable;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.models.HciPacket;
-import com.huc.android_ble_monitor.models.L2capPacket;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +40,7 @@ public class HciPacketListAdapter extends ArrayAdapter<HciPacket> {
         final HciPacket packet = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.hci_logging_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_hci_log_list_item, parent, false);
         }
 
         initializeViews(convertView);

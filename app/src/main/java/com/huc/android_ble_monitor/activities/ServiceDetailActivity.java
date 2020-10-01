@@ -21,7 +21,7 @@ import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.viewmodels.ServicesOverviewActivityViewModel;
 
 
-public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActivityViewModel> implements IBLeServiceCallbacks {
+public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivityViewModel> implements IBLeServiceCallbacks {
     static final String TAG = "BLEM_ServicesOverview";
     public static BluetoothGattService staticGattService;
     public static BluLeDevice staticBleDevice;
@@ -30,7 +30,7 @@ public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActiv
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.services_overview_activity);
+        setContentView(R.layout.activity_service_detail);
         ActivityUtil.setToolbar(this, false);
         mResolver = new PropertyResolver();
         setObservers();
@@ -44,10 +44,10 @@ public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActiv
 
     @Override
     public void onCharacteristicRead(final BluetoothGattCharacteristic characteristic) {
-        ServicesOverviewActivity.this.runOnUiThread(new Runnable() {
+        ServiceDetailActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                new MaterialAlertDialogBuilder(ServicesOverviewActivity.this)
+                new MaterialAlertDialogBuilder(ServiceDetailActivity.this)
                 .setTitle("Read from Characteristic returned:")
                 .setMessage("Read Characteristic "+ characteristic.getUuid().toString() + ":\nRaw (0x): " + BinaryUtil.byteArrToHexString(characteristic.getValue()) + "\nString: " + characteristic.getStringValue(0)
                         + "\nInt32: "+ characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT32,0))
@@ -59,11 +59,11 @@ public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActiv
 
     @Override
     public void onCharacteristicWrite(final BluetoothGattCharacteristic characteristic) {
-        ServicesOverviewActivity.this.runOnUiThread(new Runnable() {
+        ServiceDetailActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                EditText et = new EditText(ServicesOverviewActivity.this);
-                new MaterialAlertDialogBuilder(ServicesOverviewActivity.this)
+                EditText et = new EditText(ServiceDetailActivity.this);
+                new MaterialAlertDialogBuilder(ServiceDetailActivity.this)
                         .setTitle("Write from Characteristic returned:")
                         .setMessage("Successfully wrote: " + BinaryUtil.byteArrToHexString(characteristic.getValue()))
                         .setNeutralButton("Ok", null)
@@ -74,10 +74,10 @@ public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActiv
 
     @Override
     public void onCharacteristicNotify(final BluetoothGattCharacteristic characteristic) {
-        ServicesOverviewActivity.this.runOnUiThread(new Runnable() {
+        ServiceDetailActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                new MaterialAlertDialogBuilder(ServicesOverviewActivity.this)
+                new MaterialAlertDialogBuilder(ServiceDetailActivity.this)
                         .setTitle("Received Notification from Characteristic")
                         .setMessage(BinaryUtil.byteArrToHexString(characteristic.getValue()))
                         .setNeutralButton("Ok", null)
@@ -95,8 +95,8 @@ public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActiv
 
     @Override
     protected void onServiceBinded() {
-        mBluetoothLeService.registerActivityCallbacks(ServicesOverviewActivity.this);
-        mViewModel.getService().observe(ServicesOverviewActivity.this, new Observer<BluetoothGattService>() {
+        mBluetoothLeService.registerActivityCallbacks(ServiceDetailActivity.this);
+        mViewModel.getService().observe(ServiceDetailActivity.this, new Observer<BluetoothGattService>() {
             @Override
             public void onChanged(BluetoothGattService service) {
                 //update service related views when service changed
@@ -106,10 +106,10 @@ public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActiv
 
                 serviceUUID.setText(service.getUuid().toString());
                 serviceName.setText(mResolver.serviceNameResolver(service));
-                characteristicListview.setAdapter(new CharacteristicListAdapter(ServicesOverviewActivity.this, service.getCharacteristics(), mBluetoothLeService));
+                characteristicListview.setAdapter(new CharacteristicListAdapter(ServiceDetailActivity.this, service.getCharacteristics(), mBluetoothLeService));
             }
         });
-        mBluetoothLeService.getCurrentRssi().observe(ServicesOverviewActivity.this, new Observer<Integer>() {
+        mBluetoothLeService.getCurrentRssi().observe(ServiceDetailActivity.this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer rssi) {
                 mViewModel.updateRssi(rssi);
@@ -118,7 +118,7 @@ public class ServicesOverviewActivity extends BaseActivity<ServicesOverviewActiv
     }
 
     private void setObservers(){
-        mViewModel.mDevice.observe(ServicesOverviewActivity.this, new Observer<BluLeDevice>() {
+        mViewModel.mDevice.observe(ServiceDetailActivity.this, new Observer<BluLeDevice>() {
             @Override
             public void onChanged(BluLeDevice device) {
                 //update Device related views when device changed

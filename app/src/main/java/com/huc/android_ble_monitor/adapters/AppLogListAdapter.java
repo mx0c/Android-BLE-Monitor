@@ -11,9 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.models.AttProtocol.BaseAttPacket;
 
 import java.util.List;
 
@@ -33,7 +31,7 @@ public class AppLogListAdapter extends ArrayAdapter<Pair<String, String>> {
         final Pair<String, String> p = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.application_log_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_application_log_item, parent, false);
         }
 
         initializeViews(convertView);

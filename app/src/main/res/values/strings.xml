@@ -30,6 +30,11 @@
     <string name="dummy_adv_interval">Adv. Interval: 1.25ms</string>
     <string name="dummy_timestamp">10-04-19 12:00:17</string>
 
+
+    <!-- Property Labels -->
+    <string name="service_name">Service Name:</string>
+
+
     <!-- Filter Entries -->
     <string-array name="FilterArray">
         <item>Verbose</item>
