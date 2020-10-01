@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -28,15 +27,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#FFFFFF"
-                android:tint="@color/secondaryColor"
-                app:srcCompat="@drawable/round_rss_feed_white_48" />
+                app:srcCompat="@drawable/round_rss_feed_white_48"
+                app:tint="@color/secondaryColor"
+                />
 
             <TextView
                 android:id="@+id/RSSI_TextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
-                android:text="-0db" />
+                android:text="@string/_999db" />
         </LinearLayout>
 
         <LinearLayout
@@ -47,7 +47,7 @@
             android:paddingTop="8dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -60,11 +60,12 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
                     android:src="@drawable/round_tap_and_play_white_48"
-                    android:tint="@color/secondaryColor" />
+                    app:tint="@color/secondaryColor"
+                    android:contentDescription="TODO" />
 
                 <TextView
                     android:id="@+id/DeviceName_TextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/dummy_device"
                     android:textStyle="bold"
@@ -74,7 +75,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -87,11 +88,11 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
                     android:src="@drawable/round_fingerprint_white_48"
-                    android:tint="@color/secondaryColor" />
+                    app:tint="@color/secondaryColor" />
 
                 <TextView
                     android:id="@+id/DeviceUUID_TextView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/dummy_uuid"
                     android:textStyle="bold"
@@ -128,7 +129,7 @@
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
                         android:src="@drawable/round_bluetooth_disabled_white_48"
-                        android:tint="@color/secondaryColor" />
+                        app:tint="@color/secondaryColor" />
 
                     <TextView
                         android:id="@+id/BondState_TextView"
@@ -153,7 +154,7 @@
                         android:adjustViewBounds="true"
                         android:scaleType="fitCenter"
                         android:src="@drawable/round_power_off_white_48"
-                        android:tint="@color/secondaryColor" />
+                        app:tint="@color/secondaryColor" />
 
                     <TextView
                         android:id="@+id/ConnectionState_TextView"
@@ -178,178 +179,180 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="false" android:orientation="horizontal">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="1.5dp"
+                android:paddingBottom="1.5dp"
+                android:layout_weight="1">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/round_house_white_48"
+                    app:tint="@color/secondaryColor" />
+
+                <TextView
+                    android:id="@+id/CompanyIdentifier_TextView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingTop="1.5dp"
-                    android:paddingBottom="1.5dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/round_house_white_48"
-                        android:tint="@color/secondaryColor" />
-
-                    <TextView
-                        android:id="@+id/CompanyIdentifier_TextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_company"
-                        android:textSize="12sp"
-                        android:layout_marginLeft="3dp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingTop="1.5dp"
-                    android:paddingBottom="1.5dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/round_power_off_white_48"
-                        android:tint="@color/secondaryColor" />
-
-                    <TextView
-                        android:id="@+id/Connectability_TextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_not_connectable"
-                        android:layout_marginLeft="3dp"
-                        android:textSize="12sp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingTop="1.5dp"
-                    android:paddingBottom="1.5dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/round_import_export_white_48"
-                        android:tint="@color/secondaryColor" />
-
-                    <TextView
-                        android:id="@+id/Services_TextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_services"
-                        android:textSize="12sp"
-                        android:layout_marginLeft="3dp"/>
-                </LinearLayout>
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/dummy_company"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="3dp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="1.5dp"
+                android:paddingBottom="1.5dp"
+                android:layout_weight="1">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/round_info_white_48"
+                    app:tint="@color/secondaryColor" />
+
+                <TextView
+                    android:id="@+id/advertising_timestamp_TextView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingTop="1.5dp"
-                    android:paddingBottom="1.5dp">
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/dummy_timestamp"
+                    android:layout_marginLeft="3dp"
+                    android:textSize="12sp"/>
+            </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/round_info_white_48"
-                        android:tint="@color/secondaryColor" />
 
-                    <TextView
-                        android:id="@+id/advertising_timestamp_TextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_timestamp"
-                        android:layout_marginLeft="3dp"
-                        android:textSize="12sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="1.5dp"
+                android:paddingBottom="1.5dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/round_power_off_white_48"
+                    app:tint="@color/secondaryColor" />
+
+                <TextView
+                    android:id="@+id/Connectability_TextView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingTop="1.5dp"
-                    android:paddingBottom="1.5dp">
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/dummy_not_connectable"
+                    android:layout_marginLeft="3dp"
+                    android:textSize="12sp"/>
+            </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/round_info_white_48"
-                        android:tint="@color/secondaryColor" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="1.5dp"
+                android:paddingBottom="1.5dp"
+                android:layout_weight="1">
 
-                    <TextView
-                        android:id="@+id/legacyScan_TextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_legacy_scan"
-                        android:layout_marginLeft="3dp"
-                        android:textSize="12sp"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/round_info_white_48"
+                    app:tint="@color/secondaryColor" />
+
+                <TextView
+                    android:id="@+id/legacyScan_TextView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingTop="1.5dp"
-                    android:paddingBottom="1.5dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/round_info_white_48"
-                        android:tint="@color/secondaryColor" />
-
-                    <TextView
-                        android:id="@+id/advetising_interval_TextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="5dp"
-                        android:text="@string/dummy_adv_interval"
-                        android:layout_marginLeft="3dp"
-                        android:textSize="12sp"/>
-                </LinearLayout>
-
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/dummy_legacy_scan"
+                    android:layout_marginLeft="3dp"
+                    android:textSize="12sp"/>
             </LinearLayout>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="1.5dp"
+                android:paddingBottom="1.5dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/round_import_export_white_48"
+                    app:tint="@color/secondaryColor" />
+
+                <TextView
+                    android:id="@+id/Services_TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/dummy_services"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="3dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="1.5dp"
+                android:paddingBottom="1.5dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/round_info_white_48"
+                    app:tint="@color/secondaryColor" />
+
+                <TextView
+                    android:id="@+id/advetising_interval_TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/dummy_adv_interval"
+                    android:layout_marginLeft="3dp"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <ListView
