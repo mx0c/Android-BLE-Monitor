@@ -13,7 +13,7 @@ public class BinaryUtil {
     public static String byteArrToHexString(byte[] data){
         String hexString = "";
         for(byte b : data){
-            hexString += String.format("%02 ", b);
+            hexString += String.format("%02X ", b);
         }
         return hexString;
     }

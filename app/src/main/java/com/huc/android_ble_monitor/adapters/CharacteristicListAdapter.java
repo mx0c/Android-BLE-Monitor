@@ -1,14 +1,19 @@
 package com.huc.android_ble_monitor.adapters;
 
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,10 +22,11 @@ import androidx.annotation.Nullable;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
-import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.util.BleUtil;
 import com.huc.android_ble_monitor.util.IdentifierXmlResolver;
+import com.huc.android_ble_monitor.util.PropertyResolver;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharacteristic> {
@@ -46,10 +52,10 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_service_detail_characteristic_list_item, parent, false);
         }
 
-        TextView characteristicName = convertView.findViewById(R.id.tv_characteristic_item_name);
-        TextView characteristicIdentifier = convertView.findViewById(R.id.tv_characteristic_item_identifier);
-        TextView characteristicUuid = convertView.findViewById(R.id.tv_characteristic_item_uuid);
-        TextView characteristicIdentifierLink = convertView.findViewById(R.id.tv_identifier_link);
+        TextView characteristicName = convertView.findViewById(R.id.tv_service_item_name);
+        TextView characteristicIdentifier = convertView.findViewById(R.id.tv_service_item_identifier);
+        TextView characteristicUuid = convertView.findViewById(R.id.tv_service_item_uuid);
+
 
         characteristicUuid.setText(characteristic.getUuid().toString());
         characteristicName.setText(mPropertyResolver.characteristicNameResolver(characteristic));
@@ -57,12 +63,59 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
         String characteristicIdString = mPropertyResolver.characteristicIdentifierResolver(characteristic);
         characteristicIdentifier.setText(characteristicIdString);
 
+        this.handleLinkView(convertView, characteristicIdString);
+        this.handleCharacteristicButtons(convertView, characteristic);
+        this.handleDescriptorList(convertView, characteristic);
+
+        return convertView;
+    }
+
+
+    void handleDescriptorList(View convertView, BluetoothGattCharacteristic characteristic) {
+        ListView lv_descriptors = convertView.findViewById(R.id.lv_descriptors);
+        TextView tv_descriptors = convertView.findViewById(R.id.tv_descriptors);
+        List<BluetoothGattDescriptor> descriptorList = characteristic.getDescriptors();
+
+        if(descriptorList.size() > 0) {
+            List<String> strDescriptorList = new ArrayList<>();
+
+            for (BluetoothGattDescriptor descriptor :
+                    descriptorList) {
+                strDescriptorList.add(descriptor.getUuid().toString());
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter(mContext, R.layout.activity_main_adv_service_list_item, strDescriptorList);
+            lv_descriptors.setAdapter(adapter);
+        } else {
+            tv_descriptors.setVisibility(View.GONE);
+            lv_descriptors.setVisibility(View.GONE);
+        }
+
+
+    }
+
+    void handleLinkView(final View convertView, String characteristicIdString) {
+        ImageView characteristicIdentifierLink = convertView.findViewById(R.id.tv_service_identifier_link);
+
         if(!characteristicIdString.equals(PropertyResolver.SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER)) {
-            characteristicIdentifierLink.setText(IdentifierXmlResolver.getCharacteristicXmlLink(characteristicIdString));
+            characteristicIdentifierLink.setTag(IdentifierXmlResolver.getCharacteristicXmlLink(characteristicIdString));
         }else{
             characteristicIdentifierLink.setVisibility(View.GONE);
         }
 
+        characteristicIdentifierLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setData(Uri.parse(v.getTag().toString()));
+                v.getContext().startActivity(intent);
+            }
+        });
+    }
+
+    void handleCharacteristicButtons(final View convertView, final BluetoothGattCharacteristic characteristic) {
         Button readBtn = convertView.findViewById(R.id.readBtn);
         Button writeBtn = convertView.findViewById(R.id.writeBtn);
         Button notifyBtn = convertView.findViewById(R.id.notifyBtn);
@@ -112,7 +165,5 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
                 mService.setCharacteristicNotification(characteristic, true);
             }
         });
-
-        return convertView;
     }
 }

@@ -1,47 +1,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <TextView
-        android:id="@+id/tv_characteristic_item_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:paddingStart="10dp"
-        android:text="dummy characteristic name" />
+    android:orientation="vertical"
+    android:focusable="true">
+
+    <include layout="@layout/activity_device_detail_service_list_item">
+    </include>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:orientation="vertical">
         <TextView
-            android:id="@+id/tv_characteristic_item_identifier"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_descriptors"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingStart="10dp"
-            android:text="Dummy identifier"
-            android:textSize="14sp" />
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/descriptors"
+            android:textStyle="bold"/>
+        <ListView
+            android:id="@+id/lv_descriptors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_characteristic_item_uuid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/dummy_uuid"
-            android:textSize="14sp" />
-    </LinearLayout>
-    <LinearLayout android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/tv_identifier_link"
-            android:autoLink="web"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="10dp"
-            android:text="dummy link"></TextView>
-    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,7 +36,7 @@
             android:layout_weight="1"
             android:id="@+id/readBtn"
             android:layout_marginHorizontal="5dp"
-            android:text="Read">
+            android:text="@string/characteristic_read">
         </Button>
         <Button
             android:layout_width="match_parent"
@@ -62,7 +44,7 @@
             android:id="@+id/writeBtn"
             android:layout_marginHorizontal="5dp"
             android:layout_weight="1"
-            android:text="Write">
+            android:text="@string/characteristic_write">
         </Button>
         <Button
             android:layout_width="match_parent"
@@ -70,8 +52,7 @@
             android:id="@+id/notifyBtn"
             android:layout_marginHorizontal="5dp"
             android:layout_weight="1"
-            android:text="Notify">
+            android:text="@string/characteristic_notify">
         </Button>
-
     </LinearLayout>
 </LinearLayout>

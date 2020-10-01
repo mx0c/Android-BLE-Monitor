@@ -33,7 +33,13 @@
 
     <!-- Property Labels -->
     <string name="service_name">Service Name:</string>
+    <string name="service_uuid">Service UUID:</string>
 
+    <!-- Service Detail View -->
+    <string name="characteristic_read">Read</string>
+    <string name="characteristic_write">Write</string>
+    <string name="characteristic_notify">Notify</string>
+    <string name="descriptors">Descriptors</string>
 
     <!-- Filter Entries -->
     <string-array name="FilterArray">

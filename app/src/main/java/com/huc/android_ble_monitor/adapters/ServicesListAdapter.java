@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.util.IdentifierXmlResolver;
 import com.huc.android_ble_monitor.util.PropertyResolver;
@@ -36,7 +38,7 @@ public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
         BluetoothGattService bluetoothGattService = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_service_detail_service_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_device_detail_service_list_item, parent, false);
         }
 
         initializeViews(convertView);
