@@ -3,6 +3,8 @@ package com.huc.android_ble_monitor.models.AttProtocol;
 import com.huc.android_ble_monitor.models.L2capPacket;
 import com.huc.android_ble_monitor.models.Triplet;
 import com.huc.android_ble_monitor.util.BinaryUtil;
+import com.huc.android_ble_monitor.util.DataUtil;
+
 import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,10 +46,13 @@ public class AttReadByGroupTypeRsp extends BaseAttPacket {
         for(Triplet<Short, Short, Byte[]> t : mHandleValueTriplets){
             list += BinaryUtil.shortToHexString(t.getFirst()) + ", ";
             list += BinaryUtil.shortToHexString(t.getSecond()) + ", ";
+
+            String data = "0x";
             for(Byte b : t.getThird()){
-                list += String.format("%02X ", b);
+                data += String.format("%02X", b);
             }
-            list += "\n";
+            data += " (" + DataUtil.resolveUuidToNameInformation(data).name + ")";
+            list += data + "\n";
         }
 
         res += list;

@@ -98,7 +98,7 @@ public class AttFindInformationRsp extends BaseAttPacket{
     public String toString(){
         String listString = "";
         for(Pair<Short, String> p : mHandleUuidList){
-            String uuid = "("+ DataUtil.resolveUuidToNameInformation(p.second).name +") 0x" + p.second;
+            String uuid = "0x" + p.second + " (" + DataUtil.resolveUuidToNameInformation(p.second).name + ")";
             listString += "Handle: " + BinaryUtil.shortToHexString(p.first) + ", " + "UUID: " + uuid + "\n";
         }
 

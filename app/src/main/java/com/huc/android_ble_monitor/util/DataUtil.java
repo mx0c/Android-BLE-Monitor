@@ -16,7 +16,8 @@ import java.util.HashMap;
 public class DataUtil {
     static private HashMap<String,NameInformation> mCharacteristicUuidToNameInformationMap = loadCharacteristicUuidToNameInformationMap();
     static private HashMap<String,NameInformation> mServiceUuidToNameInformationMap = loadServiceUuidToNameInformationMap();
-    static private HashMap<String,NameInformation> mDeclarationUuidToNameInformationMap =  loadDeclarationUuidToNameInformationMap();
+    static private HashMap<String,NameInformation> mDeclarationUuidToNameInformationMap = loadDeclarationUuidToNameInformationMap();
+    static private HashMap<String,NameInformation> mDescriptorUuidToNameInformationMap = loadDescriptorUuidToNameInformationMap();
     static private HashMap<Integer, String> mManufacturerIdToNameMap = loadManufacturerIdToStringMap();
 
     public final static String UNKNOWN_UUID = "UNKNOWN UUID";
@@ -29,6 +30,11 @@ public class DataUtil {
         }
 
         ni = mDeclarationUuidToNameInformationMap.get(uuid);
+        if(ni != null){
+            return ni;
+        }
+
+        ni = mDescriptorUuidToNameInformationMap.get(uuid);
         if(ni != null){
             return ni;
         }
@@ -84,6 +90,33 @@ public class DataUtil {
                 JSONObject obj = jsonArray.getJSONObject(i);
                 String test = obj.keys().next();
                 map.put(obj.getInt("code"), obj.getString("name"));
+            }catch (JSONException ex){
+                ex.printStackTrace();
+                return null;
+            }
+        }
+        return map;
+    }
+
+    /**
+     * This static method can be used to read in the "descriptor_uuids.json" file located in the Assets folder.
+     * @return if successful returns a map with service-uuid's as keys and a NameInformation Object as values which consists
+     * of a "name" and "identifier" string, otherwise null.
+     */
+    static public HashMap<String, NameInformation> loadDescriptorUuidToNameInformationMap(){
+        JSONArray jsonArray = loadJSONArrayFromAsset("descriptor_uuids.json");
+        HashMap<String, NameInformation> map = new HashMap<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                String test = obj.keys().next();
+                map.put(obj.getString("uuid"),
+                        new NameInformation(
+                                obj.getString("name"),
+                                obj.getString("identifier")
+                        )
+                );
             }catch (JSONException ex){
                 ex.printStackTrace();
                 return null;

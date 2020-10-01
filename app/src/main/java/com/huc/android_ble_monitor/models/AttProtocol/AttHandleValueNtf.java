@@ -19,7 +19,7 @@ public class AttHandleValueNtf extends BaseAttPacket{
     public String toString() {
         String res = super.toString() + "\n";
         res += "Handle: " + BinaryUtil.shortToHexString(mHandle) + "\n";
-        res += "Value: \n";
+        res += "Value (Big Endian): \n";
         for(Byte b : mValue){
             res += String.format("%02x ", b);
         }
