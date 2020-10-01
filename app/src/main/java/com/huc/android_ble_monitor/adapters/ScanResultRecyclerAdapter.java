@@ -38,7 +38,7 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.device_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_main_device_list_item, parent, false);
         ViewHolder vh = new ViewHolder(view, mOnDeviceConnectListener);
         return vh;
     }
@@ -63,7 +63,7 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
 
         ArrayList<String> uuids = propertyResolver.deviceServiceResolver(device, scanResult);
         ((ViewHolder)holder).tvServices.setText("Advertised Services (" + device.getAdvServiceCount() + ")");
-        ArrayAdapter<String> adapter = new ArrayAdapter(mContext, R.layout.advertised_service_list_item, uuids);
+        ArrayAdapter<String> adapter = new ArrayAdapter(mContext, R.layout.activity_main_adv_service_list_item, uuids);
         ((ViewHolder)holder).servicesListView.setAdapter(adapter);
     }
 

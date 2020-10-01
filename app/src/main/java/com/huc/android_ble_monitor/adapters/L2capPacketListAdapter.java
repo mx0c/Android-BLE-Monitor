@@ -10,13 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.models.HciPacket;
 import com.huc.android_ble_monitor.models.L2capPacket;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -41,7 +36,7 @@ public class L2capPacketListAdapter extends ArrayAdapter<L2capPacket> {
         final L2capPacket packet = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.hci_logging_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_hci_log_list_item, parent, false);
         }
 
         initializeViews(convertView);

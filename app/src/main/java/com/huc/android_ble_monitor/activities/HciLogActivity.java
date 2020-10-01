@@ -27,7 +27,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.hci_logging_activity);
+        setContentView(R.layout.activity_hci_log);
         ActivityUtil.setToolbar(this, false);
         ActivityUtil.setToolbarTitle(this, "HCI, L2CAP, ATT Snoop Log");
 
