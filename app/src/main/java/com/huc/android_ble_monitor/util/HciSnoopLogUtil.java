@@ -1,6 +1,12 @@
 package com.huc.android_ble_monitor.util;
 
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.content.Context;
+
 import androidx.annotation.Nullable;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.huc.android_ble_monitor.activities.ServicesOverviewActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,10 +30,20 @@ public class HciSnoopLogUtil implements IHciDecoder {
         System.loadLibrary("hciviewer");
     }
 
-    public HciSnoopLogUtil(IPacketReceptionCallback cb){
+    public HciSnoopLogUtil(IPacketReceptionCallback cb, Context ctx){
         setPacketReceptionCb(cb);
-        readSnoopLog();
-        startHciLogStream(BTSNOOP_FALLBACK_PATH, mReadLastPacketCount);
+        String filePath = getSnoopLogLocation();
+
+        // Check if file exists
+        if(!new File(filePath).exists()){
+            new MaterialAlertDialogBuilder(ctx)
+                    .setTitle("Error")
+                    .setMessage("Could not find Bluetooth Snoop log file. Make sure to Activate the Option in the Android Developer Settings.")
+                    .setNeutralButton("Ok", null)
+                    .show();
+        }else {
+            startHciLogStream(filePath, mReadLastPacketCount);
+        }
     }
 
     @Override
@@ -37,31 +53,6 @@ public class HciSnoopLogUtil implements IHciDecoder {
     public native void stopHciLogStream();
 
     /**
-     * tries to read in snoop log from location specified in bt_stack.conf file
-     */
-    public void readSnoopLog(){
-        String location = getSnoopLogLocation();
-        if(location == null){
-            location = BTSNOOP_FALLBACK_PATH;
-        }
-
-        //read in snoop log file
-        try {
-            FileInputStream fis = new FileInputStream(new File(location));
-            StringBuilder sb = new StringBuilder();
-            while(fis.available() > 0) {
-                sb.append((char)fis.read());
-            }
-            fis.close();
-            this.mRawSnoopLog = sb.toString();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Returns the HCI Snoop log location from bt_stack.conf file
      * @return log filepath
      */
@@ -69,7 +60,7 @@ public class HciSnoopLogUtil implements IHciDecoder {
     public String getSnoopLogLocation(){
         // check if conf file exists
         File file = new File(this.BTSTACK_CONFIG_PATH);
-        if(!file.exists()) return null;
+        if(!file.exists()) return BTSNOOP_FALLBACK_PATH;
 
         // read in conf file
         Properties prop = new Properties();
@@ -79,7 +70,7 @@ public class HciSnoopLogUtil implements IHciDecoder {
             prop.load(fis);
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return BTSNOOP_FALLBACK_PATH;
         }
         mLogFilepath = prop.getProperty("btsnoopfilename");
         return mLogFilepath;
