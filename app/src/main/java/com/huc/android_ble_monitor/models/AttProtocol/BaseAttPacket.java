@@ -58,7 +58,7 @@ public class BaseAttPacket {
     }
 
     protected short decode16BitValue(byte LSB, byte MSB){
-        return (short)((MSB << 8) + LSB);
+        return (short)((MSB << 8) | LSB);
     }
 
     @Override

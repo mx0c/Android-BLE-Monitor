@@ -44,7 +44,7 @@ public class AttReadByGroupTypeReq extends BaseAttPacket{
         String res = super.toString() + "\n";
         res += "Starting Handle: " + BinaryUtil.shortToHexString(mStartingHandle) + "\n";
         res += "Ending Handle: " + BinaryUtil.shortToHexString(mEndingHandle) + "\n";
-        res += "Attribute Group Type UUID: (" + DataUtil.resolveUuidToNameInformation(mAttributeGroupType).name + ") 0x"+ mAttributeGroupType +"\n";
+        res += "Attribute Group Type UUID: 0x"+ mAttributeGroupType + " (" + DataUtil.resolveUuidToNameInformation(mAttributeGroupType).name + ")\n";
         return res;
     }
 }

@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.ParcelUuid;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
+import android.util.Pair;
 import android.util.SparseArray;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.models.BluLeDevice;
@@ -57,6 +58,19 @@ public class PropertyResolver {
                 break;
         }
         return res;
+    }
+
+    public int connectabilityImageResolver(ScanResult res) {
+        //only possible with api level >= 26
+        int buildVersion = Build.VERSION.SDK_INT;
+        if (buildVersion >= 26) {
+            if (res.isConnectable()) {
+                return CONNECTED_IMG_ID;
+            }
+            return NOT_CONNECTED_IMG_ID;
+        }else{
+            return CONNECTED_IMG_ID;
+        }
     }
 
     public int connectionStateImageResolver(int connState) {
@@ -157,16 +171,16 @@ public class PropertyResolver {
         return connectabilityText;
     }
 
-    public ArrayList<String> deviceServiceResolver(BluLeDevice item, ScanResult result) {
+    public ArrayList<Pair<String, String>> deviceServiceResolver(BluLeDevice item, ScanResult result) {
         //TODO: Remove Logic to viewmodel
         List<ParcelUuid> uuids = result.getScanRecord().getServiceUuids();
-        ArrayList<String> uuidStrings = new ArrayList<>();
+        ArrayList<Pair<String, String>> uuidStrings = new ArrayList<>();
 
         if(uuids != null) {
             for (ParcelUuid uuid : uuids) {
                 String uuidString = uuid.getUuid().toString();
-                String name = " (" + DataUtil.resolveUuidToNameInformation(uuidString).name + ")";
-                uuidStrings.add(name + uuidString);
+                String name = DataUtil.resolveUuidToNameInformation(uuidString.substring(4,8).toUpperCase()).name;
+                uuidStrings.add(new Pair(name, uuidString));
             }
         }
         return uuidStrings;
@@ -223,22 +237,6 @@ public class PropertyResolver {
         }
 
         return strLegacy;
-    }
-
-    public String advertisingIntervalResolver(ScanResult scanResult) {
-        double unit = 1.25;
-        String interval;
-        int buildVersion = Build.VERSION.SDK_INT;
-        if (buildVersion >= 26) {
-            interval = ADV_INTERVAL +
-                    COLON +
-                    WHITESPACE +
-                    unit * scanResult.getPeriodicAdvertisingInterval() +
-                    MILLISECONDS_SHORT;
-        } else {
-            interval = ADV_INTERVAL + COLON + WHITESPACE + NOT_AVAIL;
-        }
-        return interval;
     }
 
     public String timestampResolver(ScanResult scanResult) {

@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
-                android:text="@string/_999db" />
+                android:text="@string/_999db"/>
         </LinearLayout>
 
         <LinearLayout
@@ -136,7 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="@string/dummy_bonded" />
+                        android:text="@string/dummy_bonded"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -161,7 +161,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="@string/dummy_disconnected" />
+                        android:text="@string/dummy_disconnected"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -251,6 +251,7 @@
                 android:layout_weight="1">
 
                 <ImageView
+                    android:id="@+id/Connectability_ImageView"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:adjustViewBounds="true"
@@ -265,7 +266,7 @@
                     android:paddingHorizontal="5dp"
                     android:text="@string/dummy_not_connectable"
                     android:layout_marginLeft="3dp"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -305,7 +306,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingTop="1.5dp"
+                android:paddingTop="7.5dp"
                 android:paddingBottom="1.5dp"
                 android:layout_weight="1">
 
@@ -323,34 +324,8 @@
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="5dp"
                     android:text="@string/dummy_services"
-                    android:textSize="12sp"
-                    android:layout_marginLeft="3dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingTop="1.5dp"
-                android:paddingBottom="1.5dp"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/round_info_white_48"
-                    app:tint="@color/secondaryColor" />
-
-                <TextView
-                    android:id="@+id/advetising_interval_TextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="5dp"
-                    android:text="@string/dummy_adv_interval"
-                    android:layout_marginLeft="3dp"
-                    android:textSize="12sp"/>
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

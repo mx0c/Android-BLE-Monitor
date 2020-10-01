@@ -34,7 +34,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
         mListView = findViewById(R.id.hci_log_listView);
         mAdapter = new HciPacketListAdapter(this, mViewModel.getSnoopPackets().getValue());
         mListView.setAdapter(mAdapter);
-        HciSnoopLogUtil snoopLog = new HciSnoopLogUtil(this, getApplicationContext());
+        HciSnoopLogUtil snoopLog = new HciSnoopLogUtil(this, HciLogActivity.this);
 
         mProtocolSpinner = findViewById(R.id.protocolSpinner);
         mProtocolSpinner.setAdapter(ArrayAdapter.createFromResource(this, R.array.ProtocolArray, android.R.layout.simple_spinner_item));

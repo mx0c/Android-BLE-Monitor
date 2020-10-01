@@ -58,7 +58,6 @@ public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
         tvServiceName.setText(this.propertyResolver.serviceNameResolver(bluetoothGattService));
         tvServiceUuid.setText(this.propertyResolver.serviceUuidResolver(bluetoothGattService));
         tvServiceIdentifier.setText(this.propertyResolver.serviceIdentifierResolver(bluetoothGattService));
-
         String serviceId = propertyResolver.serviceIdentifierResolver(bluetoothGattService);
 
         if(!serviceId.equals(PropertyResolver.SIG_UNKNOWN_SERVICE_IDENTIFIER)) {
