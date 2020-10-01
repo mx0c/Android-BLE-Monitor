@@ -43,7 +43,7 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
         final BluetoothGattCharacteristic characteristic = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.characteristic_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_service_detail_characteristic_list_item, parent, false);
         }
 
         TextView characteristicName = convertView.findViewById(R.id.tv_characteristic_item_name);
