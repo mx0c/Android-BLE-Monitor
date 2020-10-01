@@ -213,7 +213,7 @@
                 </LinearLayout>
                 <include
                     android:id="@+id/hr_divider"
-                    layout="@layout/horizontal_divider"
+                    layout="@layout/activity_device_detail_service_divider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"/>

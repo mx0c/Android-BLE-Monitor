@@ -36,7 +36,7 @@ public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
         BluetoothGattService bluetoothGattService = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.service_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_service_detail_service_list_item, parent, false);
         }
 
         initializeViews(convertView);

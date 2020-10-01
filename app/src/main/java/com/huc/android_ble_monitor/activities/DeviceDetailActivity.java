@@ -34,7 +34,7 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ble_device_overview);
+        setContentView(R.layout.activity_device_detail);
         ActivityUtil.setToolbar(this, false);
         mResolver = new PropertyResolver();
         setObservers();
@@ -58,9 +58,9 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
         mListViewOfServices.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ServicesOverviewActivity.staticGattService = (BluetoothGattService)parent.getAdapter().getItem(position);
-                ServicesOverviewActivity.staticBleDevice = DeviceDetailActivity.staticBleDevice;
-                Intent intent = new Intent(DeviceDetailActivity.this, ServicesOverviewActivity.class);
+                ServiceDetailActivity.staticGattService = (BluetoothGattService)parent.getAdapter().getItem(position);
+                ServiceDetailActivity.staticBleDevice = DeviceDetailActivity.staticBleDevice;
+                Intent intent = new Intent(DeviceDetailActivity.this, ServiceDetailActivity.class);
                 startActivity(intent);
             }
         });

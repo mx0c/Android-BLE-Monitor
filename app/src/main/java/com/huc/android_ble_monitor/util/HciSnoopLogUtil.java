@@ -1,22 +1,14 @@
 package com.huc.android_ble_monitor.util;
 
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
-
 import androidx.annotation.Nullable;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.huc.android_ble_monitor.activities.ServicesOverviewActivity;
-
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
 public class HciSnoopLogUtil implements IHciDecoder {
-    private String mRawSnoopLog;
-    private String mLogFilepath;
     private String TAG = this.getClass().getSimpleName();
     private String BTSTACK_CONFIG_FILE = "bt_stack.conf";
     private String BTSTACK_CONFIG_PATH = "/etc/bluetooth/" + BTSTACK_CONFIG_FILE;
@@ -35,7 +27,8 @@ public class HciSnoopLogUtil implements IHciDecoder {
         String filePath = getSnoopLogLocation();
 
         // Check if file exists
-        if(!new File(filePath).exists()){
+        File file = new File(filePath);
+        if(!file.exists()){
             new MaterialAlertDialogBuilder(ctx)
                     .setTitle("Error")
                     .setMessage("Could not find Bluetooth Snoop log file. Make sure to Activate the Option in the Android Developer Settings.")
@@ -72,8 +65,13 @@ public class HciSnoopLogUtil implements IHciDecoder {
             e.printStackTrace();
             return BTSNOOP_FALLBACK_PATH;
         }
-        mLogFilepath = prop.getProperty("btsnoopfilename");
-        return mLogFilepath;
+
+        String res = prop.getProperty("btsnoopfilename");
+        if(res == null){
+            return BTSNOOP_FALLBACK_PATH;
+        } else{
+            return res;
+        }
     }
 
     @Override

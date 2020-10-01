@@ -34,7 +34,7 @@ public class AttPacketListAdapter extends ArrayAdapter<BaseAttPacket> {
         final BaseAttPacket packet = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.hci_logging_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_hci_log_list_item, parent, false);
         }
 
         initializeViews(convertView);
