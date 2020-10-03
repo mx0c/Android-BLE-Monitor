@@ -1,4 +1,4 @@
-package com.huc.android_ble_monitor.adapters;
+package com.huc.android_ble_monitor.adapters.serviceDetailActivity;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,15 +78,13 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
         List<BluetoothGattDescriptor> descriptorList = characteristic.getDescriptors();
 
         if(descriptorList.size() > 0) {
-            List<String> strDescriptorList = new ArrayList<>();
-
+            List<Pair<String, String>> strDescriptorList = new ArrayList<>();
             for (BluetoothGattDescriptor descriptor :
                     descriptorList) {
-                strDescriptorList.add(descriptor.getUuid().toString());
+                strDescriptorList.add(new Pair(descriptor.getUuid().toString(), String.valueOf(descriptor.getPermissions())));
             }
 
-            ArrayAdapter<String> adapter = new ArrayAdapter(mContext, R.layout.activity_main_adv_service_list_item, strDescriptorList);
-            lv_descriptors.setAdapter(adapter);
+            lv_descriptors.setAdapter(new DescriptorListAdapter(mContext, strDescriptorList));
         } else {
             tv_descriptors.setVisibility(View.GONE);
             lv_descriptors.setVisibility(View.GONE);

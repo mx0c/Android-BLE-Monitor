@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.adapters.CharacteristicListAdapter;
+import com.huc.android_ble_monitor.adapters.serviceDetailActivity.CharacteristicListAdapter;
 import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.services.IBLeServiceCallbacks;
 import com.huc.android_ble_monitor.util.ActivityUtil;
