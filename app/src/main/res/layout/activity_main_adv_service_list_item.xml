@@ -5,21 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
-    android:orientation="vertical">
+    android:orientation="horizontal">
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/round_import_export_white_48"
+        app:tint="@color/secondaryColor"
+        android:layout_gravity="center">
+    </ImageView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center">
             <TextView
                 android:textStyle="bold"
                 android:id="@+id/name"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:textSize="10dp"
-                android:layout_marginLeft="30dp">
+                android:layout_marginLeft="5dp">
             </TextView>
             <TextView
                 android:id="@+id/uuid"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:textSize="10dp"
-                android:layout_marginLeft="30dp">
+                android:layout_marginLeft="5dp">
             </TextView>
+    </LinearLayout>
 </LinearLayout>
 

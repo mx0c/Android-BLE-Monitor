@@ -99,7 +99,7 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
             tvConnectability = itemView.findViewById(R.id.Connectability_TextView);
             tvCompanyIdentifier = itemView.findViewById(R.id.CompanyIdentifier_TextView);
             ivBondstate = itemView.findViewById(R.id.BondState_ImageView);
-            tvServices = itemView.findViewById(R.id.Services_TextView);
+            tvServices = itemView.findViewById(R.id.advServices_tv_text);
             servicesListView = itemView.findViewById(R.id.serviceUUIDs_ListView);
             tvConnState = itemView.findViewById(R.id.ConnectionState_TextView);
             ivConnState = itemView.findViewById(R.id.ConnectionState_ImageView);
