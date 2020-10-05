@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.2"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:text="Protocol:"></TextView>
@@ -35,7 +35,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.2"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:text="Type:"></TextView>
@@ -44,6 +44,22 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/typeSpinner">
+            </Spinner>
+            <TextView
+                android:id="@+id/methodTextview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:text="Method:"></TextView>
+            <Spinner
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/methodSpinner">
             </Spinner>
         </LinearLayout>
 

@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.adapters.ScanResultRecyclerAdapter;
+import com.huc.android_ble_monitor.adapters.mainActivity.ScanResultRecyclerAdapter;
 import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
 import com.huc.android_ble_monitor.util.ActivityUtil;

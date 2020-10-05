@@ -1,4 +1,4 @@
-package com.huc.android_ble_monitor.adapters;
+package com.huc.android_ble_monitor.adapters.hciLogActivity;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,13 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.models.L2capPacket;
+import com.huc.android_ble_monitor.models.HciPacket;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class L2capPacketListAdapter extends ArrayAdapter<L2capPacket> {
+public class HciPacketListAdapter extends ArrayAdapter<HciPacket> {
     private TextView mPacket_num;
     private TextView mPacket_timestamp;
     private TextView mPacket_type;
@@ -25,7 +29,7 @@ public class L2capPacketListAdapter extends ArrayAdapter<L2capPacket> {
     private SimpleDateFormat mTimestampFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss.SSS");
     private Context ctx;
 
-    public L2capPacketListAdapter(@NonNull Context context, @NonNull List<L2capPacket> objects) {
+    public HciPacketListAdapter(@NonNull Context context, @NonNull List<HciPacket> objects) {
         super(context, 0, objects);
         ctx = context;
     }
@@ -33,7 +37,7 @@ public class L2capPacketListAdapter extends ArrayAdapter<L2capPacket> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final L2capPacket packet = getItem(position);
+        final HciPacket packet = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_hci_log_list_item, parent, false);
@@ -41,22 +45,26 @@ public class L2capPacketListAdapter extends ArrayAdapter<L2capPacket> {
 
         initializeViews(convertView);
 
-        mPacket_type.setText("CID: " + packet.packet_channel_id);
-        mPacket_timestamp.setText(mTimestampFormat.format(packet.packet_hci_frames.get(0).timestamp));
+        mPacket_type.setText(packet.packet_type);
+        mPacket_timestamp.setText(mTimestampFormat.format(packet.timestamp));
         mPacket_num.setText(String.valueOf(packet.packet_number));
+        mPacket_info.setText(packet.packet_info);
+        mPacket_len.setText(packet.original_length + " Byte");
 
-        String dataInHex = "Data: ";
-        for (byte b : packet.packet_data) {
-            dataInHex += String.format("%02X ", b);
-        }
-        mPacket_info.setText(dataInHex);
-
-        mPacket_len.setText(String.valueOf(packet.packet_length) + " Byte");
-
+        //display raw hci json on item click
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                try {
+                JSONObject jsonObj = new JSONObject(packet.packet_hci_json);
+                new MaterialAlertDialogBuilder(ctx)
+                        .setTitle("Raw JSON:")
+                        .setMessage(jsonObj.toString(4))
+                        .setNeutralButton("OK", null)
+                        .show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

@@ -1,6 +1,7 @@
 package com.huc.android_ble_monitor.util;
 
 import android.content.Context;
+import android.util.Log;
 import androidx.annotation.Nullable;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.io.File;
@@ -9,7 +10,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class HciSnoopLogUtil implements IHciDecoder {
-    private String TAG = this.getClass().getSimpleName();
+    private String TAG = "BLEM_HciSnoopLog";
     private String BTSTACK_CONFIG_FILE = "bt_stack.conf";
     private String BTSTACK_CONFIG_PATH = "/etc/bluetooth/" + BTSTACK_CONFIG_FILE;
     private String BTSNOOP_FALLBACK_FILE = "btsnoop_hci.log";
@@ -31,7 +32,7 @@ public class HciSnoopLogUtil implements IHciDecoder {
         if(!file.exists()){
             new MaterialAlertDialogBuilder(ctx)
                     .setTitle("Error")
-                    .setMessage("Could not find Bluetooth Snoop log file. Make sure to Activate the Option in the Android Developer Settings.")
+                    .setMessage("Could not find Bluetooth Snoop log file. Make sure to Activate the Option in the Android Developer Settings and your device supports this feature.")
                     .setNeutralButton("Ok", null)
                     .show();
         }else {
@@ -70,6 +71,7 @@ public class HciSnoopLogUtil implements IHciDecoder {
         if(res == null){
             return BTSNOOP_FALLBACK_PATH;
         } else{
+            Log.d(TAG, "getSnoopLogLocation: Successfully read Snoop log Location from bt_stack.conf");
             return res;
         }
     }

@@ -1,11 +1,10 @@
-package com.huc.android_ble_monitor.adapters;
+package com.huc.android_ble_monitor.adapters.mainActivity;
 
 import android.bluetooth.le.ScanResult;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.activities.MainActivity;
+import com.huc.android_ble_monitor.adapters.mainActivity.AdvServicesListAdapter;
 import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.util.PropertyResolver;
 

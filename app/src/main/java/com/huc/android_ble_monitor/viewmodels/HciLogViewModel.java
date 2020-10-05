@@ -1,20 +1,18 @@
 package com.huc.android_ble_monitor.viewmodels;
 
-import android.app.Application;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.activities.HciLogActivity;
-import com.huc.android_ble_monitor.adapters.AttPacketListAdapter;
-import com.huc.android_ble_monitor.adapters.HciPacketListAdapter;
-import com.huc.android_ble_monitor.adapters.L2capPacketListAdapter;
+import com.huc.android_ble_monitor.adapters.hciLogActivity.AttPacketListAdapter;
+import com.huc.android_ble_monitor.adapters.hciLogActivity.HciPacketListAdapter;
+import com.huc.android_ble_monitor.adapters.hciLogActivity.L2capPacketListAdapter;
 import com.huc.android_ble_monitor.models.AttProtocol.AttErrorRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttExchangeMtuReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttExchangeMtuRsp;
@@ -25,6 +23,7 @@ import com.huc.android_ble_monitor.models.AttProtocol.AttFindInformationReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttFindInformationRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttHandleValueInd;
 import com.huc.android_ble_monitor.models.AttProtocol.AttHandleValueNtf;
+import com.huc.android_ble_monitor.models.AttProtocol.AttOpCodeMethod;
 import com.huc.android_ble_monitor.models.AttProtocol.AttPrepareWriteReqRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadBlobReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadBlobRsp;
@@ -121,6 +120,15 @@ public class HciLogViewModel extends ViewModel {
             ctx.mTypeSpinner.setEnabled(true);
         }
 
+        //disable method spinner and textview when ATT is not selected
+        if(!protocol.equals("ATT")){
+            ctx.mMethodTextView.setVisibility(View.GONE);
+            ctx.mMethodSpinner.setVisibility(View.GONE);
+        }else{
+            ctx.mMethodSpinner.setVisibility(View.VISIBLE);
+            ctx.mMethodTextView.setVisibility(View.VISIBLE);
+        }
+
         switch (protocol){
             case "HCI":
                 ctx.mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -144,7 +152,7 @@ public class HciLogViewModel extends ViewModel {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         String type = parent.getItemAtPosition(position).toString();
-                        ctx.mAdapter = new AttPacketListAdapter(ctx, getFilteredAttPackets(type));
+                        ctx.mAdapter = new AttPacketListAdapter(ctx, getFilteredByTypeAttPackets(type));
                         ctx.mListView.setAdapter(ctx.mAdapter);
                         ctx.mAdapter.notifyDataSetChanged();
                     }
@@ -153,6 +161,19 @@ public class HciLogViewModel extends ViewModel {
                 });
                 ctx.mAdapter = new AttPacketListAdapter(ctx, mAttPackets.getValue());
                 ctx.mListView.setAdapter(ctx.mAdapter);
+                ctx.mMethodSpinner.setAdapter(ArrayAdapter.createFromResource(ctx, R.array.AttMethodArray, android.R.layout.simple_spinner_item));
+                ctx.mMethodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String method = parent.getItemAtPosition(position).toString();
+                        ctx.mAdapter = new AttPacketListAdapter(ctx, getFilteredByMethodAttPackets(method));
+                        ctx.mListView.setAdapter(ctx.mAdapter);
+                        ctx.mAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {}
+                });
                 break;
             case "L2CAP":
                 ctx.mAdapter = new L2capPacketListAdapter(ctx, mL2capPackets.getValue());
@@ -181,7 +202,23 @@ public class HciLogViewModel extends ViewModel {
         return filteredList;
     }
 
-    public ArrayList<BaseAttPacket> getFilteredAttPackets(String type){
+    public ArrayList<BaseAttPacket> getFilteredByMethodAttPackets(String method){
+        //return unfiltered ATT Packets
+        if(method.equals("ALL")){
+            return mAttPackets.getValue();
+        }
+
+        //filter packets by provided method
+        ArrayList<BaseAttPacket> filteredList = new ArrayList<>();
+        for (BaseAttPacket p: mAttPackets.getValue()) {
+            if(p.packet_method.name().contains(method)){
+                filteredList.add(p);
+            }
+        }
+        return filteredList;
+    }
+
+    public ArrayList<BaseAttPacket> getFilteredByTypeAttPackets(String type){
         //return unfiltered ATT Packets
         if(type.equals("All")){
             return mAttPackets.getValue();
