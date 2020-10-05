@@ -27,6 +27,8 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
     public ArrayAdapter mAdapter;
     public TextView mMethodTextView;
     public Spinner mMethodSpinner;
+    public TextView mTypeHeaderTextview;
+    public TextView mMethodHeaderTextview;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +39,8 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
 
         mMethodSpinner = findViewById(R.id.methodSpinner);
         mMethodTextView = findViewById(R.id.methodTextview);
+        mTypeHeaderTextview = findViewById(R.id.header_tv_1);
+        mMethodHeaderTextview = findViewById(R.id.header_tv_2);
 
         mListView = findViewById(R.id.hci_log_listView);
         mAdapter = new HciPacketListAdapter(this, mViewModel.getSnoopPackets().getValue());

@@ -112,12 +112,16 @@ public class HciLogViewModel extends ViewModel {
     }
 
     public void changeProtocol(String protocol, final HciLogActivity ctx){
-        //disable type spinner when L2CAP is selected
+        //disable type spinner when L2CAP is selected and change header
         if(protocol.equals("L2CAP")){
             ctx.mTypeSpinner.setEnabled(false);
             ctx.mTypeSpinner.setClickable(false);
+            ctx.mTypeHeaderTextview.setText("Channel ID");
+            ctx.mMethodHeaderTextview.setText("Data (0x)");
         }else {
             ctx.mTypeSpinner.setEnabled(true);
+            ctx.mTypeHeaderTextview.setText("Type");
+            ctx.mMethodHeaderTextview.setText("Method");
         }
 
         //disable method spinner and textview when ATT is not selected

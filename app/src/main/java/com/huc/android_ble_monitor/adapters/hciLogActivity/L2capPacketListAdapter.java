@@ -41,11 +41,11 @@ public class L2capPacketListAdapter extends ArrayAdapter<L2capPacket> {
 
         initializeViews(convertView);
 
-        mPacket_type.setText("CID: " + packet.packet_channel_id);
+        mPacket_type.setText(packet.packet_channel_id);
         mPacket_timestamp.setText(mTimestampFormat.format(packet.packet_hci_frames.get(0).timestamp));
         mPacket_num.setText(String.valueOf(packet.packet_number));
 
-        String dataInHex = "Data: ";
+        String dataInHex = "";
         for (byte b : packet.packet_data) {
             dataInHex += String.format("%02X ", b);
         }
@@ -55,9 +55,7 @@ public class L2capPacketListAdapter extends ArrayAdapter<L2capPacket> {
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-            }
+            public void onClick(View v) { }
         });
 
         return convertView;
