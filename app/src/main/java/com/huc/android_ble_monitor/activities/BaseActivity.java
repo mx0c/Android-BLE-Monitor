@@ -20,9 +20,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.huc.android_ble_monitor.R;
+import com.huc.android_ble_monitor.dialogs.AboutDialog;
+import com.huc.android_ble_monitor.dialogs.OpenSourceComponentsDialog;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
+import com.huc.android_ble_monitor.util.BinaryUtil;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -86,6 +90,14 @@ public abstract class BaseActivity<T extends ViewModel> extends AppCompatActivit
                     case R.id.action_logging:
                         Intent j = new Intent(BaseActivity.this, ApplicationLogActivity.class);
                         startActivity(j);
+                        break;
+                    case R.id.action_about:
+                        AboutDialog aboutDialog = new AboutDialog(BaseActivity.this);
+                        aboutDialog.show();
+                        break;
+                    case R.id.action_components:
+                        OpenSourceComponentsDialog oscDialog = new OpenSourceComponentsDialog(BaseActivity.this);
+                        oscDialog.show();
                         break;
                 }
                 return true;
