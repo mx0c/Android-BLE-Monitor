@@ -40,6 +40,9 @@
     <string name="characteristic_write">Write</string>
     <string name="characteristic_notify">Notify</string>
     <string name="descriptors">Descriptors</string>
+    <string name="service_identifier">Service Identifier</string>
+    <string name="characteristic_identifier">Characteristic Identifier</string>
+
 
     <!-- Characteristic Detail View -->
     <string name="characteristic_uuid">Characteristic UUID:</string>

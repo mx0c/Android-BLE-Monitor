@@ -34,6 +34,7 @@ public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivity
 
     TextView serviceUUID;
     TextView serviceName;
+    TextView serviceIdentifier;
     ListView characteristicListview;
 
     @Override
@@ -112,10 +113,12 @@ public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivity
                 //update service related views when service changed
                 serviceUUID = findViewById(R.id.service_uuid_textview);
                 serviceName = findViewById(R.id.service_name_textview);
+                serviceIdentifier = findViewById(R.id.service_identifier_textview);
                 characteristicListview = findViewById(R.id.characteristic_listview);
 
                 serviceUUID.setText(service.getUuid().toString());
                 serviceName.setText(mResolver.serviceNameResolver(service));
+                serviceIdentifier.setText(mResolver.serviceIdentifierResolver(service));
                 characteristicListview.setAdapter(new CharacteristicListAdapter(ServiceDetailActivity.this, service.getCharacteristics(), mBluetoothLeService));
             }
         });
@@ -129,11 +132,15 @@ public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivity
         characteristicListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CharacteristicDetailActivity.staticGattService = staticGattService;
-                CharacteristicDetailActivity.staticBleDevice = staticBleDevice;
-                CharacteristicDetailActivity.staticCharacteristic = (BluetoothGattCharacteristic) parent.getAdapter().getItem(position);
-                Intent intent = new Intent(ServiceDetailActivity.this, CharacteristicDetailActivity.class);
-                startActivity(intent);
+                BluetoothGattCharacteristic characteristic = (BluetoothGattCharacteristic) parent.getAdapter().getItem(position);
+
+                if (characteristic.getDescriptors().size() > 0) {
+                    CharacteristicDetailActivity.staticGattService = staticGattService;
+                    CharacteristicDetailActivity.staticBleDevice = staticBleDevice;
+                    CharacteristicDetailActivity.staticCharacteristic = characteristic;
+                    Intent intent = new Intent(ServiceDetailActivity.this, CharacteristicDetailActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 

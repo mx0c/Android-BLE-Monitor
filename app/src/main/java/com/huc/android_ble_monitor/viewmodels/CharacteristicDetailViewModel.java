@@ -1,5 +1,6 @@
 package com.huc.android_ble_monitor.viewmodels;
 
+import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 
 import androidx.lifecycle.LiveData;
@@ -11,10 +12,12 @@ import com.huc.android_ble_monitor.models.BluLeDevice;
 public class CharacteristicDetailViewModel extends ViewModel {
     private MutableLiveData<BluetoothGattService> mService;
     public MutableLiveData<BluLeDevice> mDevice;
+    private MutableLiveData<BluetoothGattCharacteristic> mCharacteristic;
 
-    public void init(BluetoothGattService service, BluLeDevice device){
+    public void init(BluetoothGattService service, BluLeDevice device, BluetoothGattCharacteristic bluetoothGattCharacteristic){
         mService = new MutableLiveData<>(service);
         mDevice = new MutableLiveData<>(device);
+        mCharacteristic = new MutableLiveData<>(bluetoothGattCharacteristic);
     }
 
     public void updateRssi(Integer Rssi){
@@ -25,4 +28,5 @@ public class CharacteristicDetailViewModel extends ViewModel {
 
     public LiveData<BluetoothGattService> getService(){ return mService; }
     public LiveData<BluLeDevice> getDevice(){ return mDevice; }
+    public LiveData<BluetoothGattCharacteristic> getCharacteristic() { return mCharacteristic; }
 }

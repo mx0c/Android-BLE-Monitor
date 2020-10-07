@@ -81,7 +81,7 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
             List<Pair<String, String>> strDescriptorList = new ArrayList<>();
             for (BluetoothGattDescriptor descriptor :
                     descriptorList) {
-                strDescriptorList.add(new Pair(descriptor.getUuid().toString(), String.valueOf(descriptor.getPermissions())));
+                strDescriptorList.add(new Pair(mPropertyResolver.descriptorNameResolver(descriptor), String.valueOf(descriptor.getUuid())));
             }
 
             lv_descriptors.setAdapter(new DescriptorListAdapter(mContext, strDescriptorList));

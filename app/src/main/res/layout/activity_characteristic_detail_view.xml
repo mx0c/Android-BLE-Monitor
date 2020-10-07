@@ -204,6 +204,35 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginRight="5dp"
+                android:src="@drawable/round_fingerprint_white_48"
+                app:tint="@color/secondaryColor" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2.25"
+                android:text="@string/service_identifier"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/service_identifier_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="mock" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginRight="5dp"
                 android:src="@drawable/round_import_export_white_48"
                 app:tint="@color/secondaryColor" />
 
@@ -253,6 +282,35 @@
                 android:text="mock" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/round_fingerprint_white_48"
+                app:tint="@color/secondaryColor" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2.25"
+                android:text="@string/characteristic_identifier"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/characteristic_identifier_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="mock" />
+        </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
@@ -262,7 +320,7 @@
         <ListView
             android:id="@+id/descriptor_listview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

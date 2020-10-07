@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -11,6 +12,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.huc.android_ble_monitor.R;
+import com.huc.android_ble_monitor.adapters.characteristicDetailActivity.DescriptorListAdapter;
 import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.PropertyResolver;
@@ -25,8 +27,11 @@ public class CharacteristicDetailActivity extends BaseActivity<CharacteristicDet
     private PropertyResolver mResolver;
     TextView serviceUUID;
     TextView serviceName;
+    TextView serviceIdentifier;
     TextView characteristicName;
     TextView characteristicUUID;
+    TextView characteristicIdentifier;
+    ListView descriptorListView;
 
 
     @Override
@@ -46,14 +51,19 @@ public class CharacteristicDetailActivity extends BaseActivity<CharacteristicDet
                 //update service related views when service changed
                 serviceUUID = findViewById(R.id.service_uuid_textview);
                 serviceName = findViewById(R.id.service_name_textview);
+                serviceIdentifier = findViewById(R.id.service_identifier_textview);
                 characteristicName = findViewById(R.id.characteristic_name_textview);
                 characteristicUUID = findViewById(R.id.characteristic_uuid_textview);
+                characteristicIdentifier = findViewById(R.id.characteristic_identifier_textview);
+                descriptorListView = findViewById(R.id.descriptor_listview);
 
                 serviceUUID.setText(service.getUuid().toString());
                 serviceName.setText(mResolver.serviceNameResolver(service));
+                serviceIdentifier.setText(mResolver.serviceIdentifierResolver(service));
                 characteristicName.setText(mResolver.characteristicNameResolver(staticCharacteristic));
-                characteristicUUID.setText(mResolver.characteristicIdentifierResolver(staticCharacteristic));
-
+                characteristicUUID.setText(staticCharacteristic.getUuid().toString());
+                characteristicIdentifier.setText(mResolver.characteristicIdentifierResolver(staticCharacteristic));
+                descriptorListView.setAdapter(new DescriptorListAdapter(CharacteristicDetailActivity.this, staticCharacteristic.getDescriptors(), mBluetoothLeService));
             }
         });
         mBluetoothLeService.getCurrentRssi().observe(CharacteristicDetailActivity.this, new Observer<Integer>() {
@@ -68,7 +78,7 @@ public class CharacteristicDetailActivity extends BaseActivity<CharacteristicDet
     @Override
     protected void initializeViewModel() {
         mViewModel = new ViewModelProvider(this).get(CharacteristicDetailViewModel.class);
-        mViewModel.init(staticGattService, staticBleDevice);
+        mViewModel.init(staticGattService, staticBleDevice, staticCharacteristic);
     }
 
     private void setObservers(){
