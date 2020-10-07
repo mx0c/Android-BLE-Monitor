@@ -35,7 +35,6 @@ public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivity
     TextView serviceUUID;
     TextView serviceName;
     ListView characteristicListview;
-    ListView descriptorListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,9 +129,10 @@ public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivity
         characteristicListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DescriptorDetailActivity.staticGattService = staticGattService;
-                DescriptorDetailActivity.staticBleDevice = staticBleDevice;
-                Intent intent = new Intent(ServiceDetailActivity.this, DescriptorDetailActivity.class);
+                CharacteristicDetailActivity.staticGattService = staticGattService;
+                CharacteristicDetailActivity.staticBleDevice = staticBleDevice;
+                CharacteristicDetailActivity.staticCharacteristic = (BluetoothGattCharacteristic) parent.getAdapter().getItem(position);
+                Intent intent = new Intent(ServiceDetailActivity.this, CharacteristicDetailActivity.class);
                 startActivity(intent);
             }
         });

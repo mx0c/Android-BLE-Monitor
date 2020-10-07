@@ -43,7 +43,7 @@
         </activity>
         <activity android:name=".activities.ServiceDetailActivity"
             android:parentActivityName=".activities.DeviceDetailActivity"/>
-        <activity android:name=".activities.DescriptorDetailActivity"
+        <activity android:name=".activities.CharacteristicDetailActivity"
             android:parentActivityName=".activities.ServiceDetailActivity"/>
         <activity android:name=".activities.ApplicationLogActivity"
             android:parentActivityName=".activities.MainActivity">

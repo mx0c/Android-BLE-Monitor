@@ -41,6 +41,10 @@
     <string name="characteristic_notify">Notify</string>
     <string name="descriptors">Descriptors</string>
 
+    <!-- Characteristic Detail View -->
+    <string name="characteristic_uuid">Characteristic UUID:</string>
+    <string name="characteristic_name">Characteristic Name:</string>
+
     <!-- Filter Entries -->
     <string-array name="FilterArray">
         <item>Verbose</item>
