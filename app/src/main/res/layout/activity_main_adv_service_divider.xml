@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
-        android:id="@+id/hr_divider"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -14,26 +13,26 @@
         andorid:layout_constraintStart_toStartOf="parent"
         andorid:layout_constraintTop_toTopOf="parent">
         <TextView
-            android:id="@+id/hr_tv_text"
+            android:id="@+id/advServices_tv_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="@string/hr_text_service"
+            android:text="Advertised Services (0)"
             android:textColor="@color/primaryDarkColor"
             android:textStyle="bold" />
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/hr_tv_text"
+            android:layout_toLeftOf="@id/advServices_tv_text"
             android:background="@color/secondaryColor" />
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/hr_tv_text"
+            android:layout_toRightOf="@id/advServices_tv_text"
             android:background="@color/secondaryColor" />
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

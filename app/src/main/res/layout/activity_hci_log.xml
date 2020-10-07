@@ -15,14 +15,14 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"/>
         <LinearLayout
-            android:layout_marginVertical="10dp"
+            android:layout_marginVertical="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.2"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:text="Protocol:"></TextView>
@@ -35,7 +35,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.2"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:text="Type:"></TextView>
@@ -45,8 +45,89 @@
                 android:layout_weight="1"
                 android:id="@+id/typeSpinner">
             </Spinner>
+            <TextView
+                android:id="@+id/methodTextview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:text="Method:"></TextView>
+            <Spinner
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/methodSpinner">
+            </Spinner>
         </LinearLayout>
+        <!-- Horizontal Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/primaryDarkColor"></View>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="Nr."
+                android:textColor="#1a1a1a"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:paddingLeft="5dp"
+                android:text="Timestamp"
+                android:textColor="#1a1a1a"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/header_tv_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Type"
+                    android:textColor="#1a1a1a"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Length"
+                    android:textColor="#1a1a1a"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/header_tv_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Method"
+                android:textColor="#1a1a1a"
+                android:textStyle="bold"/>
+        </LinearLayout>
         <!-- Horizontal Divider -->
         <View
             android:layout_width="match_parent"

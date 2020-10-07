@@ -1,4 +1,4 @@
-package com.huc.android_ble_monitor.adapters;
+package com.huc.android_ble_monitor.adapters.hciLogActivity;
 
 import android.content.Context;
 import android.view.LayoutInflater;

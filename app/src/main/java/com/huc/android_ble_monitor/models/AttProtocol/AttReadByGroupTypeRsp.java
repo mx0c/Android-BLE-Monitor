@@ -47,12 +47,12 @@ public class AttReadByGroupTypeRsp extends BaseAttPacket {
             list += BinaryUtil.shortToHexString(t.getFirst()) + ", ";
             list += BinaryUtil.shortToHexString(t.getSecond()) + ", ";
 
-            String data = "0x";
+            String data = "";
             for(Byte b : t.getThird()){
                 data += String.format("%02X", b);
             }
             data += " (" + DataUtil.resolveUuidToNameInformation(data).name + ")";
-            list += data + "\n";
+            list += "0x" + data + "\n";
         }
 
         res += list;

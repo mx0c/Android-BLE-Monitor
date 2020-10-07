@@ -172,7 +172,6 @@ public class PropertyResolver {
     }
 
     public ArrayList<Pair<String, String>> deviceServiceResolver(BluLeDevice item, ScanResult result) {
-        //TODO: Remove Logic to viewmodel
         List<ParcelUuid> uuids = result.getScanRecord().getServiceUuids();
         ArrayList<Pair<String, String>> uuidStrings = new ArrayList<>();
 

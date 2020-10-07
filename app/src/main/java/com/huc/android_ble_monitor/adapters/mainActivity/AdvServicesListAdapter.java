@@ -1,4 +1,4 @@
-package com.huc.android_ble_monitor.adapters;
+package com.huc.android_ble_monitor.adapters.mainActivity;
 
 import android.content.Context;
 import android.util.Pair;

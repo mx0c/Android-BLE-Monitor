@@ -7,10 +7,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.adapters.HciPacketListAdapter;
+import com.huc.android_ble_monitor.adapters.hciLogActivity.HciPacketListAdapter;
 import com.huc.android_ble_monitor.models.HciPacket;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.HciSnoopLogUtil;
@@ -23,13 +25,22 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
     public Spinner mTypeSpinner;
     public ListView mListView;
     public ArrayAdapter mAdapter;
+    public TextView mMethodTextView;
+    public Spinner mMethodSpinner;
+    public TextView mTypeHeaderTextview;
+    public TextView mMethodHeaderTextview;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hci_log);
         ActivityUtil.setToolbar(this, false);
-        ActivityUtil.setToolbarTitle(this, "HCI, L2CAP, ATT Snoop Log");
+        ActivityUtil.setToolbarTitle(this, "BLE Protocol Log");
+
+        mMethodSpinner = findViewById(R.id.methodSpinner);
+        mMethodTextView = findViewById(R.id.methodTextview);
+        mTypeHeaderTextview = findViewById(R.id.header_tv_1);
+        mMethodHeaderTextview = findViewById(R.id.header_tv_2);
 
         mListView = findViewById(R.id.hci_log_listView);
         mAdapter = new HciPacketListAdapter(this, mViewModel.getSnoopPackets().getValue());

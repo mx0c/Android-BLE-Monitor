@@ -81,4 +81,26 @@
         <item>Indication</item>
         <item>Confirmation</item>
     </string-array>
+
+    <!-- ATT Method Entries -->
+    <string-array name="AttMethodArray">
+        <item>ALL</item>
+        <item>ATT_EXCHANGE_MTU</item>
+        <item>ATT_ERROR</item>
+        <item>ATT_FIND_INFORMATION</item>
+        <item>ATT_READ</item>
+        <item>ATT_WRITE</item>
+        <item>ATT_READ_BY_TYPE</item>
+        <item>ATT_READ_BY_GROUP_TYPE</item>
+        <item>ATT_FIND_BY_TYPE_VALUE</item>
+        <item>ATT_HANDLE_VALUE_NTF</item>
+        <item>ATT_HANDLE_VALUE_IND</item>
+        <item>ATT_SIGNED_WRITE_CMD</item>
+        <item>ATT_READ_BLOB</item>
+        <item>ATT_READ_MULTIPLE</item>
+        <item>ATT_WRITE_CMD</item>
+        <item>ATT_READ_MULTIPLE_VARIABLE</item>
+        <item>ATT_PREPARE_WRITE</item>
+        <item>ATT_EXECUTE_WRITE</item>
+    </string-array>
 </resources>
