@@ -1,5 +1,6 @@
 # Android-BLE-Monitor
-![alt text](https://travis-ci.org/mx0c/Android-BLE-Monitor.svg?branch=master "TravisCI")
+![TravisCI](https://travis-ci.org/mx0c/Android-BLE-Monitor.svg?branch=master "TravisCI")
+[![GitHub last commit](https://img.shields.io/github/last-commit/mx0c/Android-BLE-Monitor.svg)]() 
 
 A Bluetooth Low Energy (BLE) Monitor for Android.
 
