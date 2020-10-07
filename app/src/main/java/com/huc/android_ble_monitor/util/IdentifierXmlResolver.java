@@ -44,6 +44,10 @@ public class IdentifierXmlResolver extends AsyncTask<String, String, String> {
         return baseUrl + "Characteristics/" + identifier + ".xml";
     }
 
+    public static String getDescriptorXmlLink(String identifier) {
+        return baseUrl + "Descriptors/" + identifier + ".xml";
+    }
+
     @Override
     protected String doInBackground(String... args) {
         try {

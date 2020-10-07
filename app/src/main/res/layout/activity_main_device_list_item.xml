@@ -309,13 +309,15 @@
                 android:paddingTop="7.5dp"
                 android:paddingBottom="1.5dp"
                 android:layout_weight="1">
-                <include
-                    android:id="@+id/hr_divider"
-                    layout="@layout/activity_main_adv_service_divider"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/advServices_tv_text"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="3dp"/>
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="10dp"
+                    android:text="Advertised Services (0)"
+                    android:textColor="@color/primaryDarkColor"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

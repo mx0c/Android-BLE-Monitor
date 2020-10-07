@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.activities.MainActivity;
-import com.huc.android_ble_monitor.adapters.mainActivity.AdvServicesListAdapter;
 import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.util.PropertyResolver;
 
@@ -63,7 +62,14 @@ public class ScanResultRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         ((ViewHolder)holder).ivConnectability.setImageResource(propertyResolver.connectabilityImageResolver(scanResult));
 
         ArrayList<Pair<String, String>> uuids = propertyResolver.deviceServiceResolver(device, scanResult);
-        ((ViewHolder)holder).tvServices.setText("Advertised Services (" + device.getAdvServiceCount() + "):");
+
+        if (device.getAdvServiceCount() > 0) {
+            ((ViewHolder)holder).tvServices.setVisibility(View.VISIBLE);
+            ((ViewHolder)holder).tvServices.setText("Advertised Services (" + device.getAdvServiceCount() + "):");
+        } else {
+            ((ViewHolder)holder).tvServices.setVisibility(View.GONE);
+        }
+
         ((ViewHolder)holder).servicesListView.setAdapter(new AdvServicesListAdapter(mContext, uuids));
     }
 

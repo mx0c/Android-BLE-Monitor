@@ -74,7 +74,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/tv_descriptor_identifier_link"
+        android:id="@+id/iv_descriptor_identifier_link"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_alignParentTop="true"
