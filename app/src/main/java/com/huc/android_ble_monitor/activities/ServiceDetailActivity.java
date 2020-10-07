@@ -3,13 +3,18 @@ package com.huc.android_ble_monitor.activities;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.serviceDetailActivity.CharacteristicListAdapter;
@@ -26,6 +31,11 @@ public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivity
     public static BluetoothGattService staticGattService;
     public static BluLeDevice staticBleDevice;
     private PropertyResolver mResolver;
+
+    TextView serviceUUID;
+    TextView serviceName;
+    TextView serviceIdentifier;
+    ListView characteristicListview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,16 +106,19 @@ public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivity
     @Override
     protected void onServiceBinded() {
         mBluetoothLeService.registerActivityCallbacks(ServiceDetailActivity.this);
+
         mViewModel.getService().observe(ServiceDetailActivity.this, new Observer<BluetoothGattService>() {
             @Override
             public void onChanged(BluetoothGattService service) {
                 //update service related views when service changed
-                TextView serviceUUID = findViewById(R.id.service_uuid_textview);
-                TextView serviceName = findViewById(R.id.service_name_textview);
-                ListView characteristicListview = findViewById(R.id.characteristic_listview);
+                serviceUUID = findViewById(R.id.service_uuid_textview);
+                serviceName = findViewById(R.id.service_name_textview);
+                serviceIdentifier = findViewById(R.id.service_identifier_textview);
+                characteristicListview = findViewById(R.id.characteristic_listview);
 
                 serviceUUID.setText(service.getUuid().toString());
                 serviceName.setText(mResolver.serviceNameResolver(service));
+                serviceIdentifier.setText(mResolver.serviceIdentifierResolver(service));
                 characteristicListview.setAdapter(new CharacteristicListAdapter(ServiceDetailActivity.this, service.getCharacteristics(), mBluetoothLeService));
             }
         });
@@ -115,6 +128,22 @@ public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivity
                 mViewModel.updateRssi(rssi);
             }
         });
+
+        characteristicListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                BluetoothGattCharacteristic characteristic = (BluetoothGattCharacteristic) parent.getAdapter().getItem(position);
+
+                if (characteristic.getDescriptors().size() > 0) {
+                    CharacteristicDetailActivity.staticGattService = staticGattService;
+                    CharacteristicDetailActivity.staticBleDevice = staticBleDevice;
+                    CharacteristicDetailActivity.staticCharacteristic = characteristic;
+                    Intent intent = new Intent(ServiceDetailActivity.this, CharacteristicDetailActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
     }
 
     private void setObservers(){

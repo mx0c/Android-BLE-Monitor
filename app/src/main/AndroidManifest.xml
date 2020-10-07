@@ -42,7 +42,9 @@
                 android:value="com.huc.android_ble_monitor.activities.MainActivity" />
         </activity>
         <activity android:name=".activities.ServiceDetailActivity"
-            android:parentActivityName=".activities.DeviceDetailActivity"></activity>
+            android:parentActivityName=".activities.DeviceDetailActivity"/>
+        <activity android:name=".activities.CharacteristicDetailActivity"
+            android:parentActivityName=".activities.ServiceDetailActivity"/>
         <activity android:name=".activities.ApplicationLogActivity"
             android:parentActivityName=".activities.MainActivity">
         </activity>

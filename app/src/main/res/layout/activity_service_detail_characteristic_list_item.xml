@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:focusable="true">
+    android:descendantFocusability="blocksDescendants">
 
     <include layout="@layout/activity_device_detail_service_list_item">
     </include>
@@ -17,12 +17,12 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:text="@string/descriptors"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
         <ListView
             android:id="@+id/lv_descriptors"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -37,7 +37,9 @@
             android:layout_weight="1"
             android:id="@+id/readBtn"
             android:layout_marginHorizontal="5dp"
-            android:text="@string/characteristic_read">
+            android:text="@string/characteristic_read"
+            android:focusable="false"
+            android:focusableInTouchMode="false">
         </Button>
         <Button
             android:layout_width="match_parent"
@@ -45,7 +47,9 @@
             android:id="@+id/writeBtn"
             android:layout_marginHorizontal="5dp"
             android:layout_weight="1"
-            android:text="@string/characteristic_write">
+            android:text="@string/characteristic_write"
+            android:focusable="false"
+            android:focusableInTouchMode="false">
         </Button>
         <Button
             android:layout_width="match_parent"
@@ -53,7 +57,9 @@
             android:id="@+id/notifyBtn"
             android:layout_marginHorizontal="5dp"
             android:layout_weight="1"
-            android:text="@string/characteristic_notify">
+            android:text="@string/characteristic_notify"
+            android:focusable="false"
+            android:focusableInTouchMode="false">
         </Button>
     </LinearLayout>
 </LinearLayout>

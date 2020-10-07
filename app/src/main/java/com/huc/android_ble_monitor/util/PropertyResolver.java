@@ -2,18 +2,20 @@ package com.huc.android_ble_monitor.util;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanResult;
 import android.os.Build;
 import android.os.ParcelUuid;
 import android.os.SystemClock;
-import android.provider.ContactsContract;
 import android.util.Pair;
 import android.util.SparseArray;
+
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.models.NameInformation;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +34,8 @@ public class PropertyResolver {
     public final static String SIG_UNKNOWN_CHARACTERISTIC_NAME = "Unknown Characteristic";
     public final static String SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER = "Unknown Characteristic Identifier";
     public final static String SIG_UNKNOWN_SERVICE_IDENTIFIER = "Unknown Service Identifier";
+    public final static String SIG_UNKNOWN_DESCRIPTOR_IDENTIFIER = "Unknown Descriptor Identifier";
+    public final static String SIG_UNKNOWN_DESCRIPTOR_NAME = "Unknown Descriptor";
     private final static String LEGACY_SCAN_RES = "Legacy Scan Result";
     private final static String NOT_AVAIL = "n/a";
     private final static String WHITESPACE = " ";
@@ -208,6 +212,22 @@ public class PropertyResolver {
         sUuid = sUuid.substring(4,8).toUpperCase();
         NameInformation characteristicNi = DataUtil.resolveUuidToNameInformation(sUuid);
         return characteristicNi.identifier == DataUtil.UNKNOWN_UUID ? SIG_UNKNOWN_CHARACTERISTIC_IDENTIFIER : characteristicNi.identifier;
+    }
+
+    public String descriptorIdentifierResolver(BluetoothGattDescriptor bluetoothGattDescriptor) {
+        UUID uuid = bluetoothGattDescriptor.getUuid();
+        String sUuid = uuid.toString();
+        sUuid = sUuid.substring(4,8).toUpperCase();
+        NameInformation descriptorNi = DataUtil.resolveUuidToNameInformation(sUuid);
+        return descriptorNi.name == DataUtil.UNKNOWN_UUID ? SIG_UNKNOWN_DESCRIPTOR_IDENTIFIER : descriptorNi.identifier;
+    }
+
+    public String descriptorNameResolver(BluetoothGattDescriptor bluetoothGattDescriptor) {
+        UUID uuid = bluetoothGattDescriptor.getUuid();
+        String sUuid = uuid.toString();
+        sUuid = sUuid.substring(4,8).toUpperCase();
+        NameInformation descriptorNi = DataUtil.resolveUuidToNameInformation(sUuid);
+        return descriptorNi.name == DataUtil.UNKNOWN_UUID ? SIG_UNKNOWN_DESCRIPTOR_NAME : descriptorNi.name;
     }
 
     public String serviceUuidResolver(BluetoothGattService bluetoothGattService) {
