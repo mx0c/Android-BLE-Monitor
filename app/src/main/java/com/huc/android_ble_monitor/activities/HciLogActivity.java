@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.appbar.MaterialToolbar;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.hciLogActivity.HciPacketListAdapter;
 import com.huc.android_ble_monitor.models.HciPacket;
@@ -36,6 +38,8 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
         setContentView(R.layout.activity_hci_log);
         ActivityUtil.setToolbar(this, false);
         ActivityUtil.setToolbarTitle(this, "BLE Protocol Log");
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setMenu();
 
         mMethodSpinner = findViewById(R.id.methodSpinner);
         mMethodTextView = findViewById(R.id.methodTextview);
