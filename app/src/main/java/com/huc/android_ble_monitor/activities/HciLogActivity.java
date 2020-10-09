@@ -1,18 +1,30 @@
 package com.huc.android_ble_monitor.activities;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.appbar.MaterialToolbar;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.hciLogActivity.HciPacketListAdapter;
+import com.huc.android_ble_monitor.dialogs.SetSnoopFilePathDialog;
 import com.huc.android_ble_monitor.models.HciPacket;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.HciSnoopLogUtil;
@@ -29,6 +41,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
     public Spinner mMethodSpinner;
     public TextView mTypeHeaderTextview;
     public TextView mMethodHeaderTextview;
+    private MenuItem mMenuItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +74,41 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
         });
 
         mTypeSpinner = findViewById(R.id.typeSpinner);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_appbar_snooplog_act, menu);
+
+        // workaround to make iconTints white (because layout iconTint doesnt work... )
+        Drawable drawable = menu.findItem(R.id.share_snoop_log_button).getIcon();
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, R.color.primaryTextColor));
+        menu.findItem(R.id.share_snoop_log_button).setIcon(drawable);
+
+        drawable = menu.findItem(R.id.snoop_log_path_button).getIcon();
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, R.color.primaryTextColor));
+        menu.findItem(R.id.snoop_log_path_button).setIcon(drawable);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.snoop_log_path_button:
+                SetSnoopFilePathDialog dialog = new SetSnoopFilePathDialog(HciLogActivity.this);
+                dialog.show();
+                break;
+            case R.id.share_snoop_log_button:
+                //TODO: Share functionality
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     @Override

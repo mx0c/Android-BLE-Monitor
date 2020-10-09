@@ -27,6 +27,6 @@ public class AboutDialog extends AlertDialog {
         github_link.setText("https://github.com/mx0c/Android-BLE-Monitor");
 
         setTitle("About this App");
-        setButton(DialogInterface.BUTTON_NEUTRAL, "Ok", (OnClickListener) null);
+        setButton(DialogInterface.BUTTON_NEUTRAL, "OK", (OnClickListener) null);
     }
 }

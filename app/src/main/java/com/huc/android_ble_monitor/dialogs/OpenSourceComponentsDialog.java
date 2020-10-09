@@ -17,6 +17,6 @@ public class OpenSourceComponentsDialog extends AlertDialog {
 
         setView(listview);
         setTitle("Used Open Source Components");
-        setButton(DialogInterface.BUTTON_NEUTRAL, "Ok", (OnClickListener) null);
+        setButton(DialogInterface.BUTTON_NEUTRAL, "OK", (OnClickListener) null);
     }
 }

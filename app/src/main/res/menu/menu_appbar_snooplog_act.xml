@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/snoop_log_path_button"
+        android:title="path"
+        app:showAsAction="always"
+        android:iconTint="@color/primaryTextColor"
+        android:icon="@drawable/baseline_description_black_48dp"
+        />
+
+    <item
+        android:id="@+id/share_snoop_log_button"
+        android:title="share"
+        app:showAsAction="always"
+        android:iconTint="@color/primaryTextColor"
+        android:icon="@drawable/baseline_share_black_48dp"
+        />
+</menu>

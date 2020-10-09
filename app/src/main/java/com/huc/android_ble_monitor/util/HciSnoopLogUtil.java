@@ -16,6 +16,7 @@ public class HciSnoopLogUtil implements IHciDecoder {
     private String BTSNOOP_FALLBACK_FILE = "btsnoop_hci.log";
     private String BTSNOOP_FALLBACK_PATH = "/sdcard/" + BTSNOOP_FALLBACK_FILE;
     private IPacketReceptionCallback mCallback;
+    public static String BTSNOOP_PATH;
     private int mReadLastPacketCount = 1000;
     private int mHciSnoopLogPacketCount;
 
@@ -25,10 +26,10 @@ public class HciSnoopLogUtil implements IHciDecoder {
 
     public HciSnoopLogUtil(IPacketReceptionCallback cb, Context ctx){
         setPacketReceptionCb(cb);
-        String filePath = getSnoopLogLocation();
+        BTSNOOP_PATH = getSnoopLogLocation();
 
         // Check if file exists
-        File file = new File(filePath);
+        File file = new File(BTSNOOP_PATH);
         if(!file.exists()){
             new MaterialAlertDialogBuilder(ctx)
                     .setTitle("Error")
@@ -36,8 +37,13 @@ public class HciSnoopLogUtil implements IHciDecoder {
                     .setNeutralButton("Ok", null)
                     .show();
         }else {
-            startHciLogStream(filePath, mReadLastPacketCount);
+            startHciLogStream(BTSNOOP_PATH, mReadLastPacketCount);
         }
+    }
+
+    public void restartStreaming(){
+        stopHciLogStream();
+        startHciLogStream(BTSNOOP_PATH, mReadLastPacketCount);
     }
 
     @Override
