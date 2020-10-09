@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:padding="5dp"
-        android:text="Select BTSnoop Log Filepath " />
+        android:text="file path" />
 
     <EditText
         android:id="@+id/snoop_file_edit"

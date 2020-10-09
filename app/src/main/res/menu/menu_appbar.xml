@@ -8,12 +8,4 @@
         android:title="@string/action_ble_toggle"
         app:actionLayout="@layout/switch_layout"
         app:showAsAction="ifRoom" />
-
-    <!-- Settings, should always be in the overflow -->
-
-    <!-- Place Menu Items here e.g below
-    <item
-        android:id="@+id/action_logging"
-        android:title="application logs"
-        app:showAsAction="never" />-->
 </menu>
