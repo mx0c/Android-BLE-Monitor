@@ -15,7 +15,7 @@ public class SetSnoopFilePathDialog extends AlertDialog {
     final static String TAG = "BLEM_SoopFileDialog";
     private EditText mSnoopFileEditText;
 
-    public SetSnoopFilePathDialog(Context context) {
+    public SetSnoopFilePathDialog(Context context, final HciSnoopLogUtil snoopLog) {
         super(context);
         LayoutInflater inflater = getLayoutInflater();
         View dialoglayout = inflater.inflate(R.layout.dialog_set_snoop_path, null);
@@ -32,6 +32,8 @@ public class SetSnoopFilePathDialog extends AlertDialog {
                 // save selected path
                 HciSnoopLogUtil.BTSNOOP_PATH = mSnoopFileEditText.getText().toString();
                 Log.d(TAG, "onClick Positive Button: Saved BtSnoop Path " + HciSnoopLogUtil.BTSNOOP_PATH);
+                // restart streaming
+                snoopLog.restartStreaming();
             }
         });
 
