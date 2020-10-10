@@ -41,7 +41,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
     public Spinner mMethodSpinner;
     public TextView mTypeHeaderTextview;
     public TextView mMethodHeaderTextview;
-    private MenuItem mMenuItem;
+    private HciSnoopLogUtil mSnoopLogUtil;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
         mListView = findViewById(R.id.hci_log_listView);
         mAdapter = new HciPacketListAdapter(this, mViewModel.getSnoopPackets().getValue());
         mListView.setAdapter(mAdapter);
-        HciSnoopLogUtil snoopLog = new HciSnoopLogUtil(this, HciLogActivity.this);
+        mSnoopLogUtil = new HciSnoopLogUtil(this, HciLogActivity.this);
 
         mProtocolSpinner = findViewById(R.id.protocolSpinner);
         mProtocolSpinner.setAdapter(ArrayAdapter.createFromResource(this, R.array.ProtocolArray, android.R.layout.simple_spinner_item));
@@ -99,7 +99,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.snoop_log_path_button:
-                SetSnoopFilePathDialog dialog = new SetSnoopFilePathDialog(HciLogActivity.this);
+                SetSnoopFilePathDialog dialog = new SetSnoopFilePathDialog(HciLogActivity.this, mSnoopLogUtil);
                 dialog.show();
                 break;
             case R.id.share_snoop_log_button:
