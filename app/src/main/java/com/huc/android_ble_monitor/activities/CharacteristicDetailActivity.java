@@ -119,11 +119,16 @@ public class CharacteristicDetailActivity extends BaseActivity<CharacteristicDet
     }
 
     @Override
-    public void onDescriptorWrite(BluetoothGattDescriptor descriptor) {
-        new MaterialAlertDialogBuilder(CharacteristicDetailActivity.this)
-                .setTitle("Write to descriptor returned:")
-                .setMessage("Write descriptor "+ descriptor.getUuid().toString() + "\nRaw (0x): " + BinaryUtil.byteArrToHexString(descriptor.getValue()) + "\nString: " + new String(descriptor.getValue()))
-                .setNeutralButton("Ok", null)
-                .show();
+    public void onDescriptorWrite(final BluetoothGattDescriptor descriptor) {
+        CharacteristicDetailActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new MaterialAlertDialogBuilder(CharacteristicDetailActivity.this)
+                        .setTitle("Write to descriptor returned:")
+                        .setMessage("Write descriptor "+ descriptor.getUuid().toString() + "\nRaw (0x): " + BinaryUtil.byteArrToHexString(descriptor.getValue()) + "\nString: " + new String(descriptor.getValue()))
+                        .setNeutralButton("Ok", null)
+                        .show();
+            }
+        });
     }
 }
