@@ -1,6 +1,7 @@
 package com.huc.android_ble_monitor.activities;
 
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -11,14 +12,17 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.characteristicDetailActivity.DescriptorListAdapter;
 import com.huc.android_ble_monitor.models.BluLeDevice;
+import com.huc.android_ble_monitor.services.IBleDescriptorCallbacks;
 import com.huc.android_ble_monitor.util.ActivityUtil;
+import com.huc.android_ble_monitor.util.BinaryUtil;
 import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.viewmodels.CharacteristicDetailViewModel;
 
-public class CharacteristicDetailActivity extends BaseActivity<CharacteristicDetailViewModel> {
+public class CharacteristicDetailActivity extends BaseActivity<CharacteristicDetailViewModel> implements IBleDescriptorCallbacks {
     static final String TAG = "BLEM_CharacteristicDetailActivity";
     static BluetoothGattService staticGattService;
     static BluLeDevice staticBleDevice;
@@ -98,5 +102,28 @@ public class CharacteristicDetailActivity extends BaseActivity<CharacteristicDet
                 BondStateTextView.setText(mResolver.bondStateTextResolver(device.mScanResult));
             }
         });
+    }
+
+    @Override
+    public void onDescriptorRead(final BluetoothGattDescriptor descriptor) {
+        CharacteristicDetailActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new MaterialAlertDialogBuilder(CharacteristicDetailActivity.this)
+                        .setTitle("Read from descriptor returned:")
+                        .setMessage("Read descriptor: "+ descriptor.getUuid().toString() + "\nRaw (0x): " + BinaryUtil.byteArrToHexString(descriptor.getValue()) + "\nString: " + new String(descriptor.getValue()))
+                        .setNeutralButton("Ok", null)
+                        .show();
+            }
+        });
+    }
+
+    @Override
+    public void onDescriptorWrite(BluetoothGattDescriptor descriptor) {
+        new MaterialAlertDialogBuilder(CharacteristicDetailActivity.this)
+                .setTitle("Write to descriptor returned:")
+                .setMessage("Write descriptor "+ descriptor.getUuid().toString() + "\nRaw (0x): " + BinaryUtil.byteArrToHexString(descriptor.getValue()) + "\nString: " + new String(descriptor.getValue()))
+                .setNeutralButton("Ok", null)
+                .show();
     }
 }

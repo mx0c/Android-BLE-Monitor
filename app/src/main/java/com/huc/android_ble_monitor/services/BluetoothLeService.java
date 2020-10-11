@@ -40,7 +40,8 @@ public class BluetoothLeService extends Service {
     private MutableLiveData<List<BluLeDevice>> mScannedDevices;
     private MutableLiveData<ScanResult> mScanResult;
     private MutableLiveData<Integer> mCurrentRssi = new MutableLiveData<>();
-    public IBLeServiceCallbacks mCallbacks;
+    public IBLeCharacteristicCallbacks mCharacteristicCallbacks;
+    public IBleDescriptorCallbacks mDescriptorCallbacks;
 
     @Override
     public void onCreate() {
@@ -76,8 +77,12 @@ public class BluetoothLeService extends Service {
         }
     }
 
-    public void registerActivityCallbacks(Activity activity){
-        mCallbacks = (IBLeServiceCallbacks) activity;
+    public void registerActivityCharacteristicCallbacks(Activity activity){
+        mCharacteristicCallbacks = (IBLeCharacteristicCallbacks) activity;
+    }
+
+    public void registerActivityDescriptorCallbacks(Activity activity){
+        mDescriptorCallbacks = (IBleDescriptorCallbacks) activity;
     }
 
     void updateBleDeviceGatt(BluetoothGatt gatt){
@@ -142,20 +147,32 @@ public class BluetoothLeService extends Service {
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
             if(status == BluetoothGatt.GATT_SUCCESS) {
-                mCallbacks.onCharacteristicRead(characteristic);
+                mCharacteristicCallbacks.onCharacteristicRead(characteristic);
             }
         }
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             if(status == BluetoothGatt.GATT_SUCCESS) {
-                mCallbacks.onCharacteristicWrite(characteristic);
+                mCharacteristicCallbacks.onCharacteristicWrite(characteristic);
             }
         }
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            mCallbacks.onCharacteristicNotify(characteristic);
+            mCharacteristicCallbacks.onCharacteristicNotify(characteristic);
+        }
+
+        @Override
+        public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor,
+                                     int status) {
+            mDescriptorCallbacks.onDescriptorRead(descriptor);
+        }
+
+        @Override
+        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor,
+                                     int status) {
+            mDescriptorCallbacks.onDescriptorWrite(descriptor);
         }
     };
 
@@ -236,6 +253,25 @@ public class BluetoothLeService extends Service {
         }
         mBluetoothGatt.writeCharacteristic(characteristic);
     }
+
+    public boolean readDescriptor(BluetoothGattDescriptor descriptor) {
+        if (BleUtil.mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.d(TAG, "BluetoothAdapter not initialized");
+            return false;
+        } else {
+           return mBluetoothGatt.readDescriptor(descriptor);
+        }
+    }
+
+    public boolean writeDescriptor(BluetoothGattDescriptor descriptor) {
+        if (BleUtil.mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.d(TAG, "BluetoothAdapter not initialized");
+            return false;
+        } else {
+            return mBluetoothGatt.writeDescriptor(descriptor);
+        }
+    }
+
 
     public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, boolean enabled) {
         if (BleUtil.mBluetoothAdapter == null || mBluetoothGatt == null) {

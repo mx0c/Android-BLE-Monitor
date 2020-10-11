@@ -47,6 +47,8 @@
     <!-- Characteristic Detail View -->
     <string name="characteristic_uuid">Characteristic UUID:</string>
     <string name="characteristic_name">Characteristic Name:</string>
+    <string name="descriptor_write">Write</string>
+    <string name="descriptor_read">Read</string>
 
     <!-- Filter Entries -->
     <string-array name="FilterArray">

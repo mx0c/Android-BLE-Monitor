@@ -2,20 +2,13 @@ package com.huc.android_ble_monitor.util;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.navigation.NavigationView;
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.activities.ApplicationLogActivity;
-import com.huc.android_ble_monitor.activities.HciLogActivity;
 import com.huc.android_ble_monitor.models.BluLeDevice;
 
 import java.io.Serializable;
