@@ -1,19 +1,24 @@
 package com.huc.android_ble_monitor.adapters.characteristicDetailActivity;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.IdentifierXmlResolver;
@@ -22,6 +27,7 @@ import com.huc.android_ble_monitor.util.PropertyResolver;
 import java.util.List;
 
 public class DescriptorListAdapter extends ArrayAdapter<BluetoothGattDescriptor> {
+    static final String TAG = "BLEM_DescripListAdapt";
     private Context mContext;
     private List<BluetoothGattDescriptor> mDescriptors;
     private PropertyResolver mPropertyResolver;
@@ -48,10 +54,12 @@ public class DescriptorListAdapter extends ArrayAdapter<BluetoothGattDescriptor>
         TextView descriptorUUID = convertView.findViewById(R.id.tv_descriptor_uuid);
         TextView descriptorName = convertView.findViewById(R.id.tv_descriptor_name);
 
-
         descriptorIdentifier.setText(mPropertyResolver.descriptorIdentifierResolver(descriptor));
         descriptorUUID.setText(descriptor.getUuid().toString());
         descriptorName.setText(mPropertyResolver.descriptorNameResolver(descriptor));
+
+        this.initButtonStates(convertView, descriptor);
+
         this.handleLinkView(convertView, mPropertyResolver.descriptorIdentifierResolver(descriptor));
 
         return convertView;
@@ -80,4 +88,48 @@ public class DescriptorListAdapter extends ArrayAdapter<BluetoothGattDescriptor>
     }
 
 
+    private void initButtonStates(View convertView, final BluetoothGattDescriptor descriptor) {
+        Button readBtn = convertView.findViewById(R.id.descReadBtn);
+        Button writeBtn = convertView.findViewById(R.id.descWriteBtn);
+        boolean isDescriptorReadable;
+
+        if (mService.getBluetoothDevice().getValue() != null) {
+            isDescriptorReadable = mService.readDescriptor(descriptor);
+            readBtn.setEnabled(isDescriptorReadable);
+            if (!isDescriptorReadable) {
+                readBtn.setAlpha(0.6f);
+            }
+        } else {
+            readBtn.setEnabled(false);
+            readBtn.setAlpha(0.6f);
+        }
+
+        readBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mService.registerActivityDescriptorCallbacks((Activity) mContext); // Register in onClick because we dont want to catch the initial callback
+                mService.readDescriptor(descriptor);
+            }
+        });
+
+        writeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mService.registerActivityDescriptorCallbacks((Activity) mContext); // Register in onClick because we dont want to catch the initial callback
+                final EditText et = new EditText(mContext);
+                new MaterialAlertDialogBuilder(mContext)
+                        .setTitle("Write to descriptor")
+                        .setMessage("Enter value to write:")
+                        .setView(et)
+                        .setNeutralButton("OK", new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                descriptor.setValue(et.getText().toString().getBytes());
+                                mService.writeDescriptor(descriptor);
+                            }
+                        })
+                        .show();
+            }
+        });
+    }
 }

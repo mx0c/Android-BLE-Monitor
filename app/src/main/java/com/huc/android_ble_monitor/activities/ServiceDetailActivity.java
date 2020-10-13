@@ -19,14 +19,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.serviceDetailActivity.CharacteristicListAdapter;
 import com.huc.android_ble_monitor.models.BluLeDevice;
-import com.huc.android_ble_monitor.services.IBLeServiceCallbacks;
+import com.huc.android_ble_monitor.services.IBLeCharacteristicCallbacks;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BinaryUtil;
 import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.viewmodels.ServicesOverviewActivityViewModel;
 
 
-public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivityViewModel> implements IBLeServiceCallbacks {
+public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivityViewModel> implements IBLeCharacteristicCallbacks {
     static final String TAG = "BLEM_ServicesOverview";
     public static BluetoothGattService staticGattService;
     public static BluLeDevice staticBleDevice;
@@ -59,7 +59,7 @@ public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivity
             public void run() {
                 new MaterialAlertDialogBuilder(ServiceDetailActivity.this)
                 .setTitle("Read from Characteristic returned:")
-                .setMessage("Read Characteristic "+ characteristic.getUuid().toString() + ":\nRaw (0x): " + BinaryUtil.byteArrToHexString(characteristic.getValue()) + "\nString: " + characteristic.getStringValue(0)
+                .setMessage("Read Characteristic: "+ characteristic.getUuid().toString() + "\nRaw (0x): " + BinaryUtil.byteArrToHexString(characteristic.getValue()) + "\nString: " + characteristic.getStringValue(0)
                         + "\nInt32: "+ characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT32,0))
                 .setNeutralButton("Ok", null)
                 .show();
@@ -105,7 +105,7 @@ public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivity
 
     @Override
     protected void onServiceBinded() {
-        mBluetoothLeService.registerActivityCallbacks(ServiceDetailActivity.this);
+        mBluetoothLeService.registerActivityCharacteristicCallbacks(ServiceDetailActivity.this);
 
         mViewModel.getService().observe(ServiceDetailActivity.this, new Observer<BluetoothGattService>() {
             @Override
