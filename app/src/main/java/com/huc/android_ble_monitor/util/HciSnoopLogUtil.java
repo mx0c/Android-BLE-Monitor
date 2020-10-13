@@ -4,14 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
-
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.huc.android_ble_monitor.BuildConfig;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -159,14 +156,10 @@ public class HciSnoopLogUtil implements IHciDecoder {
         return null;
     }
 
-
-    public <T> Uri getSharableUriForPackages(Context mContext, String sFileName, ArrayList<T> packets) {
+    public <T> Uri getSharableUriForBlePackets(Context mContext, String sFileName, ArrayList<T> packets) {
         String jsonHciPackets = serializePackets(packets);
         File dir = writeFileOnInternalStorage(mContext, sFileName, jsonHciPackets);
         Uri uri = FileProvider.getUriForFile(Objects.requireNonNull(mContext), BuildConfig.APPLICATION_ID + ".provider", dir.getAbsoluteFile());
         return uri;
     }
-
-
-
 }
