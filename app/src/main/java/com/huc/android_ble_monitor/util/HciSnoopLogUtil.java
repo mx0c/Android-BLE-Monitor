@@ -1,6 +1,7 @@
 package com.huc.android_ble_monitor.util;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -13,8 +14,8 @@ public class HciSnoopLogUtil implements IHciDecoder {
     private String TAG = "BLEM_HciSnoopLog";
     private String BTSTACK_CONFIG_FILE = "bt_stack.conf";
     private String BTSTACK_CONFIG_PATH = "/etc/bluetooth/" + BTSTACK_CONFIG_FILE;
-    private String BTSNOOP_FALLBACK_FILE = "btsnoop_hci.log";
-    private String BTSNOOP_FALLBACK_PATH = "/sdcard/" + BTSNOOP_FALLBACK_FILE;
+    private String BTSNOOP_FALLBACK_FILE = "/btsnoop_hci.log";
+    private String BTSNOOP_FALLBACK_PATH = Environment.getExternalStorageDirectory() + BTSNOOP_FALLBACK_FILE;
     private IPacketReceptionCallback mCallback;
     public static String BTSNOOP_PATH;
     private int mReadLastPacketCount = 1000;
