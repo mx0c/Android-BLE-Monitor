@@ -1,8 +1,9 @@
 package com.huc.android_ble_monitor.activities;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,19 +11,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.view.menu.ActionMenuItemView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.hciLogActivity.HciPacketListAdapter;
@@ -32,6 +29,15 @@ import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.HciSnoopLogUtil;
 import com.huc.android_ble_monitor.util.IPacketReceptionCallback;
 import com.huc.android_ble_monitor.viewmodels.HciLogViewModel;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPacketReceptionCallback {
     private static final String TAG = "BLEM_HciLogAct";
@@ -97,7 +103,7 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.snoop_log_path_button:
@@ -106,20 +112,68 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
                 break;
             case R.id.share_snoop_log_button:
                 //TODO: Share functionality
-                CharSequence[] items = new CharSequence[]{ "ATT Log", "L2CAP Log", "HCI Log", "Raw Snoop Log" };
-                boolean[] selected = new boolean[]{ false, false, false, false };
+                final CharSequence[] items = new CharSequence[]{ "ATT Log", "L2CAP Log", "HCI Log", "Raw Snoop Log" };
+                final boolean[] selected = new boolean[]{ false, false, false, false };
                 new MaterialAlertDialogBuilder(this)
                         .setTitle("Select Logs to share")
                         .setMultiChoiceItems(items, selected, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-
+                                selected[which] = isChecked;
                             }
                         })
                         .setPositiveButton("Share", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                ArrayList<Uri> uris = new ArrayList<>();
 
+                                if (selected[0]) {
+                                    String fileName = "attPackages.json";
+                                    Log.d(TAG, "Sharing following package " +  fileName);
+                                    uris.add(mSnoopLogUtil.getSharableUriForPackages(Objects.requireNonNull(getApplicationContext()), fileName, mViewModel.getmAttPackets().getValue()));
+                                }
+
+                                if (selected[1]) {
+                                    String fileName = "l2capPackages.json";
+                                    Log.d(TAG, "Sharing following package " +  fileName);
+                                    uris.add(mSnoopLogUtil.getSharableUriForPackages(Objects.requireNonNull(getApplicationContext()), fileName, mViewModel.getmL2capPackets().getValue()));
+                                }
+
+                                if (selected[2]) {
+                                    String fileName = "hciPackets.json";
+                                    Log.d(TAG, "Sharing following package " +  fileName);
+                                    uris.add(mSnoopLogUtil.getSharableUriForPackages(Objects.requireNonNull(getApplicationContext()), fileName, mViewModel.getmHciPackets().getValue()));
+                                }
+
+                                if (selected[3]) {
+                                    String fileName = HciSnoopLogUtil.BTSNOOP_PATH;
+                                    Log.d(TAG, "Sharing following package " +  fileName);
+
+
+                                    File source = new File(fileName);
+                                    File dest = new File(getApplicationContext().getFilesDir() + "/hci", "btsnoop_hci.log");
+
+                                    try (InputStream in = new FileInputStream(source)) {
+                                        try (OutputStream out = new FileOutputStream(dest)) {
+                                            // Transfer bytes from in to out
+                                            byte[] buf = new byte[1024];
+                                            int len;
+                                            while ((len = in.read(buf)) > 0) {
+                                                out.write(buf, 0, len);
+                                            }
+                                        } catch (IOException e) {
+                                            Log.e(TAG, "Failed creating FileInputStream", e);
+                                        }
+                                    } catch (IOException e) {
+                                        Log.e(TAG, "Failed creating FileOutputStream", e);
+                                    }
+                                    uris.add(Uri.parse(dest.getAbsolutePath()));
+                                }
+
+                                Intent share = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                                share.setType("text/plain");
+                                share.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+                                startActivity(Intent.createChooser(share, "Share packages"));
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

@@ -51,6 +51,18 @@
         <activity android:name=".activities.HciLogActivity"
             android:parentActivityName=".activities.MainActivity">
         </activity>
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.huc.android_ble_monitor.provider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
     </application>
 
 </manifest>

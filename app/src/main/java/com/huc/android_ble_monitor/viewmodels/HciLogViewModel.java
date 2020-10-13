@@ -23,7 +23,6 @@ import com.huc.android_ble_monitor.models.AttProtocol.AttFindInformationReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttFindInformationRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttHandleValueInd;
 import com.huc.android_ble_monitor.models.AttProtocol.AttHandleValueNtf;
-import com.huc.android_ble_monitor.models.AttProtocol.AttOpCodeMethod;
 import com.huc.android_ble_monitor.models.AttProtocol.AttPrepareWriteReqRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadBlobReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadBlobRsp;
@@ -43,6 +42,7 @@ import com.huc.android_ble_monitor.models.AttProtocol.AttWriteReq;
 import com.huc.android_ble_monitor.models.AttProtocol.BaseAttPacket;
 import com.huc.android_ble_monitor.models.HciPacket;
 import com.huc.android_ble_monitor.models.L2capPacket;
+
 import java.util.ArrayList;
 
 public class HciLogViewModel extends ViewModel {
@@ -236,5 +236,17 @@ public class HciLogViewModel extends ViewModel {
             }
         }
         return filteredList;
+    }
+
+    public MutableLiveData<ArrayList<HciPacket>> getmHciPackets() {
+        return mHciPackets;
+    }
+
+    public MutableLiveData<ArrayList<L2capPacket>> getmL2capPackets() {
+        return mL2capPackets;
+    }
+
+    public MutableLiveData<ArrayList<BaseAttPacket>> getmAttPackets() {
+        return mAttPackets;
     }
 }
