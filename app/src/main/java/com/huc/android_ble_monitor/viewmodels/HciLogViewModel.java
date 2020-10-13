@@ -13,6 +13,7 @@ import com.huc.android_ble_monitor.activities.HciLogActivity;
 import com.huc.android_ble_monitor.adapters.hciLogActivity.AttPacketListAdapter;
 import com.huc.android_ble_monitor.adapters.hciLogActivity.HciPacketListAdapter;
 import com.huc.android_ble_monitor.adapters.hciLogActivity.L2capPacketListAdapter;
+import com.huc.android_ble_monitor.models.AttMethod;
 import com.huc.android_ble_monitor.models.AttProtocol.AttErrorRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttExchangeMtuReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttExchangeMtuRsp;
@@ -23,7 +24,6 @@ import com.huc.android_ble_monitor.models.AttProtocol.AttFindInformationReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttFindInformationRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttHandleValueInd;
 import com.huc.android_ble_monitor.models.AttProtocol.AttHandleValueNtf;
-import com.huc.android_ble_monitor.models.AttProtocol.AttOpCodeMethod;
 import com.huc.android_ble_monitor.models.AttProtocol.AttPrepareWriteReqRsp;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadBlobReq;
 import com.huc.android_ble_monitor.models.AttProtocol.AttReadBlobRsp;
@@ -41,7 +41,9 @@ import com.huc.android_ble_monitor.models.AttProtocol.AttSignedWriteCmd;
 import com.huc.android_ble_monitor.models.AttProtocol.AttWriteCmd;
 import com.huc.android_ble_monitor.models.AttProtocol.AttWriteReq;
 import com.huc.android_ble_monitor.models.AttProtocol.BaseAttPacket;
+import com.huc.android_ble_monitor.models.AttType;
 import com.huc.android_ble_monitor.models.HciPacket;
+import com.huc.android_ble_monitor.models.HciType;
 import com.huc.android_ble_monitor.models.L2capPacket;
 import java.util.ArrayList;
 
@@ -49,6 +51,9 @@ public class HciLogViewModel extends ViewModel {
     private MutableLiveData<ArrayList<HciPacket>> mHciPackets = new MutableLiveData<>();
     private MutableLiveData<ArrayList<L2capPacket>> mL2capPackets = new MutableLiveData<>();
     private MutableLiveData<ArrayList<BaseAttPacket>> mAttPackets = new MutableLiveData<>();
+
+    private AttType mSelecetedAttType = AttType.ALL;
+    private AttMethod mSelecetedAttMethod = AttMethod.ALL;
 
     public void init(){
         mHciPackets.setValue(new ArrayList<HciPacket>());
@@ -138,7 +143,7 @@ public class HciLogViewModel extends ViewModel {
                 ctx.mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        String type = parent.getItemAtPosition(position).toString();
+                        HciType type = HciType.valueOf(parent.getItemAtPosition(position).toString().toUpperCase());
                         ctx.mAdapter = new HciPacketListAdapter(ctx, getFilteredHciPackets(type));
                         ctx.mListView.setAdapter(ctx.mAdapter);
                         ctx.mAdapter.notifyDataSetChanged();
@@ -155,8 +160,9 @@ public class HciLogViewModel extends ViewModel {
                 ctx.mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        String type = parent.getItemAtPosition(position).toString();
-                        ctx.mAdapter = new AttPacketListAdapter(ctx, getFilteredByTypeAttPackets(type));
+                        AttType type = AttType.valueOf(parent.getItemAtPosition(position).toString().toUpperCase());
+                        mSelecetedAttType = type;
+                        ctx.mAdapter = new AttPacketListAdapter(ctx, getFilteredAttPackets(mSelecetedAttMethod, mSelecetedAttType));
                         ctx.mListView.setAdapter(ctx.mAdapter);
                         ctx.mAdapter.notifyDataSetChanged();
                     }
@@ -169,8 +175,9 @@ public class HciLogViewModel extends ViewModel {
                 ctx.mMethodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        String method = parent.getItemAtPosition(position).toString();
-                        ctx.mAdapter = new AttPacketListAdapter(ctx, getFilteredByMethodAttPackets(method));
+                        AttMethod method = AttMethod.valueOf(parent.getItemAtPosition(position).toString());
+                        mSelecetedAttMethod = method;
+                        ctx.mAdapter = new AttPacketListAdapter(ctx, getFilteredAttPackets(mSelecetedAttMethod, mSelecetedAttType));
                         ctx.mListView.setAdapter(ctx.mAdapter);
                         ctx.mAdapter.notifyDataSetChanged();
                     }
@@ -190,48 +197,48 @@ public class HciLogViewModel extends ViewModel {
         return mHciPackets;
     }
 
-    public ArrayList<HciPacket> getFilteredHciPackets(String type){
+    public ArrayList<HciPacket> getFilteredHciPackets(HciType type){
         //return unfiltered HCI Packets
-        if(type.equals("All")){
+        if(type.equals(HciType.ALL)){
             return mHciPackets.getValue();
         }
 
         //filter packets by provided type
         ArrayList<HciPacket> filteredList = new ArrayList<>();
         for (HciPacket p: mHciPackets.getValue()) {
-            if(p.packet_type.equals(type.toUpperCase())){
+            if(p.packet_type.equals(type.getHciType().toUpperCase())){
                 filteredList.add(p);
             }
         }
         return filteredList;
     }
 
-    public ArrayList<BaseAttPacket> getFilteredByMethodAttPackets(String method){
-        //return unfiltered ATT Packets
-        if(method.equals("ALL")){
-            return mAttPackets.getValue();
-        }
-
-        //filter packets by provided method
+    public ArrayList<BaseAttPacket> getFilteredAttPackets(AttMethod method, AttType type){
         ArrayList<BaseAttPacket> filteredList = new ArrayList<>();
-        for (BaseAttPacket p: mAttPackets.getValue()) {
-            if(p.packet_method.name().contains(method)){
-                filteredList.add(p);
+
+        if(method == AttMethod.ALL && type == AttType.ALL)
+            return mAttPackets.getValue();
+
+        if(method == AttMethod.ALL) {
+            //filter packets by provided method
+            for (BaseAttPacket p : mAttPackets.getValue()) {
+                if (p.packet_type == type.getAttType()) {
+                    filteredList.add(p);
+                }
             }
+            return filteredList;
+        } else if(type == AttType.ALL){
+            for (BaseAttPacket p : mAttPackets.getValue()) {
+                if (p.compareAttMethodString(method)) {
+                    filteredList.add(p);
+                }
+            }
+            return filteredList;
         }
-        return filteredList;
-    }
 
-    public ArrayList<BaseAttPacket> getFilteredByTypeAttPackets(String type){
-        //return unfiltered ATT Packets
-        if(type.equals("All")){
-            return mAttPackets.getValue();
-        }
-
-        //filter packets by provided type
-        ArrayList<BaseAttPacket> filteredList = new ArrayList<>();
+        //filter packets by provided method and type
         for (BaseAttPacket p: mAttPackets.getValue()) {
-            if(p.packet_type.equals(type)){
+            if(p.packet_type == type.getAttType() && p.compareAttMethodString(method)){
                 filteredList.add(p);
             }
         }

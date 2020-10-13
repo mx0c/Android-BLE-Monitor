@@ -1,5 +1,6 @@
 package com.huc.android_ble_monitor.models.AttProtocol;
 
+import com.huc.android_ble_monitor.models.AttMethod;
 import com.huc.android_ble_monitor.models.L2capPacket;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -59,6 +60,15 @@ public class BaseAttPacket {
 
     protected short decode16BitValue(byte LSB, byte MSB){
         return (short)((MSB << 8) | LSB);
+    }
+
+    public boolean compareAttMethodString(AttMethod method){
+        if(this.packet_method.name().contains(method.getAttMethod())){
+            if(Math.abs(this.packet_method.name().length() - method.getAttMethod().length()) <= 4 ){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
