@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.huc.android_ble_monitor.R;
 
-public class AboutDialog extends AlertDialog {
+public class AboutDialog extends AlertDialog{
     public AboutDialog(Context context) {
         super(context);
 

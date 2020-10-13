@@ -1,5 +1,6 @@
 package com.huc.android_ble_monitor.activities;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.hciLogActivity.HciPacketListAdapter;
 import com.huc.android_ble_monitor.dialogs.SetSnoopFilePathDialog;
@@ -104,6 +106,28 @@ public class HciLogActivity extends BaseActivity<HciLogViewModel> implements IPa
                 break;
             case R.id.share_snoop_log_button:
                 //TODO: Share functionality
+                CharSequence[] items = new CharSequence[]{ "ATT Log", "L2CAP Log", "HCI Log", "Raw Snoop Log" };
+                boolean[] selected = new boolean[]{ false, false, false, false };
+                new MaterialAlertDialogBuilder(this)
+                        .setTitle("Select Logs to share")
+                        .setMultiChoiceItems(items, selected, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+
+                            }
+                        })
+                        .setPositiveButton("Share", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).show();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
