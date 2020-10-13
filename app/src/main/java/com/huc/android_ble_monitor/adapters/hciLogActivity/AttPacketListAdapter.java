@@ -14,14 +14,17 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.models.AttProtocol.BaseAttPacket;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class AttPacketListAdapter extends ArrayAdapter<BaseAttPacket> {
+    private TextView mPacket_timestamp;
     private TextView mPacket_num;
     private TextView mPacket_type;
     private TextView mPacket_info;
     private TextView mPacket_length;
     private Context mCtx;
+    private SimpleDateFormat mTimestampFormat = new SimpleDateFormat("yy-MM-dd HH:mm:ss.SSS");
 
     public AttPacketListAdapter(@NonNull Context context, @NonNull List<BaseAttPacket> objects) {
         super(context, 0, objects);
@@ -39,6 +42,7 @@ public class AttPacketListAdapter extends ArrayAdapter<BaseAttPacket> {
 
         initializeViews(convertView);
 
+        mPacket_timestamp.setText(mTimestampFormat.format(packet.l2capPacket.packet_hci_frames.get(0).timestamp));
         mPacket_type.setText(packet.packet_type);
         mPacket_num.setText(String.valueOf(packet.l2capPacket.packet_number));
         mPacket_info.setText(packet.packet_method.name());
@@ -58,6 +62,7 @@ public class AttPacketListAdapter extends ArrayAdapter<BaseAttPacket> {
     }
 
     private void initializeViews(View view) {
+        mPacket_timestamp = view.findViewById(R.id.packet_timestamp);
         mPacket_num = view.findViewById(R.id.packet_num);
         mPacket_info = view.findViewById(R.id.packet_info);
         mPacket_type = view.findViewById(R.id.packet_type);

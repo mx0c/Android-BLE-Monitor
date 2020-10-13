@@ -3,7 +3,6 @@ package com.huc.android_ble_monitor.activities;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanResult;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,15 +12,17 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.ServicesListAdapter;
 import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.viewmodels.DeviceDetailViewModel;
+
 import java.util.ArrayList;
 
 public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
@@ -136,31 +137,10 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
                 BluLeDevice bleDevice =  mViewModel.getmBleDevice().getValue();
                 if (bleDevice != null) {
                     if (bleDevice.mConnectionState == BluetoothProfile.STATE_CONNECTED) {
-                        new MaterialAlertDialogBuilder(DeviceDetailActivity.this)
-                                .setTitle("Disconnect")
-                                .setMessage("Disconnect from " + staticBleDevice.mScanResult.getDevice().getName())
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Log.d(TAG, "onClick: yes");
-                                        mBluetoothLeService.requestRssi(false);
-                                        mBluetoothLeService.disconnect();
-                                        finish();
-                                    }
-                                })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Log.d(TAG, "onClick: no");
-                                        mBluetoothLeService.requestRssi(false);
-                                        finish();
-                                    }
-                                })
-                                .show();
+                        mBluetoothLeService.requestRssi(false);
+                        mBluetoothLeService.disconnect();
                     }
-                    else {
-                        return false;
-                    }
+                    return false;
                 }
                 break;
         }
