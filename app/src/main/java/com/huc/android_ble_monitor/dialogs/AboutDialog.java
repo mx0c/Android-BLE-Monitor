@@ -1,21 +1,19 @@
 package com.huc.android_ble_monitor.dialogs;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 
-public class AboutDialog extends AlertDialog{
-    public AboutDialog(Context context) {
-        super(context);
+public class AboutDialog {
+    private MaterialAlertDialogBuilder mBuilder;
 
-        LayoutInflater inflater = getLayoutInflater();
+    public AboutDialog(Activity context) {
+        LayoutInflater inflater = context.getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.dialog_about, null);
-        setView(dialogLayout);
 
         TextView copyright = dialogLayout.findViewById(R.id.who_made_it);
         TextView description = dialogLayout.findViewById(R.id.description);
@@ -26,7 +24,13 @@ public class AboutDialog extends AlertDialog{
                 "It is supposed to support the process of using not standardized BLE Devices in a medical context.");
         github_link.setText("https://github.com/mx0c/Android-BLE-Monitor");
 
-        setTitle("About this App");
-        setButton(DialogInterface.BUTTON_NEUTRAL, "OK", (OnClickListener) null);
+        mBuilder = new MaterialAlertDialogBuilder(context)
+                .setView(dialogLayout)
+                .setTitle("About this App")
+                .setNeutralButton("OK", null);
+    }
+
+    public void show(){
+        mBuilder.show();
     }
 }
