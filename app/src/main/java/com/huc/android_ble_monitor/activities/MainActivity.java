@@ -92,7 +92,8 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
         mViewModel.getmBleDevices().observe(this, new Observer<List<BluLeDevice>>() {
             @Override
             public void onChanged(List<BluLeDevice> bleDevices) {
-                mScanResultRecyclerAdapter.notifyDataSetChanged();
+                mScanResultRecyclerView.getRecycledViewPool().clear();
+
                 if(bleDevices.size() > 0){
                     mStatesRecyclerViewAdapter.setState(StatesRecyclerViewAdapter.STATE_NORMAL);
                 }else if(bleDevices.size() <= 0 && mViewModel.isScanEnabled()){
@@ -100,6 +101,8 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
                 }else if(bleDevices.size() <= 0 && !mViewModel.isScanEnabled()){
                     mStatesRecyclerViewAdapter.setState(StatesRecyclerViewAdapter.STATE_EMPTY);
                 }
+
+                mScanResultRecyclerAdapter.notifyDataSetChanged();
             }
         });
     }

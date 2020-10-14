@@ -39,6 +39,7 @@
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/menu_navigation"
         android:layout_gravity="start"
+        app:itemTextColor="@color/colorPrimary"
         android:fitsSystemWindows="true"
         android:id="@+id/nav_view" />
     

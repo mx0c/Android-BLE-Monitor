@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,6 +96,7 @@ public class DescriptorListAdapter extends ArrayAdapter<BluetoothGattDescriptor>
 
         if (mService.getBluetoothDevice().getValue() != null) {
             isDescriptorReadable = mService.readDescriptor(descriptor);
+            Log.d(TAG, "Descriptor " + descriptor.getUuid() + " returned on read: " + isDescriptorReadable);
             readBtn.setEnabled(isDescriptorReadable);
             if (!isDescriptorReadable) {
                 readBtn.setAlpha(0.6f);
