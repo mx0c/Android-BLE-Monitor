@@ -94,7 +94,7 @@ void BtSnoopParser::join(){
  *      wait for thread to finish (blocking method)
  */
 void BtSnoopParser::stop(){
-
+	thread_started = false;
 	snoop_task.stop();
 	join();
 }

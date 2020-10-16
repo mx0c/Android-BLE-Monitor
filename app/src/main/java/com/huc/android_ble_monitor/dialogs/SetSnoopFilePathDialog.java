@@ -32,11 +32,14 @@ public class SetSnoopFilePathDialog {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // save selected path
-                        HciSnoopLogUtil.BTSNOOP_PATH = mSnoopFileEditText.getText().toString();
-                        Log.d(TAG, "onClick Positive Button: Saved BtSnoop Path " + HciSnoopLogUtil.BTSNOOP_PATH);
-                        // restart streaming
-                        snoopLog.restartStreaming();
+                        // check if path has changed
+                        if(!mSnoopFileEditText.getText().toString().equals(HciSnoopLogUtil.BTSNOOP_PATH)) {
+                            // save selected path
+                            HciSnoopLogUtil.BTSNOOP_PATH = mSnoopFileEditText.getText().toString();
+                            Log.d(TAG, "onClick Positive Button: Saved BtSnoop Path " + HciSnoopLogUtil.BTSNOOP_PATH);
+                            // restart streaming
+                            snoopLog.restartStreaming();
+                        }
                     }
                 })
                 .setNegativeButton("CANCEL", (DialogInterface.OnClickListener) null);

@@ -166,13 +166,15 @@ public class BluetoothLeService extends Service {
         @Override
         public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor,
                                      int status) {
-            mDescriptorCallbacks.onDescriptorRead(descriptor);
+            if(mDescriptorCallbacks != null)
+                mDescriptorCallbacks.onDescriptorRead(descriptor);
         }
 
         @Override
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor,
                                      int status) {
-            mDescriptorCallbacks.onDescriptorWrite(descriptor);
+            if(mDescriptorCallbacks != null)
+                mDescriptorCallbacks.onDescriptorWrite(descriptor);
         }
     };
 

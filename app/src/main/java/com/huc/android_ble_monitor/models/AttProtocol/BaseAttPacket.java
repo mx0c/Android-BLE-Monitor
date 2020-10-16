@@ -2,9 +2,7 @@ package com.huc.android_ble_monitor.models.AttProtocol;
 
 import com.huc.android_ble_monitor.models.AttMethod;
 import com.huc.android_ble_monitor.models.L2capPacket;
-
 import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.Arrays;
 
 public class BaseAttPacket {
