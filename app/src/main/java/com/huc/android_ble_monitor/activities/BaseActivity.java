@@ -74,6 +74,18 @@ public abstract class BaseActivity<T extends ViewModel> extends AppCompatActivit
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent homeIntent = new Intent(this, MainActivity.class);
+                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+        }
+        return (super.onOptionsItemSelected(item));
+    }
+
     /**
      * Used to initialize the navigation of the menu items in the navigation drawer menu
      */
