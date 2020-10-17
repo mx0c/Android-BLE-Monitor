@@ -12,6 +12,8 @@ A Bluetooth Low Energy (BLE) Monitor for Android.
 - Interact with Characteristics and Descriptors
 - HCI, L2CAP & ATT Log utilizing the Android Bluetooth [Snoop](https://tools.ietf.org/html/rfc1761) Log 
 
+![alt text](./img/pics.png)
+
 ### Requirements:
 - Android Phone which supports BLE
 - Android 5.0 (API level 21)

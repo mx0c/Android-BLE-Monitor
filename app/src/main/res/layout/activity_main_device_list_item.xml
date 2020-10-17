@@ -323,8 +323,7 @@
                     android:layout_centerInParent="true"
                     android:layout_marginRight="10dp"
                     android:text="Advertised Services (0)"
-                    android:textColor="@color/primaryDarkColor"
-                    android:textStyle="bold" />
+                    android:textColor="@color/primaryDarkColor" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
