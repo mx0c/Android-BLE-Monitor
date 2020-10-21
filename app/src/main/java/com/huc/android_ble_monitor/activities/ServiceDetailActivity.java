@@ -151,16 +151,18 @@ public class ServiceDetailActivity extends BaseActivity<ServicesOverviewActivity
             @Override
             public void onChanged(BluLeDevice device) {
                 //update Device related views when device changed
-                TextView RssiTextView = findViewById(R.id.RSSI_TextView);
-                TextView DeviceNameTextView = findViewById(R.id.DeviceName_TextView);
-                TextView DeviceUUIDTextView = findViewById(R.id.DeviceUUID_TextView);
-                ImageView BondStateImageView = findViewById(R.id.BondState_ImageView);
-                TextView BondStateTextView = findViewById(R.id.BondState_TextView);
-                RssiTextView.setText(mResolver.deviceRssiResolver(device.mCurrentRssi));
-                DeviceNameTextView.setText(mResolver.deviceNameResolver(device.mScanResult));
-                DeviceUUIDTextView.setText(device.mScanResult.getDevice().getAddress());
-                BondStateImageView.setImageResource(mResolver.bondStateImageResolver(device.mScanResult));
-                BondStateTextView.setText(mResolver.bondStateTextResolver(device.mScanResult));
+                if(device != null) {
+                    TextView RssiTextView = findViewById(R.id.RSSI_TextView);
+                    TextView DeviceNameTextView = findViewById(R.id.DeviceName_TextView);
+                    TextView DeviceUUIDTextView = findViewById(R.id.DeviceUUID_TextView);
+                    ImageView BondStateImageView = findViewById(R.id.BondState_ImageView);
+                    TextView BondStateTextView = findViewById(R.id.BondState_TextView);
+                    RssiTextView.setText(mResolver.deviceRssiResolver(device.mCurrentRssi));
+                    DeviceNameTextView.setText(mResolver.deviceNameResolver(device.mScanResult));
+                    DeviceUUIDTextView.setText(device.mScanResult.getDevice().getAddress());
+                    BondStateImageView.setImageResource(mResolver.bondStateImageResolver(device.mScanResult));
+                    BondStateTextView.setText(mResolver.bondStateTextResolver(device.mScanResult));
+                }
             }
         });
     }

@@ -16,17 +16,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
+import com.huc.android_ble_monitor.util.BinaryUtil;
 import com.huc.android_ble_monitor.util.BleUtil;
 import com.huc.android_ble_monitor.util.IdentifierXmlResolver;
 import com.huc.android_ble_monitor.util.PropertyResolver;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,18 +76,14 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
 
         if(descriptorList.size() > 0) {
             List<Pair<String, String>> strDescriptorList = new ArrayList<>();
-            for (BluetoothGattDescriptor descriptor :
-                    descriptorList) {
+            for (BluetoothGattDescriptor descriptor : descriptorList) {
                 strDescriptorList.add(new Pair(mPropertyResolver.descriptorNameResolver(descriptor), String.valueOf(descriptor.getUuid())));
             }
-
             lv_descriptors.setAdapter(new DescriptorListAdapter(mContext, strDescriptorList));
         } else {
             tv_descriptors.setVisibility(View.GONE);
             lv_descriptors.setVisibility(View.GONE);
         }
-
-
     }
 
     void handleLinkView(final View convertView, String characteristicIdString) {
@@ -144,12 +138,12 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
                 final EditText et = new EditText(mContext);
                 new MaterialAlertDialogBuilder(mContext)
                         .setTitle("Write to Characteristic")
-                        .setMessage("Enter value to write:")
+                        .setMessage("Enter value to write (0x):")
                         .setView(et)
                         .setNeutralButton("OK", new DialogInterface.OnClickListener(){
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                characteristic.setValue(et.getText().toString());
+                                characteristic.setValue(BinaryUtil.hexStringToByteArray(et.getText().toString()));
                                 mService.writeCharacteristic(characteristic);
                             }
                         })
