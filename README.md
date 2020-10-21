@@ -2,7 +2,7 @@
 ![TravisCI](https://travis-ci.org/mx0c/Android-BLE-Monitor.svg?branch=master "TravisCI")
 [![GitHub last commit](https://img.shields.io/github/last-commit/mx0c/Android-BLE-Monitor.svg)]() 
 
-A Bluetooth Low Energy (BLE) Monitor for Android.
+A Bluetooth Low Energy (BLE) Monitor for Android which is developed as part of a 2 Semester long Master Project at the University Reutlingen, Germany. This app is supposed to support the process of using not standardized BLE Devices (wearables) in a medical context.
 
 ### Features:
 - Scan for BLE Devices and retrieve advertised Informations
