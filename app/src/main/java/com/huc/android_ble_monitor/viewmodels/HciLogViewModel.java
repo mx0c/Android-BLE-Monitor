@@ -108,8 +108,7 @@ public class HciLogViewModel extends ViewModel {
                     case ATT_READ_MULTIPLE_VARIABLE_RSP: decodedAttPacket = new AttReadMultipleVariableRsp(l2capPacket); break;
                     case ATT_WRITE_CMD: decodedAttPacket = new AttWriteCmd(l2capPacket); break;
                     case ATT_EXECUTE_WRITE_REQ: decodedAttPacket = new AttExecuteWriteReq(l2capPacket); break;
-                    case ATT_PREPARE_WRITE_REQ: decodedAttPacket = new AttPrepareWriteReqRsp(l2capPacket); break;
-                    case ATT_PREPARE_WRITE_RSP: decodedAttPacket = new AttPrepareWriteReqRsp(l2capPacket); break;
+                    case ATT_PREPARE_WRITE_REQ: case ATT_PREPARE_WRITE_RSP: decodedAttPacket = new AttPrepareWriteReqRsp(l2capPacket); break;
                 }
                 ArrayList tmp = mAttPackets.getValue();
                 tmp.add(decodedAttPacket);
@@ -118,7 +117,6 @@ public class HciLogViewModel extends ViewModel {
                 mAttPackets.postValue(tmp);
             }
         }
-
     }
 
     public void changeProtocol(String protocol, final HciLogActivity ctx){

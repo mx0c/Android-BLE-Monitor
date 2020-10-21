@@ -29,14 +29,10 @@ public class CharacteristicDetailActivity extends BaseActivity<CharacteristicDet
     static BluetoothGattCharacteristic staticCharacteristic;
 
     private PropertyResolver mResolver;
-    TextView serviceUUID;
-    TextView serviceName;
-    TextView serviceIdentifier;
     TextView characteristicName;
     TextView characteristicUUID;
     TextView characteristicIdentifier;
     ListView descriptorListView;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,17 +49,11 @@ public class CharacteristicDetailActivity extends BaseActivity<CharacteristicDet
             @Override
             public void onChanged(BluetoothGattService service) {
                 //update service related views when service changed
-                serviceUUID = findViewById(R.id.service_uuid_textview);
-                serviceName = findViewById(R.id.service_name_textview);
-                serviceIdentifier = findViewById(R.id.service_identifier_textview);
                 characteristicName = findViewById(R.id.characteristic_name_textview);
                 characteristicUUID = findViewById(R.id.characteristic_uuid_textview);
                 characteristicIdentifier = findViewById(R.id.characteristic_identifier_textview);
                 descriptorListView = findViewById(R.id.descriptor_listview);
 
-                serviceUUID.setText(service.getUuid().toString());
-                serviceName.setText(mResolver.serviceNameResolver(service));
-                serviceIdentifier.setText(mResolver.serviceIdentifierResolver(service));
                 characteristicName.setText(mResolver.characteristicNameResolver(staticCharacteristic));
                 characteristicUUID.setText(staticCharacteristic.getUuid().toString());
                 characteristicIdentifier.setText(mResolver.characteristicIdentifierResolver(staticCharacteristic));

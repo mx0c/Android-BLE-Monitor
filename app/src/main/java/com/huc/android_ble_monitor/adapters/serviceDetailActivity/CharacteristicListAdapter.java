@@ -57,7 +57,6 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
         TextView characteristicIdentifier = convertView.findViewById(R.id.tv_service_item_identifier);
         TextView characteristicUuid = convertView.findViewById(R.id.tv_service_item_uuid);
 
-
         characteristicUuid.setText(characteristic.getUuid().toString());
         characteristicName.setText(mPropertyResolver.characteristicNameResolver(characteristic));
 
