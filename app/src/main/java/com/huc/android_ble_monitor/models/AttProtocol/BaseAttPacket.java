@@ -5,7 +5,7 @@ import com.huc.android_ble_monitor.models.L2capPacket;
 import org.apache.commons.lang3.ArrayUtils;
 import java.util.Arrays;
 
-public class BaseAttPacket {
+public class BaseAttPacket implements Comparable<BaseAttPacket>{
     public BaseAttPacket(L2capPacket p){
         Byte opcode = p.packet_data[0];
         this.packet_method = AttOpCodeMethod.getAttOpCodeMethod(opcode & 0x3f);
@@ -81,5 +81,10 @@ public class BaseAttPacket {
         }
         res += "\n";
         return res;
+    }
+
+    @Override
+    public int compareTo(BaseAttPacket o) {
+        return o.l2capPacket.timestamp.compareTo(this.l2capPacket.timestamp);
     }
 }

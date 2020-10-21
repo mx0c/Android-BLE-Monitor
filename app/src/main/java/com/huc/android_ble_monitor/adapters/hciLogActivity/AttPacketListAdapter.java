@@ -42,7 +42,7 @@ public class AttPacketListAdapter extends ArrayAdapter<BaseAttPacket> {
 
         initializeViews(convertView);
 
-        mPacket_timestamp.setText(mTimestampFormat.format(packet.l2capPacket.packet_hci_frames.get(0).timestamp));
+        mPacket_timestamp.setText(mTimestampFormat.format(packet.l2capPacket.timestamp));
         mPacket_type.setText(packet.packet_type);
         mPacket_num.setText(String.valueOf(packet.l2capPacket.packet_number));
         mPacket_info.setText(packet.packet_method.name());

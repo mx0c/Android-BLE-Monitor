@@ -42,7 +42,7 @@ public class L2capPacketListAdapter extends ArrayAdapter<L2capPacket> {
         initializeViews(convertView);
 
         mPacket_type.setText(packet.packet_channel_id);
-        mPacket_timestamp.setText(mTimestampFormat.format(packet.packet_hci_frames.get(0).timestamp));
+        mPacket_timestamp.setText(mTimestampFormat.format(packet.timestamp));
         mPacket_num.setText(String.valueOf(packet.packet_number));
 
         String dataInHex = "";

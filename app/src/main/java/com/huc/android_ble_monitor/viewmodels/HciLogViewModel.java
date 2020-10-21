@@ -3,11 +3,9 @@ package com.huc.android_ble_monitor.viewmodels;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.activities.HciLogActivity;
 import com.huc.android_ble_monitor.adapters.hciLogActivity.AttPacketListAdapter;
@@ -45,8 +43,9 @@ import com.huc.android_ble_monitor.models.AttType;
 import com.huc.android_ble_monitor.models.HciPacket;
 import com.huc.android_ble_monitor.models.HciType;
 import com.huc.android_ble_monitor.models.L2capPacket;
-
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class HciLogViewModel extends ViewModel {
     private MutableLiveData<ArrayList<HciPacket>> mHciPackets = new MutableLiveData<>();
@@ -66,6 +65,7 @@ public class HciLogViewModel extends ViewModel {
         ArrayList hciPackets = mHciPackets.getValue();
         packet.packet_number = hciPackets.size() + 1;
         hciPackets.add(packet);
+        Collections.sort(hciPackets);
         mHciPackets.postValue(hciPackets);
 
         //convert to L2CAP
@@ -76,6 +76,7 @@ public class HciLogViewModel extends ViewModel {
                 ArrayList L2capPackets = mL2capPackets.getValue();
                 L2capPacket l2capPacket = new L2capPacket(packet, L2capPackets.size() + 1);
                 L2capPackets.add(l2capPacket);
+                Collections.sort(L2capPackets);
                 mL2capPackets.postValue(L2capPackets);
                 //convert to Base ATT Packet
                 ArrayList AttPackets = mAttPackets.getValue();
@@ -110,8 +111,11 @@ public class HciLogViewModel extends ViewModel {
                     case ATT_PREPARE_WRITE_REQ: decodedAttPacket = new AttPrepareWriteReqRsp(l2capPacket); break;
                     case ATT_PREPARE_WRITE_RSP: decodedAttPacket = new AttPrepareWriteReqRsp(l2capPacket); break;
                 }
-                AttPackets.add(decodedAttPacket);
-                mAttPackets.postValue(AttPackets);
+                ArrayList tmp = mAttPackets.getValue();
+                tmp.add(decodedAttPacket);
+                // Sort by Timestamp
+                Collections.sort(tmp);
+                mAttPackets.postValue(tmp);
             }
         }
 

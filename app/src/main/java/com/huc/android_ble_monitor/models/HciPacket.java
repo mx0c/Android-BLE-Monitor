@@ -5,7 +5,82 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Date;
 
-public class HciPacket {
+public class HciPacket implements Comparable<HciPacket>{
+    /**
+     * raw json of hci Packet
+     */
+    public String packet_hci_json;
+
+    /**
+     * packet sequential number
+     */
+    public int packet_number;
+
+    /**
+     * length of original packet (could be more than this packet's length)
+     */
+    public int original_length;
+
+    /**
+     * packet data field length
+     */
+    public int included_length;
+
+    /**
+     * number of packet lost between the first record and this record for this file
+     */
+    public int cumulative_drops;
+
+    /**
+     * unix timestamp for this packet record
+     */
+    public Date timestamp;
+
+    /**
+     * packet data
+     */
+    public Byte[] packet_data;
+
+    /**
+     * raw packet data
+     */
+    public Byte[] packet_data_raw;
+
+    /**
+     * define if packet record is sent
+     */
+    public boolean packet_sent;
+
+    /**
+     * define if packet record is Sent or Received
+     */
+    public String packet_destination;
+
+    /**
+     * define if packet record is data record
+     */
+    public boolean packet_type_data;
+
+    /**
+     * define if packet record is command or event
+     */
+    public boolean packet_type_command_event;
+
+    /**
+     * defines the type of the packet
+     */
+    public String packet_type;
+
+    /**
+     * defines additional packet info
+     */
+    public String packet_info;
+
+    /**
+     * defines if packet is first or a continuing packet
+     */
+    public boundary packet_boundary_flag;
+
     public HciPacket(String snoopJson, String hciJson){
         parseSnoopJson(snoopJson);
         parseHciJson(hciJson);
@@ -104,78 +179,8 @@ public class HciPacket {
         }
     }
 
-    /**
-     * raw json of hci Packet
-     */
-    public String packet_hci_json;
-
-    /**
-     * packet sequential number
-     */
-    public int packet_number;
-
-    /**
-     * length of original packet (could be more than this packet's length)
-     */
-    public int original_length;
-
-    /**
-     * packet data field length
-     */
-    public int included_length;
-
-    /**
-     * number of packet lost between the first record and this record for this file
-     */
-    public int cumulative_drops;
-
-    /**
-     * unix timestamp for this packet record
-     */
-    public Date timestamp;
-
-    /**
-     * packet data
-     */
-    public Byte[] packet_data;
-
-    /**
-     * raw packet data
-     */
-    public Byte[] packet_data_raw;
-
-    /**
-     * define if packet record is sent
-     */
-    public boolean packet_sent;
-
-    /**
-     * define if packet record is Sent or Received
-     */
-    public String packet_destination;
-
-    /**
-     * define if packet record is data record
-     */
-    public boolean packet_type_data;
-
-    /**
-     * define if packet record is command or event
-     */
-    public boolean packet_type_command_event;
-
-    /**
-     * defines the type of the packet
-     */
-    public String packet_type;
-
-    /**
-     * defines additional packet info
-     */
-    public String packet_info;
-
-    /**
-     * defines if packet is first or a continuing packet
-     */
-    public boundary packet_boundary_flag;
+    @Override
+    public int compareTo(HciPacket o) {
+        return o.timestamp.compareTo(this.timestamp);
+    }
 }
