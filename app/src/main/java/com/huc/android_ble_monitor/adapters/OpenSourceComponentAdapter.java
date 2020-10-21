@@ -11,10 +11,10 @@ import com.huc.android_ble_monitor.R;
 
 public class OpenSourceComponentAdapter extends BaseAdapter {
     private static final String[][] COMPONENTS = new String[][]{
-            {"btsnoop-decoder", "https://github.com/bertrandmartel/btsnoop-decoder"},
-            {"bluetooth-hci-decoder", "https://github.com/bertrandmartel/bluetooth-hci-decoder"},
-            {"rv-adapter-states", "https://github.com/rockerhieu/rv-adapter-states"},
-            {"easypermissions", "https://github.com/googlesamples/easypermissions"}
+        {"btsnoop-decoder", "https://github.com/bertrandmartel/btsnoop-decoder"},
+        {"bluetooth-hci-decoder", "https://github.com/bertrandmartel/bluetooth-hci-decoder"},
+        {"rv-adapter-states", "https://github.com/rockerhieu/rv-adapter-states"},
+        {"easypermissions", "https://github.com/googlesamples/easypermissions"}
     };
 
     private LayoutInflater mInflater;

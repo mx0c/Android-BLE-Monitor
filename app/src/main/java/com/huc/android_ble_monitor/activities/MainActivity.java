@@ -31,7 +31,6 @@ import com.huc.android_ble_monitor.util.BleUtil;
 import com.huc.android_ble_monitor.util.PermissionsUtil;
 import com.huc.android_ble_monitor.viewmodels.MainActivityViewModel;
 import com.rockerhieu.rvadapter.states.StatesRecyclerViewAdapter;
-
 import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -278,7 +277,7 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
     @Override
     public void onRefresh() {
         Log.d(TAG, "onRefresh: ScanResult List refreshed.");
-        mViewModel.clearBleDevices();
+        mViewModel.refreshBleDevices();
         mSwipeRefreshLayout.setRefreshing(false);
     }
 }

@@ -1,5 +1,6 @@
 package com.huc.android_ble_monitor.adapters.serviceDetailActivity;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.content.Context;
@@ -12,14 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import com.huc.android_ble_monitor.R;
+import com.huc.android_ble_monitor.dialogs.WriteCharacteristicDialog;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.BinaryUtil;
 import com.huc.android_ble_monitor.util.BleUtil;
@@ -135,19 +136,7 @@ public class CharacteristicListAdapter extends ArrayAdapter<BluetoothGattCharact
         writeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final EditText et = new EditText(mContext);
-                new MaterialAlertDialogBuilder(mContext)
-                        .setTitle("Write to Characteristic")
-                        .setMessage("Enter value to write (0x):")
-                        .setView(et)
-                        .setNeutralButton("OK", new DialogInterface.OnClickListener(){
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                characteristic.setValue(BinaryUtil.hexStringToByteArray(et.getText().toString()));
-                                mService.writeCharacteristic(characteristic);
-                            }
-                        })
-                        .show();
+                new WriteCharacteristicDialog((Activity) mContext, characteristic, mService).show();
             }
         });
 

@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
+import com.huc.android_ble_monitor.dialogs.WriteDescriptorDialog;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
 import com.huc.android_ble_monitor.util.BinaryUtil;
 import com.huc.android_ble_monitor.util.IdentifierXmlResolver;
@@ -37,6 +38,7 @@ public class DescriptorListAdapter extends ArrayAdapter<BluetoothGattDescriptor>
         mDescriptors = descriptors;
         mPropertyResolver = new PropertyResolver();
         mService = service;
+        mService.registerActivityDescriptorCallbacks((Activity) mContext);
     }
 
     @NonNull
@@ -92,7 +94,6 @@ public class DescriptorListAdapter extends ArrayAdapter<BluetoothGattDescriptor>
         readBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mService.registerActivityDescriptorCallbacks((Activity) mContext); // Register in onClick because we dont want to catch the initial callback
                 mService.readDescriptor(descriptor);
             }
         });
@@ -100,26 +101,7 @@ public class DescriptorListAdapter extends ArrayAdapter<BluetoothGattDescriptor>
         writeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mService.registerActivityDescriptorCallbacks((Activity) mContext); // Register in onClick because we dont want to catch the initial callback
-                final EditText et = new EditText(mContext);
-                ((Activity) mContext).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new MaterialAlertDialogBuilder(mContext)
-                            .setTitle("Write to descriptor")
-                            .setMessage("Enter value to write (0x):")
-                            .setView(et)
-                            .setNegativeButton("Cancel", null)
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    descriptor.setValue(BinaryUtil.hexStringToByteArray(et.getText().toString()));
-                                    mService.writeDescriptor(descriptor);
-                                }
-                            })
-                            .show();
-                    }
-                });
+                new WriteDescriptorDialog((Activity) mContext, descriptor, mService).show();
             }
         });
     }

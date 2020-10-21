@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel;
 import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.models.ToastModel;
 import com.huc.android_ble_monitor.util.BleUtil;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -80,7 +82,7 @@ public class MainActivityViewModel extends ViewModel {
         }
     }
 
-    public void clearBleDevices() {
+    public void refreshBleDevices() {
         List<BluLeDevice> devices = mBleDevices.getValue();
         devices.clear();
         this.mBleDevices.postValue(devices);

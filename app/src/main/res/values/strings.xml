@@ -108,4 +108,9 @@
         <item>ATT_PREPARE_WRITE</item>
         <item>ATT_EXECUTE_WRITE</item>
     </string-array>
+
+    <string-array name="encodings">
+        <item>Hex</item>
+        <item>UTF-16</item>
+    </string-array>
 </resources>
