@@ -2,7 +2,7 @@
 ![TravisCI](https://travis-ci.org/mx0c/Android-BLE-Monitor.svg?branch=master "TravisCI")
 [![GitHub last commit](https://img.shields.io/github/last-commit/mx0c/Android-BLE-Monitor.svg)]() 
 
-A Bluetooth Low Energy (BLE) Monitor for Android.
+Bluetooth Low Energy Monitor (BLEM) is an Android App which can be used to analyze BLE Devices by using Android Snoop Logging and the Android BLE API. It is developed as part of a 2 Semester long Master Project at the University Reutlingen, Germany. The purpose of this app is to support the process of using not standardized BLE Devices (wearables) in a medical context.
 
 ### Features:
 - Scan for BLE Devices and retrieve advertised Informations
