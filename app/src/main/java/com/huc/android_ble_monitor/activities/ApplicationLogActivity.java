@@ -7,14 +7,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.AppLogListAdapter;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.LogsUtil;
 
-public class ApplicationLogActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener  {
+public class ApplicationLogActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener  {
     private ListView mListView;
     private Spinner mFilterSpinner;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -23,8 +22,6 @@ public class ApplicationLogActivity extends AppCompatActivity implements SwipeRe
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        overridePendingTransition(0, 0);
-        setTheme(R.style.AppTheme);
         setContentView(R.layout.activity_application_log);
         ActivityUtil.setToolbar(this, false);
         ActivityUtil.setToolbarTitle(this, "Application Log");
@@ -46,6 +43,16 @@ public class ApplicationLogActivity extends AppCompatActivity implements SwipeRe
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+    }
+
+    @Override
+    protected void onServiceBinded() {
+
+    }
+
+    @Override
+    protected void initializeViewModel() {
+
     }
 
     @Override

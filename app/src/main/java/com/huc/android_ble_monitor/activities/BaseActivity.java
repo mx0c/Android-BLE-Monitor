@@ -75,6 +75,12 @@ public abstract class BaseActivity<T extends ViewModel> extends AppCompatActivit
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
@@ -82,6 +88,7 @@ public abstract class BaseActivity<T extends ViewModel> extends AppCompatActivit
                 Intent homeIntent = new Intent(this, MainActivity.class);
                 homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(homeIntent);
+                overridePendingTransition(0, 0);
         }
         return (super.onOptionsItemSelected(item));
     }
