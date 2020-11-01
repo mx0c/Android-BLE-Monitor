@@ -10,7 +10,7 @@ android:
   - android-29
   - extra-android-m2repository
 script:
-- "./gradlew clean build connectedAndroidTest -PdisablePreDex --stacktrace"
+- "./gradlew clean assembleRelease --stacktrace"
 before_install:
 - chmod +x gradlew
 install:
