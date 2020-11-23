@@ -44,7 +44,6 @@ import com.huc.android_ble_monitor.models.HciPacket;
 import com.huc.android_ble_monitor.models.HciType;
 import com.huc.android_ble_monitor.models.L2capPacket;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 public class HciLogViewModel extends ViewModel {

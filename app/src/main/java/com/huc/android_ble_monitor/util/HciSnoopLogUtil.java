@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Properties;
 
+/**
+ * Util Class to read stream of decoded HCI Packets from HCI Snoop Log
+ */
 public class HciSnoopLogUtil implements IHciDecoder {
     private String TAG = "BLEM_HciSnoopLog";
     private String BTSTACK_CONFIG_FILE = "bt_stack.conf";
@@ -83,9 +86,10 @@ public class HciSnoopLogUtil implements IHciDecoder {
 
         String res = prop.getProperty("btsnoopfilename");
         if(res == null){
+            Log.e(TAG, "getSnoopLogLocation: couldn't read btsnoop path from config using fallback path");
             return BTSNOOP_FALLBACK_PATH;
         } else{
-            Log.d(TAG, "getSnoopLogLocation: Successfully read Snoop log Location from bt_stack.conf");
+            Log.v(TAG, "getSnoopLogLocation: Successfully read Snoop log Location from bt_stack.conf, " + res);
             return res;
         }
     }

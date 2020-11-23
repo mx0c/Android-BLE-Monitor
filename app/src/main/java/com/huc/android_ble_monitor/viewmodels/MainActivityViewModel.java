@@ -28,6 +28,8 @@ public class MainActivityViewModel extends ViewModel {
         mBleDevices.setValue(new ArrayList<BluLeDevice>());
         isBluetoothEnabled = true;
         isScanEnabled = false;
+
+        //Timestamp gets checked every 2 seconds
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -44,7 +46,7 @@ public class MainActivityViewModel extends ViewModel {
             List<BluLeDevice> toRemove = new ArrayList<>();
             for (BluLeDevice dev : devices) {
                 if (dev.mTimestamp <= currTime) {
-                    Log.d(TAG, "checkTimeStamp: removed " + dev.mScanResult.getDevice().getAddress() + " because TTL was exceeded.");
+                    Log.v(TAG, "checkTimeStamp: removed " + dev.mScanResult.getDevice().getAddress() + " because TTL was exceeded.");
                     toRemove.add(dev);
                 }
             }
@@ -52,7 +54,7 @@ public class MainActivityViewModel extends ViewModel {
             mBleDevices.postValue(devices);
         }catch (Exception e){
             e.printStackTrace();
-            Log.e(TAG, "checkTimeStamp: " + e.getMessage());
+            Log.v(TAG, "checkTimeStamp: " + e.getMessage());
         }
     }
 

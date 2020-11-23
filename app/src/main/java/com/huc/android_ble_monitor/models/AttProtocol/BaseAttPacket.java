@@ -50,12 +50,25 @@ public class BaseAttPacket implements Comparable<BaseAttPacket>{
         }
     }
 
+    /**
+     * decodes a Little Endian Byte array to Big Endian
+     * @param data
+     * @param from
+     * @param to
+     * @return
+     */
     protected Byte[] decodeValue(Byte[] data, int from, int to){
         Byte[] temp = Arrays.copyOfRange(data, from, to);
         ArrayUtils.reverse(temp);
         return temp;
     }
 
+    /**
+     * decodes 16 Bit Little Endian to Big Endian value
+     * @param LSB
+     * @param MSB
+     * @return
+     */
     protected short decode16BitValue(byte LSB, byte MSB){
         return (short)((MSB << 8) | LSB);
     }

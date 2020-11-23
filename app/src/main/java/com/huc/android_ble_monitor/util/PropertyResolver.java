@@ -22,6 +22,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Util Class to process data for presentation in UI
+ */
 public class PropertyResolver {
     private static final String TAG = "BLEM_PropertyToViewReso";
     private final static int BONDING_IMG_ID = R.drawable.round_bluetooth_searching_white_48;
@@ -40,8 +43,6 @@ public class PropertyResolver {
     private final static String NOT_AVAIL = "n/a";
     private final static String WHITESPACE = " ";
     private final static String COLON = ":";
-    private final static String ADV_INTERVAL = "Advertising Interval";
-    private final static String MILLISECONDS_SHORT = "ms";
     private final static String TIMESTAMP = "Timestamp";
     private final static String CONNECTABLE = "Connectable";
 

@@ -17,13 +17,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.adapters.characteristicDetailActivity.DescriptorListAdapter;
 import com.huc.android_ble_monitor.models.BluLeDevice;
-import com.huc.android_ble_monitor.services.IBleDescriptorCallbacks;
+import com.huc.android_ble_monitor.services.IBLeDescriptorCallbacks;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.BinaryUtil;
 import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.viewmodels.CharacteristicDetailViewModel;
 
-public class CharacteristicDetailActivity extends BaseActivity<CharacteristicDetailViewModel> implements IBleDescriptorCallbacks {
+public class CharacteristicDetailActivity extends BaseActivity<CharacteristicDetailViewModel> implements IBLeDescriptorCallbacks {
     static final String TAG = "BLEM_CharacteristicDetailActivity";
     static BluetoothGattService staticGattService;
     static BluLeDevice staticBleDevice;
