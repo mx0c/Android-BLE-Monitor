@@ -1,39 +1,23 @@
 package com.huc.android_ble_monitor.activities;
 
-import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModel;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.huc.android_ble_monitor.R;
 import com.huc.android_ble_monitor.dialogs.AboutDialog;
 import com.huc.android_ble_monitor.dialogs.OpenSourceComponentsDialog;
 import com.huc.android_ble_monitor.services.BluetoothLeService;
-import com.huc.android_ble_monitor.util.BinaryUtil;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 /**
  * Base ActivityClass which sets Theme and binds to the BluetoothLeService

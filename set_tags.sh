@@ -13,8 +13,23 @@ if [ "$TRAVIS_BRANCH" = "$BRANCH" ]; then
       git config --global user.email "travis@travis-ci.org"
       git config --global user.name "Travis"
 
+      # increment version code
+      ./gradlew bumperVersionPatch
+
+      # read version name
+      FILE_NAME=app/gradle.properties
+      KEY="appVersionName"
+      value=""
+
+      getProperty()
+      {
+        prop_key=$1
+        value=`cat ${FILE_NAME} | grep ${prop_key} | cut -d'=' -f2`
+      }
+      getProperty ${KEY}
+
       # Add tag and push to master.
-      git tag -a v${TRAVIS_BUILD_NUMBER} -m "Travis build $TRAVIS_BUILD_NUMBER pushed a tag."
+      git tag -a v${value} -m "Travis build $value pushed a tag."
       git push origin --tags
       git fetch origin
 
