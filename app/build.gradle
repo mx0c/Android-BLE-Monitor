@@ -1,7 +1,10 @@
 apply plugin: 'com.android.application'
 
-// bumper
-apply from: 'https://gist.githubusercontent.com/IlyaEremin/8821fbf0069e8e60dfeaeefc19afaca2/raw/ce54be4ea6f19b9609f303cd75714d6ec8d916e5/app_version.gradle'
+task printVersionName {
+    doLast {
+        println android.defaultConfig.versionName
+    }
+}
 
 android {
     compileSdkVersion 29
@@ -11,8 +14,8 @@ android {
         applicationId "com.huc.android_ble_monitor"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode appVersionCode.toInteger()
-        versionName appVersionName
+        versionCode 3
+        versionName "1.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk { moduleName "hciviewer" }
     }
