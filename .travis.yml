@@ -10,7 +10,7 @@ android:
   - android-29
   - extra-android-m2repository
 script:
-  - "./gradlew clean :app:assembleRelease --stacktrace"
+  - "./gradlew clean :app:assembleRelease"
 before_install:
   - chmod +x gradlew
 install:
@@ -21,7 +21,7 @@ before_deploy:
 deploy:
   provider: releases
   api_key:
-    secure: U4oJ11ijemhf6Ru3rLPJFjJny996ZTPRgEXff7/eWsUNlH9dMvzxXWXTzPQjGrhFaONddv6z8P66VY5Wd5snobIr1hE4GqiY4QJu0Oa0VTqLqlxT//GE2QncdrqmD9UccyE/ANQY5ghEbFdRlWuqHyQ7z+YZX6dCQCHiLwtUMWgLPGwEXh95hkqZyvwci+oXyQeiuH2w/LoPUeaF1RZES/h6URiGZG/47y+q3Sg9CHDlwMhw9Y7wV1skg0nXAdt9mIyE5jcgaLKAhwRwJlywMXquMSCbjfN+oqCgmV4D3v+3RxjQS285hf4CK6fRkSm3Lh/xBHPvBJ5RnF5A0q+M3WOzkeeLCrBp1fICiyRqBZE8S/Qd9qUms6y489EnQLuwgNSXbJiJ0HbJdJ5tFy63S3Q/ZuI2fuZFobO2bCOMNJmU/PayliP+B0xgCSB1TvggsTsw2Bv7060qrdY59kMi6hXHKz5tSsAN9JzVgZU/+UtsEU61oihhXyoiU8IMa9cRPWysB2hhusH1PE+/3AqeYnMMPsYdfUZ+y3pmEVxloK1IU7TlPY9/M1k4LIFL/6k7a+/A3onHNiGJANUC/bq6TnEDJz/kMkHFztKwipsWgqD1owey5lKEUTYreoGQqlfJKIh2ioyhtmrNfUOrVJOWDsE3POuT9jNAvZVnQGMbN2k=
+    secure: $GITHUB_TOKEN
   file: $TRAVIS_BUILD_DIR/app/build/outputs/apk/release/app*release*.apk
   file_glob: true
   name: "$APP_VERSION"
@@ -31,7 +31,6 @@ deploy:
   on:
     repo: mx0c/Android-BLE-Monitor
     branch: master
-    tags: true
 cache:
   directories:
   - "$HOME/.m2"
