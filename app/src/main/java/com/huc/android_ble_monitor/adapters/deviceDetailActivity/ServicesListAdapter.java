@@ -1,9 +1,10 @@
-package com.huc.android_ble_monitor.adapters;
+package com.huc.android_ble_monitor.adapters.deviceDetailActivity;
 
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.huc.android_ble_monitor.util.PropertyResolver;
 import java.util.List;
 
 public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
+    private static final String TAG = "BLEM_ServicesListAdapt";
     PropertyResolver propertyResolver;
     TextView tvServiceName;
     TextView tvServiceUuid;
@@ -69,6 +71,7 @@ public class ServicesListAdapter extends ArrayAdapter<BluetoothGattService> {
         tvServiceLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick: Clicked on open specification icon. Opening specification for " + v.getTag().toString());
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.addCategory(Intent.CATEGORY_BROWSABLE);

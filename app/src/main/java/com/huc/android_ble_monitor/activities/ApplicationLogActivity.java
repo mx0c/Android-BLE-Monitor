@@ -9,7 +9,7 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.adapters.AppLogListAdapter;
+import com.huc.android_ble_monitor.adapters.appLogActivity.AppLogListAdapter;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.LogsUtil;
 

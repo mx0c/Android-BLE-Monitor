@@ -17,7 +17,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.huc.android_ble_monitor.R;
-import com.huc.android_ble_monitor.adapters.ServicesListAdapter;
+import com.huc.android_ble_monitor.adapters.deviceDetailActivity.ServicesListAdapter;
 import com.huc.android_ble_monitor.models.BluLeDevice;
 import com.huc.android_ble_monitor.util.ActivityUtil;
 import com.huc.android_ble_monitor.util.PropertyResolver;
@@ -71,7 +71,7 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
         mViewModel.getmBleDevice().observe(this, new Observer<BluLeDevice>() {
             @Override
             public void onChanged(BluLeDevice device) {
-                Log.d(TAG, "onChanged: BleDevice value changed");
+                Log.v(TAG, "onChanged: BleDevice value changed");
                 if(device == null) return;
                 initializeViews(device);
             }
@@ -137,6 +137,7 @@ public class DeviceDetailActivity extends BaseActivity<DeviceDetailViewModel> {
                 BluLeDevice bleDevice =  mViewModel.getmBleDevice().getValue();
                 if (bleDevice != null) {
                     if (bleDevice.mConnectionState == BluetoothProfile.STATE_CONNECTED) {
+                        Log.d(TAG, "onOptionsItemSelected: Returning to the main activity");
                         mBluetoothLeService.requestRssi(false);
                         mBluetoothLeService.disconnect();
                     }

@@ -137,10 +137,12 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
                         BluetoothAdapter.ERROR);
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
+                        Log.d(TAG, "onReceive: Bluetooth Adapter was turned off");
                         mBluetoothSwitch.setChecked(false);
                         mViewModel.setBluetoothEnabled(false);
                         break;
                     case BluetoothAdapter.STATE_ON:
+                        Log.d(TAG, "onReceive: Bluetooth Adapter was turned on");
                         BleUtil.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                         BleUtil.mBleScanner = BleUtil.mBluetoothAdapter.getBluetoothLeScanner();
                         mViewModel.setBluetoothEnabled(true);
@@ -158,6 +160,10 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // Forward results to EasyPermissions
+        Log.d(TAG, "onRequestPermissionsResult: " +
+                "requestCode:" + requestCode +
+                ", permissions: " + permissions.toString() +
+                ", grandResults: " + grantResults.toString());
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
@@ -181,6 +187,7 @@ public class MainActivity extends BaseActivity<MainActivityViewModel> implements
                             mStatesRecyclerViewAdapter.setState(StatesRecyclerViewAdapter.STATE_LOADING);
                         }
                     } else {
+                        Log.d(TAG, "onCheckedChanged: BLE Switch checked but bluetooth is not enabled. Requesting permissions to activate bluetooth");
                         BleUtil.checkIsBluetoothEnabled(MainActivity.this);
                         buttonView.setChecked(false);
                     }

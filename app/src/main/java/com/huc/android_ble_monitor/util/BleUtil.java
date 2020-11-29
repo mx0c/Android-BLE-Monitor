@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.huc.android_ble_monitor.models.BluLeDevice;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 
 public class  BleUtil {
+    private static final String TAG = "BLEM_BleUtil";
     public static final int REQUEST_ENABLE_BT_RESULT = 313;
 
     public static BluetoothAdapter mBluetoothAdapter;
@@ -28,6 +30,7 @@ public class  BleUtil {
         mBleScanner = mBluetoothAdapter.getBluetoothLeScanner();
 
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+            Log.i(TAG, "checkIsBluetoothEnabled: The Bluetooth adapter is not enabled. Sending request to enable the adapter");
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             ctx.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT_RESULT);
         }
@@ -44,6 +47,7 @@ public class  BleUtil {
 
     public static void checkBleAvailability(Activity ctx){
         if (!ctx.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Log.e(TAG, "checkBleAvailability: Device does not support bluetooth low energy. System Feature " + PackageManager.FEATURE_BLUETOOTH_LE + " is missing.");
             Toast.makeText(ctx, "Seems like your device doesn\\'t support BLE!", Toast.LENGTH_SHORT ).show();
         }
     }

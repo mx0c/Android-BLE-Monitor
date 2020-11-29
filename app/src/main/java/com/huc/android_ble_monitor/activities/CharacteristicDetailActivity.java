@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,7 +25,7 @@ import com.huc.android_ble_monitor.util.PropertyResolver;
 import com.huc.android_ble_monitor.viewmodels.CharacteristicDetailViewModel;
 
 public class CharacteristicDetailActivity extends BaseActivity<CharacteristicDetailViewModel> implements IBLeDescriptorCallbacks {
-    static final String TAG = "BLEM_CharacteristicDetailActivity";
+    static final String TAG = "BLEM_CharDetailAct";
     static BluetoothGattService staticGattService;
     static BluLeDevice staticBleDevice;
     static BluetoothGattCharacteristic staticCharacteristic;
