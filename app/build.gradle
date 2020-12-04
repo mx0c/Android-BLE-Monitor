@@ -11,6 +11,7 @@ android {
         applicationId "com.huc.android_ble_monitor"
         minSdkVersion 21
         targetSdkVersion 29
+        archivesBaseName = "BLEM"
         versionCode versioning.getVersionCode()
         versionName versioning.getVersionName()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
