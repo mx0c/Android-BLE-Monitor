@@ -54,7 +54,7 @@ public class BluetoothLeService extends Service {
     public void scanForDevices(boolean enable){
         Log.i(TAG, "BLE Scan for devices: " + (enable ? "activated" : "deactivated"));
         if(enable) {
-            ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build();
+            ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build();
             List<ScanFilter> filters = new ArrayList<ScanFilter>();
             BleUtil.mBleScanner.startScan(filters, scanSettings, new ScanCallback() {
                 @Override

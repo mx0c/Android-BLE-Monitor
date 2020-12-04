@@ -1,10 +1,7 @@
-apply plugin: 'com.android.application'
-
-task printVersionName {
-    doLast {
-        println android.defaultConfig.versionName
-    }
+plugins {
+    id 'de.nanogiants.android-versioning' version '2.4.0'
 }
+apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
@@ -14,8 +11,8 @@ android {
         applicationId "com.huc.android_ble_monitor"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 3
-        versionName "1.0.2"
+        versionCode versioning.getVersionCode()
+        versionName versioning.getVersionName()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk { moduleName "hciviewer" }
     }
@@ -84,4 +81,5 @@ dependencies {
 
     // rv-adapter-states
     implementation 'com.rockerhieu:rv-adapter-states:1.2'
+
 }

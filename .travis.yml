@@ -9,31 +9,35 @@ android:
   - build-tools-29.0.3
   - android-29
   - extra-android-m2repository
-script:
-  - "./gradlew clean :app:assembleRelease"
 before_install:
   - chmod +x gradlew
 install:
   - echo y | sdkmanager "ndk;21.0.6113669"
   - echo y | sdkmanager "cmake;3.6.4111459"
-before_deploy:
-  - export APP_VERSION=$(./gradlew :app:printVersionName)
-deploy:
-  provider: releases
-  api_key:
-    secure: $GITHUB_TOKEN
-  file: $TRAVIS_BUILD_DIR/app/build/outputs/apk/release/app*release*.apk
-  file_glob: true
-  name: "$APP_VERSION"
-  tag_name: "$APP_VERSION"
-  overwrite: true
-  skip_cleanup: true
-  on:
-    repo: mx0c/Android-BLE-Monitor
-    branch: master
+jobs:
+  include:
+    - # Build debug
+      if: branch IN (develop, master)
+      script: "./gradlew :app:assembleDebug"
+    - # Only if Tag is present
+      if: tag IS present
+      script: "git fetch --tags && ./gradlew clean :app:assembleRelease"
+      deploy:
+        provider: releases
+        edge: true
+        api_key: $API_KEY
+        file: $TRAVIS_BUILD_DIR/app/build/outputs/apk/release/*.apk
+        skip_cleanup: true
+        file_glob: true
+        draft: false
+        on:
+          tags: true
+        name: $TRAVIS_TAG
+        tag_name: $TRAVIS_TAG
+        release_notes: "Generated release from Travis CI for build $TRAVIS_BUILD_NUMBER"
 cache:
   directories:
-  - "$HOME/.m2"
-  - "$HOME/.gradle"
-  - "$HOME/.gradle/caches/"
-  - "$HOME/.gradle/wrapper/"
+    - "$HOME/.m2"
+    - "$HOME/.gradle"
+    - "$HOME/.gradle/caches/"
+    - "$HOME/.gradle/wrapper/"
