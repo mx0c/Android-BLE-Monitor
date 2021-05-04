@@ -17,7 +17,7 @@ Bluetooth Low Energy Monitor (BLEM) is an Android App which can be used to rever
 ![alt text](./img/pics.png)
 
 ### Requirements
-- Android Phone which supports BLE
+- Android Phone that supports BLE
 - Android 5.0 (API level 21)
 - _To use the BLE Protocols (ATT, L2CAP, HCI) Log the Android Bluetooth Snoop Log needs to be supported_
 
